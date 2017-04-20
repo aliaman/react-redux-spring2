@@ -6,7 +6,7 @@ export default class SplashScreen extends React.Component {
             <div className="section-body">
                 <img className="is--inline is--front-image" src="/client/public/images/symantec-logo.png" alt="" width="142"/>
                 <h1 className="is--inline">Cynic</h1>
-                <small style={smallStyle}>Cynic Copyright Symantec All Rights Reserved</small>
+                <small style={smallStyle}>Copyright © 2017 Symantec. all rights reserved.</small>
             </div>
         )
     }

@@ -1,77 +1,80 @@
-import React, { Component, PropTypes } from 'react';
-import { FormGroup, InputGroup, FormControl, DropdownButton, MenuItem, Glyphicon, Button } from 'react-bootstrap';
+import React from 'react';
+import { Row, Col, FormGroup, Form, FormControl, ControlLabel, HelpBlock, Button } from 'react-bootstrap';
+import { connect } from 'react-redux'
+import { doLogin } from './../../redux/actions/login'
 
+function FieldGroup({ id, label, help, value, ...props }) {
+    return (
+        <FormGroup controlId={id}>
+            <ControlLabel>{label}</ControlLabel>
+            <FormControl {...props} value={value} />
+            {help && <HelpBlock>{help}</HelpBlock>}
+        </FormGroup>
+    );
+}
+const rowStyles = {
+    paddingTop: '100px'
+};
+
+
+
+@connect((store) => {
+    return {
+        username: store.login.username,
+        password: store.login.password
+    }
+})
 export default class LoginForm extends React.Component {
+    constructor(props) {
+        super(props);
+    }
+    login(event){
+        event.preventDefault();
+        this.props.dispatch(doLogin());
+    }
+    componentWillMount() {
+        console.log(JSON.stringify(this.props));
+        this.props.dispatch(doLogin());
+    }
     render() {
         return (
-            <form>
-                <FormGroup>
-                    <InputGroup>
-                        <InputGroup.Addon>@</InputGroup.Addon>
-                        <FormControl type="text" />
-                    </InputGroup>
-                </FormGroup>
-                <FormGroup>
-                    <InputGroup>
-                        <FormControl type="text" />
-                        <InputGroup.Addon>.00</InputGroup.Addon>
-                    </InputGroup>
-                </FormGroup>
-                <FormGroup>
-                    <InputGroup>
-                        <InputGroup.Addon>$</InputGroup.Addon>
-                        <FormControl type="text" />
-                        <InputGroup.Addon>.00</InputGroup.Addon>
-                    </InputGroup>
-                </FormGroup>
+        <div className="container">
+            <Row style={rowStyles}>
+                <Col lg={6} lgOffset={3}>
+                    <h1 className="symheading">Login</h1>
+                    <form onSubmit={this.login}>
+                        <FieldGroup
+                            id="formControlsEmail"
+                            type="email"
+                            label="Email address"
+                            value={this.props.username}
+                            placeholder="Enter email"
+                        />
+                        <FieldGroup
+                            id="formControlsPassword"
+                            label="Password"
+                            type="password"
+                        />
+                        <Button type="submit" >
+                            Submit
+                        </Button>
+                    </form>
+                </Col>
+            </Row>
+        </div>
 
-                <FormGroup>
-                    <InputGroup>
-                        <FormControl type="text" />
-                        <InputGroup.Addon>
-                            <Glyphicon glyph="music" />
-                        </InputGroup.Addon>
-                    </InputGroup>
-                </FormGroup>
-
-                <FormGroup>
-                    <InputGroup>
-                        <InputGroup.Button>
-                            <Button>Before</Button>
-                        </InputGroup.Button>
-                        <FormControl type="text" />
-                    </InputGroup>
-                </FormGroup>
-                <FormGroup>
-                    <InputGroup>
-                        <FormControl type="text" />
-                        <DropdownButton
-                            componentClass={InputGroup.Button}
-                            id="input-dropdown-addon"
-                            title="Action"
-                        >
-                            <MenuItem key="1">Item</MenuItem>
-                        </DropdownButton>
-                    </InputGroup>
-                </FormGroup>
-
-                <FormGroup>
-                    <InputGroup>
-                        <InputGroup.Addon>
-                            <input type="radio" aria-label="..." />
-                        </InputGroup.Addon>
-                        <FormControl type="text" />
-                    </InputGroup>
-                </FormGroup>
-                <FormGroup>
-                    <InputGroup>
-                        <InputGroup.Addon>
-                            <input type="checkbox" aria-label="..." />
-                        </InputGroup.Addon>
-                        <FormControl type="text" />
-                    </InputGroup>
-                </FormGroup>
-            </form>
-        )
+        );
     }
+
+    _handleValidSubmit(values) {
+        // Values is an object containing all values
+        // from the inputs
+    }
+
+    _handleInvalidSubmit(errors, values) {
+        // Errors is an array containing input names
+        // that failed to validate
+    }
+
+
 }

@@ -3,21 +3,6 @@ import { Row, Col, FormGroup, Form, FormControl, ControlLabel, HelpBlock, Button
 import { connect } from 'react-redux'
 import { doLogin } from './../../redux/actions/login'
 
-function FieldGroup({ id, label, help, value, ...props }) {
-    return (
-        <FormGroup controlId={id}>
-            <ControlLabel>{label}</ControlLabel>
-            <FormControl {...props} value={value} />
-            {help && <HelpBlock>{help}</HelpBlock>}
-        </FormGroup>
-    );
-}
-const rowStyles = {
-    paddingTop: '100px'
-};
-
-
-
 @connect((store) => {
     return {
         username: store.login.username,
@@ -36,6 +21,7 @@ export default class LoginForm extends React.Component {
         console.log(JSON.stringify(this.props));
         this.props.dispatch(doLogin());
     }
+
     render() {
         return (
         <div className="container">
@@ -53,6 +39,7 @@ export default class LoginForm extends React.Component {
                         <FieldGroup
                             id="formControlsPassword"
                             label="Password"
+                            value="Alipassword"
                             type="password"
                         />
                         <Button type="submit" >
@@ -65,7 +52,6 @@ export default class LoginForm extends React.Component {
 
         );
     }
-
     _handleValidSubmit(values) {
         // Values is an object containing all values
         // from the inputs
@@ -75,6 +61,26 @@ export default class LoginForm extends React.Component {
         // Errors is an array containing input names
         // that failed to validate
     }
-
-
 }
+class FieldGroup extends React.Component {
+    constructor(props){
+        super(props);
+    }
+    handleChange (event){
+        //this.props.username = event.target.value;
+    }
+    render() {
+        return (
+            <FormGroup controlId={this.props.id}>
+                <ControlLabel>{this.props.label}</ControlLabel>
+                <FormControl {...this.props} value={this.props.value} onChange={this.handleChange.bind(this)}/>
+                {this.props.help && <HelpBlock>{this.props.help}</HelpBlock>}
+            </FormGroup>
+        )
+    }
+}
+
+
+const rowStyles = {
+    paddingTop: '100px'
+};

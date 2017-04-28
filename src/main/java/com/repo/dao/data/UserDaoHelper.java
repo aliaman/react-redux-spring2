@@ -33,4 +33,21 @@ public class UserDaoHelper {
             return allusers;
         }
     }
+
+    public static User findUserByEmail(String email){
+        User user = null;
+        try{
+            SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+            Session session = sessionFactory.openSession();
+            Query query = session.
+                    createQuery("from User where email=:email");
+            query.setParameter("email", "ali_jalbani@symantec.com");
+            user = (User) query.getSingleResult();
+            session.close();
+        }catch(Exception e){
+            e.printStackTrace();
+        }finally {
+            return user;
+        }
+    }
 }

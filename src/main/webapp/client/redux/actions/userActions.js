@@ -5,7 +5,7 @@ export function fetchUsers() {
     return function(dispatch) {
         axios.get(rest.GET_ALL_USERS)
             .then((response) => {
-                dispatch({type: 'FETCH_USERS_FULFILLED', payload: response.data.users})
+                dispatch({type: 'FETCH_USERS_FULFILLED', payload: response.data})
             })
             .catch((err) => {
                 dispatch({type: 'FETCH_USERS_REJECTED', payload: err});

@@ -6,7 +6,7 @@ import loginReducer from './login'
 const reducers = combineReducers({
     user: userReducer,
     tweets: tweetsReducer,
-    login: loginReducer
+    login: loginReducer,
 })
 
 export default reducers;

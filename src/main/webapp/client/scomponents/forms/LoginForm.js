@@ -12,16 +12,21 @@ import { doLogin } from './../../redux/actions/login'
 export default class LoginForm extends React.Component {
     constructor(props) {
         super(props);
+        this.state = {
+            username: "",
+            password: ""
+        }
     }
     login(event){
         event.preventDefault();
         this.props.dispatch(doLogin());
     }
     componentWillMount() {
-        console.log(JSON.stringify(this.props));
-        this.props.dispatch(doLogin());
-    }
 
+    }
+    handleChange (event){
+        this.setState({ [event.target.id]: event.target.value });
+    }
     render() {
         return (
         <div className="container">
@@ -29,19 +34,23 @@ export default class LoginForm extends React.Component {
                 <Col lg={6} lgOffset={3}>
                     <h1 className="symheading">Login</h1>
                     <form onSubmit={this.login}>
-                        <FieldGroup
-                            id="formControlsEmail"
-                            type="email"
-                            label="Email address"
-                            value={this.props.username}
-                            placeholder="Enter email"
-                        />
-                        <FieldGroup
-                            id="formControlsPassword"
-                            label="Password"
-                            value="Alipassword"
-                            type="password"
-                        />
+                        <FormGroup controlId="username">
+                            <ControlLabel>Email address</ControlLabel>
+                            <FormControl id="username"
+                                         type="text"
+                                         placeholder="Enter email"
+                                         value={this.state.username}
+                                         onChange={this.handleChange.bind(this)}/>
+                            <HelpBlock>Help here</HelpBlock>
+                        </FormGroup>
+                        <FormGroup controlId="password">
+                            <ControlLabel>Password</ControlLabel>
+                            <FormControl id="password"
+                                         type="password"
+                                         value={this.state.password}
+                                         onChange={this.handleChange.bind(this)}/>
+                             <HelpBlock>Help here</HelpBlock>
+                        </FormGroup>
                         <Button type="submit" >
                             Submit
                         </Button>
@@ -62,24 +71,6 @@ export default class LoginForm extends React.Component {
         // that failed to validate
     }
 }
-class FieldGroup extends React.Component {
-    constructor(props){
-        super(props);
-    }
-    handleChange (event){
-        //this.props.username = event.target.value;
-    }
-    render() {
-        return (
-            <FormGroup controlId={this.props.id}>
-                <ControlLabel>{this.props.label}</ControlLabel>
-                <FormControl {...this.props} value={this.props.value} onChange={this.handleChange.bind(this)}/>
-                {this.props.help && <HelpBlock>{this.props.help}</HelpBlock>}
-            </FormGroup>
-        )
-    }
-}
-
 
 const rowStyles = {
     paddingTop: '100px'

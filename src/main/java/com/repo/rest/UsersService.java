@@ -37,7 +37,6 @@ public class UsersService extends GeneralService {
             data = (JSONObject) parser.parse(
                     new FileReader(resource.getFile()));//path to the JSON file.
 
-            json = data.toJSONString();
         } catch (IOException | org.json.simple.parser.ParseException e) {
             e.printStackTrace();
         } finally {

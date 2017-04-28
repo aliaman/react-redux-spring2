@@ -5,12 +5,14 @@ class RestConfig {
     }
     dev() {
         return {
-            'GET_ALL_USERS': this.base + 'db'
+            'GET_ALL_USERS': this.base + 'users',
+            'LOGIN': this.base + 'login'
         }
     }
     prod() {
         return {
-            'GET_ALL_USERS': this.base + 'users/getAll'
+            'GET_ALL_USERS': this.base + 'users/getAll',
+            'LOGIN': this.base + 'auth/login'
         }
     }
 }

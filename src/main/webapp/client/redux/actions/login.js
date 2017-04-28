@@ -1,6 +1,16 @@
+import axios from 'axios';
+import rest from './../../utils/restconfig';
+import querystring from 'querystring';
 
-export function doLogin() {
+
+export function doLogin(userblob) {
+    console.log(JSON.stringify(userblob));
     return function(dispatch) {
-        dispatch({type: 'LOGIN_FULFILLED', payload: {}});
+        axios.post(rest.LOGIN, querystring.stringify({'email': 'ali_jalbani@symantec.com'}))
+            .then((response) => {
+                dispatch({type: 'LOGIN_FULFILLED', payload: response.payload})
+            }).catch((response) => {
+                dispatch({type: 'LOGIN_REJECTED',  payload: response.payload})
+        });
     }
 }

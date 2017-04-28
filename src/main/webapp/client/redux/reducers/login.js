@@ -9,13 +9,9 @@ const initialState = {
 const loginReducer = (state=initialState, action) => {
     switch (action.type) {
         case "LOGIN_PENDING": {
-            console.log(action.type);
             return {...state, fetching: true}
         }
         case "LOGIN_REJECTED": {
-            console.log(action.type);
-
-            alert(action.payload.toString());
             return {...state, fetching: false, error: action.payload}
         }
         case "LOGIN_FULFILLED": {

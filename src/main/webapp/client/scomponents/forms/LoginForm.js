@@ -5,27 +5,32 @@ import { doLogin } from './../../redux/actions/login'
 
 @connect((store) => {
     return {
-        username: store.login.username,
-        password: store.login.password
+        userObj: store.login.userObj
     }
 })
 export default class LoginForm extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            username: "",
-            password: ""
+            userObj: this.props.userObj
         }
+        console.log(JSON.stringify(this.state.userObj));
+    }
+    componentWillReceiveProps(nextProps){
+        this.setState({ userObj: nextProps.userObj });
     }
     login(event){
+        this.props.dispatch(doLogin(this.props.userObj.email));
         event.preventDefault();
-        this.props.dispatch(doLogin());
     }
     componentWillMount() {
 
     }
     handleChange (event){
-        this.setState({ [event.target.id]: event.target.value });
+        let varVal = this.state.userObj;
+        varVal[event.target.id] = event.target.value;
+        console.log(JSON.stringify(varVal));
+        this.setState({ userObj: varVal });
     }
     render() {
         return (
@@ -33,13 +38,13 @@ export default class LoginForm extends React.Component {
             <Row style={rowStyles}>
                 <Col lg={6} lgOffset={3}>
                     <h1 className="symheading">Login</h1>
-                    <form onSubmit={this.login}>
-                        <FormGroup controlId="username">
+                    <form onSubmit={this.login.bind(this)}>
+                        <FormGroup>
                             <ControlLabel>Email address</ControlLabel>
-                            <FormControl id="username"
+                            <FormControl id="email"
                                          type="text"
                                          placeholder="Enter email"
-                                         value={this.state.username}
+                                         value={this.state.userObj.email}
                                          onChange={this.handleChange.bind(this)}/>
                             <HelpBlock>Help here</HelpBlock>
                         </FormGroup>
@@ -47,7 +52,7 @@ export default class LoginForm extends React.Component {
                             <ControlLabel>Password</ControlLabel>
                             <FormControl id="password"
                                          type="password"
-                                         value={this.state.password}
+                                         value={this.state.userObj.password}
                                          onChange={this.handleChange.bind(this)}/>
                              <HelpBlock>Help here</HelpBlock>
                         </FormGroup>

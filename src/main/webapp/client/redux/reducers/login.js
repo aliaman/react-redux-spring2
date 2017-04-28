@@ -1,8 +1,19 @@
 const initialState = {
     fetching: false,
     fetched: false,
-    username: '',
-    password: '',
+    userObj: {
+        "id": 1,
+        "email": " ",
+        "name": " ",
+        "password": "",
+        "lastUpdated": 1,
+        "role": {
+            "id": 1,
+            "name": " ",
+            "display": " ",
+            "lastUpdated": 1
+        }
+    },
     error: null
 };
 
@@ -15,12 +26,12 @@ const loginReducer = (state=initialState, action) => {
             return {...state, fetching: false, error: action.payload}
         }
         case "LOGIN_FULFILLED": {
+            alert(JSON.stringify(action));
             return {
                 ...state,
                 fetching: false,
                 fetched: true,
-                username: 'admin211',
-                password: 'a'
+                userObj: action.payload
             }
         }
     }

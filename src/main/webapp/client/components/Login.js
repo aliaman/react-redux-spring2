@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import LoginForm from './../scomponents/forms/LoginForm';
+import SimpleValidationForm from './../scomponents/forms/SimpleValidationForm';
 
 export default class Login extends React.Component {
     constructor(props) {
@@ -7,7 +8,9 @@ export default class Login extends React.Component {
     }
     render() {
         return (
-            <LoginForm />
+            // <SimpleValidationForm onSubmit={this.handleSubmit} />
+            <LoginForm/>
         );
+
     }
 }

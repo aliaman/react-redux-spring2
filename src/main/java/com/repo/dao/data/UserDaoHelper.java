@@ -41,7 +41,7 @@ public class UserDaoHelper {
             Session session = sessionFactory.openSession();
             Query query = session.
                     createQuery("from User where email=:email");
-            query.setParameter("email", "ali_jalbani@symantec.com");
+            query.setParameter("email", email);
             user = (User) query.getSingleResult();
             session.close();
         }catch(Exception e){

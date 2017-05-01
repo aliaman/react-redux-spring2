@@ -1,3 +1,5 @@
+$errorcolor: #bc5c42;
+
 .content-viewer.is--index .guide-section{
   position: static;
   top: 0%;
@@ -15,4 +17,9 @@ h1.symheading{
 }
 .paddedRow{
   margin-top: 100px;
+}
+.error{
+  color: $errorcolor;
+  font-size: 14px;
+  margin: 20px 3px;
 }

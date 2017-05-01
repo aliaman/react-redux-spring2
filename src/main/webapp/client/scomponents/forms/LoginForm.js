@@ -6,26 +6,30 @@ import { hashHistory } from 'react-router';
 
 @connect((store) => {
     return {
-        userObj: store.login.userObj
+        userObj: store.login.userObj,
+        error: store.login.error
     }
 })
 export default class LoginForm extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {
-            userObj: this.props.userObj
-        }
     }
     componentWillReceiveProps(nextProps){
         this.setState({ userObj: nextProps.userObj });
-        hashHistory.push('/dash');
+        if(this.state.userObj.email.trim()){
+            hashHistory.push('/dash');
+        }else{
+            this.setState({ error: nextProps.error });
+        }
     }
     login(event){
         this.props.dispatch(doLogin(this.props.userObj.email));
         event.preventDefault();
     }
     componentWillMount() {
-
+        //initialize state to blank
+        this.setState({ userObj: this.props.userObj });
+        this.setState({ error: null });
     }
     handleChange (event){
         let varVal = this.state.userObj;
@@ -38,6 +42,7 @@ export default class LoginForm extends React.Component {
             <Row style={rowStyles}>
                 <Col lg={6} lgOffset={3}>
                     <h1 className="symheading">Login</h1>
+                    <div className="error">{this.state.error}</div>
                     <form onSubmit={this.login.bind(this)}>
                         <FormGroup>
                             <ControlLabel>Email address</ControlLabel>

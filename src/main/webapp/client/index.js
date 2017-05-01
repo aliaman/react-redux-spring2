@@ -18,6 +18,9 @@ import Dashboard2 from './scomponents/Dashboard2';
 
 
 import { Router, IndexRoute, Route, hashHistory } from 'react-router';
+import Authorization from './utils/Authorization';
+
+
 
 require('./styles/styles.scss');
 

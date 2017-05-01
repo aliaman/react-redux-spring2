@@ -1,11 +1,13 @@
 import React from 'react'
+import Authorization from './../utils/Authorization'
 
-export default class Dashboard2 extends React.Component {
+class Dashboard2 extends React.Component {
     render() {
         return (
             <div>
-                <h4>Dashboard2</h4>
+                <h3>Dashboard2</h3>
             </div>
         )
     }
 }
+export default Authorization(Dashboard2, ['manager'])

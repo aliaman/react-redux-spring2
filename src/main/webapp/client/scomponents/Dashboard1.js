@@ -1,10 +1,11 @@
 import React from 'react'
+import Authorization from './../utils/Authorization'
 
-export default class Dashboard1 extends React.Component {
+class Dashboard1 extends React.Component {
     render() {
         return (
             <div>
-                <h4>Dashboard1</h4>
+                <h3>Dashboard1</h3>
                 <p>
                     The standard Lorem Ipsum passage, used since the 1500s
 
@@ -19,3 +20,5 @@ export default class Dashboard1 extends React.Component {
         )
     }
 }
+
+export default Authorization(Dashboard1, ['admin'])

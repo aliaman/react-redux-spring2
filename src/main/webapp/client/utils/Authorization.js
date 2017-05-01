@@ -1,7 +1,7 @@
 import React from 'react';
 import NotAuthorized from './../components/NotAuthorized';
 import Login from './../components/Login';
-import localStorage from 'localStorage';
+import ls from 'localstorage-ttl';
 
 const Authorization = function(WrappedComponent, allowedRoles)
 {
@@ -23,13 +23,12 @@ const Authorization = function(WrappedComponent, allowedRoles)
             const {role} = this.state.user
             //if Authentatication
             if(allowedRoles==undefined){
-                if(localStorage.getItem("auth")==null){
+                if(ls.get("auth")==null){
                     return <Login {...this.props} />
                 }else{
                     //let userObj = JSON.parse(localStorage.getItem("auth"));
                     return <WrappedComponent {...this.props} />
                 }
-                alert(localStorage.getItem("auth"));
             }else
                 //if Authentication + Authorization
             if (allowedRoles.includes(role)) {

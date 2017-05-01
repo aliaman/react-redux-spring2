@@ -1,12 +1,11 @@
 import React from 'react';
-import localStorage from 'localStorage';
+import ls from 'localstorage-ttl';
 import * as ReactBootstrap from 'react-bootstrap'
 import { Link } from 'react-router'
-import Login from './Login'
 
 export default class LogOut extends React.Component {
     componentWillMount(){
-        localStorage.removeItem("auth");
+        ls.set("auth", null);
     }
     render() {
         return(

@@ -1,4 +1,5 @@
-import localStorage from 'localStorage'
+import ls from 'localstorage-ttl'
+import Constants from './../../utils/Constants'
 
 const initialState = {
     fetching: false,
@@ -28,7 +29,8 @@ const loginReducer = (state=initialState, action) => {
             return {...state, fetching: false, error: action.payload}
         }
         case "LOGIN_FULFILLED": {
-            localStorage.setItem("auth", JSON.stringify(action.payload));
+            //establish session for 3 hours
+            ls.set("auth", JSON.stringify(action.payload), Constants.MILLISECONDS_IN_HOUR * 3);
             return {
                 ...state,
                 fetching: false,

@@ -8,19 +8,9 @@ const Authorization = function(WrappedComponent, allowedRoles)
     return class WithAuthorization extends React.Component {
         constructor(props) {
             super(props)
-
-            // In this case the user is hardcoded, but it could be loaded from anywhere.
-            // Redux, MobX, RxJS, Backbone...
-            this.state = {
-                user: {
-                    name: 'vcarl',
-                    role: 'admin'
-                }
-            }
         }
 
         render() {
-            const {role} = this.state.user
             //if Authentatication
             if(allowedRoles==undefined){
                 if(ls.get("auth")==null){

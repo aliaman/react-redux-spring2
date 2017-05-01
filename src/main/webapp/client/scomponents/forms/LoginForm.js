@@ -2,6 +2,7 @@ import React from 'react';
 import { Row, Col, FormGroup, Form, FormControl, ControlLabel, HelpBlock, Button } from 'react-bootstrap';
 import { connect } from 'react-redux'
 import { doLogin } from './../../redux/actions/login'
+import { hashHistory } from 'react-router';
 
 @connect((store) => {
     return {
@@ -14,10 +15,10 @@ export default class LoginForm extends React.Component {
         this.state = {
             userObj: this.props.userObj
         }
-        console.log(JSON.stringify(this.state.userObj));
     }
     componentWillReceiveProps(nextProps){
         this.setState({ userObj: nextProps.userObj });
+        hashHistory.push('/dash');
     }
     login(event){
         this.props.dispatch(doLogin(this.props.userObj.email));
@@ -29,7 +30,6 @@ export default class LoginForm extends React.Component {
     handleChange (event){
         let varVal = this.state.userObj;
         varVal[event.target.id] = event.target.value;
-        console.log(JSON.stringify(varVal));
         this.setState({ userObj: varVal });
     }
     render() {
@@ -46,7 +46,6 @@ export default class LoginForm extends React.Component {
                                          placeholder="Enter email"
                                          value={this.state.userObj.email}
                                          onChange={this.handleChange.bind(this)}/>
-                            <HelpBlock>Help here</HelpBlock>
                         </FormGroup>
                         <FormGroup controlId="password">
                             <ControlLabel>Password</ControlLabel>
@@ -54,7 +53,6 @@ export default class LoginForm extends React.Component {
                                          type="password"
                                          value={this.state.userObj.password}
                                          onChange={this.handleChange.bind(this)}/>
-                             <HelpBlock>Help here</HelpBlock>
                         </FormGroup>
                         <Button type="submit" >
                             Submit

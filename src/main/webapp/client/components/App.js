@@ -2,14 +2,14 @@ import React from 'react';
 import { connect } from 'react-redux'
 import { fetchUsers } from './../redux/actions/userActions'
 import LeftMenu from './LeftMenu'
-
+import Authorization from './../utils/Authorization'
 
 @connect((store) => {
     return {
         users: store.user.users
     }
 })
-export default class App extends React.Component {
+class App extends React.Component {
     constructor(props) {
         super(props);
     }
@@ -40,3 +40,4 @@ export default class App extends React.Component {
         );
     }
 }
+export default Authorization(App)

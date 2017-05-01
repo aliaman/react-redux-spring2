@@ -3,12 +3,12 @@ import { render } from 'react-dom'
 import { Provider } from 'react-redux'
 import { createStore } from 'redux'
 
-
 import reducers from './redux/reducers/reducer'
 import middleware from './redux/middleware/middleware';
 
 import App from './components/App';
 import Login from './components/Login';
+import LogOut from './components/LogOut';
 import LeftMenu from './components/LeftMenu';
 import SplashScreen from './components/SplashScreen';
 
@@ -16,16 +16,15 @@ import Dashboard from './components/Dashboard';
 import Dashboard1 from './scomponents/Dashboard1';
 import Dashboard2 from './scomponents/Dashboard2';
 
-
 import { Router, IndexRoute, Route, hashHistory } from 'react-router';
-import Authorization from './utils/Authorization';
 
 
 
 require('./styles/styles.scss');
 
 
-let store = createStore(reducers, {}, middleware);
+const store = createStore(reducers, {}, middleware);
+
 if(__DEVELOPMENT__){
     console.log(`***************************************`);
     console.log(`**************DEVELOPMENT**************`);
@@ -42,6 +41,7 @@ render(
                 </Route>
             </Route>
             <Route path="login" component={Login} />
+            <Route path="logout" component={LogOut} />
             <Route path="leftmenu" component={LeftMenu} />
         </Router>
     </Provider>,

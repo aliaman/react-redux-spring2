@@ -25,6 +25,12 @@ export default class LeftMenu extends React.Component {
                             </ul>
                         </li>
                     </ul>
+
+                    <ul className="content-viewer-aside-sections">
+                        <li>
+                            <Link to="/logout">Log Out</Link>
+                        </li>
+                    </ul>
                 </nav>
             </aside>
         )

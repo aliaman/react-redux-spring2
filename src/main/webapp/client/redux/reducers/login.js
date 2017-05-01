@@ -1,3 +1,5 @@
+import localStorage from 'localStorage'
+
 const initialState = {
     fetching: false,
     fetched: false,
@@ -26,7 +28,7 @@ const loginReducer = (state=initialState, action) => {
             return {...state, fetching: false, error: action.payload}
         }
         case "LOGIN_FULFILLED": {
-            alert(JSON.stringify(action));
+            localStorage.setItem("auth", JSON.stringify(action.payload));
             return {
                 ...state,
                 fetching: false,

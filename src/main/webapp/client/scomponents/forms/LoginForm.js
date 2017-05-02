@@ -24,6 +24,7 @@ export default class LoginForm extends React.Component {
             },
             () => {
                 if(this.state.authenticated){
+                    //TODO: Fwd to roles homepage instead of hardcoded link
                     hashHistory.push('/dash');
                 }
             }

@@ -1,7 +1,19 @@
 import React from 'react'
 import { Link } from 'react-router'
+import ls from 'localstorage-ttl'
 
 export default class LeftMenu extends React.Component {
+    constructor(){
+        super();
+    }
+    componentWillMount(){
+        let userObj = ls.get("auth");
+        userObj = JSON.parse(userObj);
+        this.setState({role: userObj.role.name});
+    }
+    allowedFor(allowedRoles = []){
+        return allowedRoles.includes(this.state.role);
+    }
     render() {
         return (
             <aside className="content-viewer-aside">
@@ -16,12 +28,8 @@ export default class LeftMenu extends React.Component {
                         <li>
                             <Link to="/">Dashboard</Link>
                             <ul className="content-viewer-aside-subsections">
-                                <li>
-                                    <Link to="/dash/1">Dashboard 1</Link>
-                                </li>
-                                <li>
-                                    <Link to="/dash/2">Dashboard 2</Link>
-                                </li>
+                                { this.allowedFor(["ADMINISTRATOR"]) ? <li><Link to="/dash/1">Dashboard 1</Link></li> : null }
+                                { this.allowedFor(["MANAGER"]) ? <li><Link to="/dash/1">Dashboard 1</Link></li> : null }
                             </ul>
                         </li>
                     </ul>

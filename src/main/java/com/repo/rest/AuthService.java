@@ -25,7 +25,6 @@ public class AuthService extends GeneralService {
         }catch(NoResultException nr){
             json.put("success", false);
             json.put("payload", "Could not authorize your credentials.");
-            nr.printStackTrace();
         }catch(Exception e){
             json.put("success", false);
             json.put("payload", e.toString());

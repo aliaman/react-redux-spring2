@@ -11,17 +11,15 @@ const Authorization = function(WrappedComponent, allowedRoles)
         }
 
         render() {
-            //if Authentatication
+            let userObj = ls.get("auth");
+            userObj = JSON.parse(userObj);
+            if(userObj==null){
+                return <Login {...this.props} />
+            }
+            let role = userObj.role.name;
             if(allowedRoles==undefined){
-                if(ls.get("auth")==null){
-                    return <Login {...this.props} />
-                }else{
-                    //let userObj = JSON.parse(localStorage.getItem("auth"));
-                    return <WrappedComponent {...this.props} />
-                }
-            }else
-                //if Authentication + Authorization
-            if (allowedRoles.includes(role)) {
+                  return <WrappedComponent {...this.props} />
+            }else if (allowedRoles.includes(userObj.role.name)) {
                 return <WrappedComponent {...this.props} />
             } else {
                 return <NotAuthorized />

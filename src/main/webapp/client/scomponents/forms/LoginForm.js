@@ -7,6 +7,7 @@ import { hashHistory } from 'react-router';
 @connect((store) => {
     return {
         userObj: store.login.userObj,
+        authenticated: store.login.authenticated,
         error: store.login.error
     }
 })
@@ -15,26 +16,36 @@ export default class LoginForm extends React.Component {
         super(props);
     }
     componentWillReceiveProps(nextProps){
-        this.setState({ userObj: nextProps.userObj });
-        if(this.state.userObj.email.trim()){
-            hashHistory.push('/dash');
-        }else{
-            this.setState({ error: nextProps.error });
-        }
+        this.setState(
+            {
+                userObj: nextProps.userObj,
+                error: nextProps.error,
+                authenticated: nextProps.authenticated
+            },
+            () => {
+                if(this.state.authenticated){
+                    hashHistory.push('/dash');
+                }
+            }
+        );
     }
     login(event){
-        this.props.dispatch(doLogin(this.props.userObj.email));
+        this.props.dispatch(doLogin(this.state.userObj.email, this.state.userObj.password));
         event.preventDefault();
     }
     componentWillMount() {
-        //initialize state to blank
-        this.setState({ userObj: this.props.userObj });
-        this.setState({ error: null });
+        this.setState({
+            userObj: this.props.userObj,
+            error: this.props.error,
+            authenticated: this.props.authenticated
+        });
     }
     handleChange (event){
         let varVal = this.state.userObj;
         varVal[event.target.id] = event.target.value;
-        this.setState({ userObj: varVal });
+        this.setState({
+            userObj: varVal
+        });
     }
     render() {
         return (

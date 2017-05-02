@@ -3,8 +3,8 @@ import rest from './../../utils/restconfig';
 import querystring from 'querystring';
 
 
-export function doLogin(email) {
-    console.log(JSON.stringify(email));
+export function doLogin(email, password) {
+    console.log(`attempting login with ${email} and ${password}`);
     return function(dispatch) {
         axios.post(rest.LOGIN, querystring.stringify({'email': email}))
             .then((response) => {
@@ -13,8 +13,8 @@ export function doLogin(email) {
             }else{
                 dispatch({type: 'LOGIN_REJECTED',  payload: response.data.payload})
             }
-            }).catch((response) => {
-                dispatch({type: 'LOGIN_REJECTED',  payload: response.data.payload})
+            }).catch((err) => {
+                dispatch({type: 'LOGIN_REJECTED',  payload: err})
         });
     }
 }

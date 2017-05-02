@@ -11,7 +11,7 @@ class RestConfig {
     }
     prod() {
         return {
-            'GET_ALL_USERS': this.base + 'users/getAll',
+            'GET_ALL_USERS': this.base + 'users/getAllUsers',
             'LOGIN': this.base + 'auth/login'
         }
     }

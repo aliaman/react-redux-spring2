@@ -20,7 +20,7 @@ class App extends React.Component {
         console.log(this.props.users);
         const userlist = this.props.users.map(function(user){
            return (
-               <li key={Math.random()}>{user.name} - {user.salary}</li>
+               <li key={Math.random()}>{user.name} - {user.email}</li>
            )
         });
         return (

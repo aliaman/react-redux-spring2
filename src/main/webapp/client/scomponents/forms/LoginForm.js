@@ -3,6 +3,7 @@ import { Row, Col, FormGroup, Form, FormControl, ControlLabel, HelpBlock, Button
 import { connect } from 'react-redux'
 import { doLogin } from './../../redux/actions/login'
 import { hashHistory } from 'react-router';
+import PropTypes from 'prop-types';
 
 @connect((store) => {
     return {
@@ -91,7 +92,16 @@ export default class LoginForm extends React.Component {
         // that failed to validate
     }
 }
-
+LoginForm.propTypes = {
+    error: PropTypes.string,
+    userObj: PropTypes.object,
+    authenticated: PropTypes.bool
+}
+LoginForm.defaultProps = {
+    error:  null,
+    authenticated: false,
+    userObj: null
+};
 const rowStyles = {
     paddingTop: '100px'
 };

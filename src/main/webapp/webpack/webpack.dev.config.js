@@ -34,7 +34,10 @@ module.exports = {
         HtmlWebpackPluginConfig,
         new ExtractTextPlugin('bundle.css'),
         new webpack.DefinePlugin({
-            __DEVELOPMENT__: true
-        }),
+            __DEVELOPMENT__: true,
+            'process.env': {
+                NODE_ENV: JSON.stringify('development')
+            }
+        })
     ]
 }

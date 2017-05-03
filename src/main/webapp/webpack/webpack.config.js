@@ -34,7 +34,11 @@ module.exports = {
         HtmlWebpackPluginConfig,
         new ExtractTextPlugin('bundle.css'),
         new webpack.DefinePlugin({
-            __DEVELOPMENT__: false
+            __DEVELOPMENT__: false,
+            'process.env': {
+                NODE_ENV: JSON.stringify('production')
+            }
         }),
+        // new webpack.optimize.UglifyJsPlugin()
     ]
 }

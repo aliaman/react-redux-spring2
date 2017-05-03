@@ -23,10 +23,6 @@ public class UserDaoHelper {
             Query query = session.createQuery("from User");
             allusers = query.getResultList();
 
-            for(User user : allusers){
-                System.out.println(user.getEmail());
-            }
-
         }catch (Exception e){
             e.printStackTrace();
         }finally {

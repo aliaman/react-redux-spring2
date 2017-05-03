@@ -39,6 +39,7 @@ module.exports = {
                 NODE_ENV: JSON.stringify('production')
             }
         }),
-        // new webpack.optimize.UglifyJsPlugin()
+        //TODO: uncomment this for actual production.... debugging doesn't work on minified JS
+        //  new webpack.optimize.UglifyJsPlugin()
     ]
 }

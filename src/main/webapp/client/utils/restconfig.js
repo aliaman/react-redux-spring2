@@ -6,13 +6,17 @@ class RestConfig {
     dev() {
         return {
             'GET_ALL_USERS': this.base + 'users',
-            'LOGIN': this.base + 'login'
+            'LOGIN': this.base + 'login',
+            'GET_EFFICACY_METRICS': 'https://search-cynic-analytics-o66747gccvno7p2p5ur3atabdq.us-east-1.es.amazonaws.com/task-*/task/_search'
+            // 'GET_EFFICACY_METRICS': 'https://search-cynic-analytics-o66747gccvno7p2p5ur3atabdq.us-east-1.es.amazonaws.com'
         }
     }
     prod() {
         return {
             'GET_ALL_USERS': this.base + 'users/getAllUsers',
-            'LOGIN': this.base + 'auth/login'
+            'LOGIN': this.base + 'auth/login',
+            'GET_EFFICACY_METRICS': 'https://search-cynic-analytics-o66747gccvno7p2p5ur3atabdq.us-east-1.es.amazonaws.com/task-*/task/_search'
+            // 'GET_EFFICACY_METRICS': 'https://search-cynic-analytics-o66747gccvno7p2p5ur3atabdq.us-east-1.es.amazonaws.com'
         }
     }
 }

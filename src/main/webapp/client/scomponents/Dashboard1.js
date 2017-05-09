@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import Highcharts from 'highcharts'
+import ReactHighcharts from 'react-highcharts'
 import * as RB from 'react-bootstrap'
 
 import Authorization from './../utils/Authorization'
@@ -19,43 +19,47 @@ class Dashboard1 extends React.Component {
         super(props);
         this.handleApply = this.handleApply.bind(this);
         this.state = {
-            ranges: {
-                'Today': [moment(), moment()],
-                'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
-                'Last 7 Days': [moment().subtract(6, 'days'), moment()],
-                'Last 30 Days': [moment().subtract(29, 'days'), moment()],
-                'This Month': [moment().startOf('month'), moment().endOf('month')],
-                'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+            dp: {
+                ranges: {
+                    'Today': [moment(), moment()],
+                    'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+                    'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+                    'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+                    'This Month': [moment().startOf('month'), moment().endOf('month')],
+                    'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+                },
+                startDate: moment().subtract(8, 'days'),
+                endDate: moment().subtract(0, 'days'),
             },
-            startDate: moment().subtract(6, 'days'),
-            endDate: moment().subtract(0, 'days')
-        }
+            config:{
+                /* HighchartsConfig */
+                xAxis: {
+                    categories: [
+                        moment().subtract(6, 'days').format('dddd'),
+                        moment().subtract(5, 'days').format('dddd'),
+                        moment().subtract(4, 'days').format('dddd'),
+                        moment().subtract(3, 'days').format('dddd'),
+                        moment().subtract(2, 'days').format('dddd'),
+                        moment().subtract(1, 'days').format('dddd'),
+                        moment().subtract(0, 'days').format('dddd')]
+                },
+                series: [{
+                    data: [0]
+                },{
+                    data: [0]
+                },{
+                    data: [0]
+                }]
+            },
+        };
+        console.log(JSON.stringify(this.state));
     }
     componentWillMount(){
-        this.props.dispatch(fetchEfficacyMetrics());
+        this.props.dispatch(fetchEfficacyMetrics(this.state.dp.startDate.valueOf(), this.state.dp.endDate.valueOf()));
     }
     componentWillReceiveProps(nextProps){
         this.setState(nextProps);
-    }
-    handleChange (event){
-        let key = event.target.id;
-        let value = evemt.target.value;
-        this.setState({
-            key: value
-        });
-        console.log(JSON.stringify(this.state));
-    }
-    handleApply(event, picker) {
-        this.setState({
-            startDate: picker.startDate,
-            endDate: picker.endDate,
-        });
-    }
-    fetchMetrics(){
-        this.props.dispatch(fetchEfficacyMetrics());
-    }
-    _renderChart(){
-        const data = this.props.data;
+        const data = nextProps.data;
 
         let b1 = new Array();
         let b2 = new Array();
@@ -65,44 +69,75 @@ class Dashboard1 extends React.Component {
             b2.push(data.aggregations["2"].buckets[k]["3"].buckets.FP.doc_count);
             b3.push(data.aggregations["2"].buckets[k]["3"].buckets.Accuracy.doc_count);
         }
-        const options = {
-            title: {
-                text: ' '
-            },
-            xAxis: {
-                categories: ['Jan 10','Jan 11','Jan 12','Jan 13','Jan 14','Jan 15','Jan 16','Jan 17','Jan 18','Jan 19','Jan 20','Jan 21' ]
-            },
-            yAxis: {
-                title: {
-                    text: 'count'
-                }
-            },
-            plotOptions: {
-                column: {
-                    stacking: 'normal'
-                }
-            },
-            chart: {
-                type: 'column'
-            },
-            series: [{
-                name: 'FN',
-                data: b1
-            }, {
-                name: 'FP',
-                data: b2
-            }, {
-                name: 'Accuracy (!FP AND !FN)',
-                data: b3
-            }]
-        };
+        let categories = new Array();
+        let categoriescount = data.aggregations["2"].buckets.length;
+        do{
+            // let t = Object.clone(this.state.dp.endDate);
+            let t = moment();
+            let q = t.subtract(categoriescount--, 'days').format('MM/DD/YY');
+            categories.push(q);
+        }while(categoriescount>0);
+        this.setState({
+            config:{
+                /* HighchartsConfig */
+                yAxis: {
+                    title: {
+                        text: 'count'
+                    }
+                },
+                plotOptions: {
+                    column: {
+                        stacking: 'normal'
+                    }
+                },
+                chart: {
+                    type: 'column'
+                },
+                xAxis: {
+                    categories: categories
+                },
+                series: [{
+                    name: "FN",
+                    data: b1
+                },{
+                    name: 'FP',
+                    data: b2
+                },{
+                    name: 'FP',
+                    data: b3
+                }]
+            }
+        });
+    }
+    //should there be any fields there is only 1 common handleChange event which matches event.id to state.<property>
+    handleChange (event){
+        let key = event.target.id;
+        let value = event.target.value;
+        this.setState({
+            key: value
+        });
+    }
+    //this function is a handler for the datetime range picker
+    handleApply(event, picker) {
+        this.setState({
+            dp: Object.assign({}, this.state.dp, {
+                startDate: picker.startDate,
+                endDate: picker.endDate
+            })
+        });
+    }
+    fetchMetrics(){
+        console.log(this.state.dp.startDate + '-' + this.state.dp.endDate);
+        this.props.dispatch(fetchEfficacyMetrics(this.state.dp.startDate.valueOf(), this.state.dp.endDate.valueOf()));
+    }
+    _renderChart(){
         return (
             <div>
                 <h3>Cynic Efficacy Metrics</h3>
-                <Chart container={'chart'} options={options} />
+                <ReactHighcharts config={this.state.config} ref="chart">a</ReactHighcharts>
                 <RB.Row>
                     <RB.Col md={3} mdOffset={7}>
-                        <DateRangePicker {...this.state} clickHandler={this.handleApply} />
+                        <DateRangePicker {...this.state.dp} clickHandler={this.handleApply} />
                     </RB.Col>
                     <RB.Col md={2}>
                         <RB.Button
@@ -123,25 +158,6 @@ class Dashboard1 extends React.Component {
             return (<div>Nothing</div>);
         }
 
-    }
-}
-
-class Chart extends React.Component {
-    componentDidMount() {
-        this.chart = new Highcharts[this.props.type || "Chart"](
-            this.refs.chart,
-            this.props.options
-        );
-    }
-
-    componentWillUnmount() {
-        this.chart.destroy();
-    }
-
-    render() {
-        return (
-            <div ref="chart"></div>
-        )
     }
 }
 

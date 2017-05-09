@@ -33,7 +33,22 @@ class Dashboard1 extends React.Component {
             },
             config:{
                 /* HighchartsConfig */
-                title: '',
+                title:{
+                    text: ''
+                },
+                yAxis: {
+                    title: {
+                        text: 'count'
+                    }
+                },
+                plotOptions: {
+                    column: {
+                        stacking: 'normal'
+                    }
+                },
+                chart: {
+                    type: 'column'
+                },
                 xAxis: {
                     categories: [
                         moment().subtract(6, 'days').format('dddd'),
@@ -70,6 +85,7 @@ class Dashboard1 extends React.Component {
             b2.push(data.aggregations["2"].buckets[k]["3"].buckets.FP.doc_count);
             b3.push(data.aggregations["2"].buckets[k]["3"].buckets.Accuracy.doc_count);
         }
+
         let categories = new Array();
         let categoriescount = data.aggregations["2"].buckets.length;
         do{
@@ -77,22 +93,9 @@ class Dashboard1 extends React.Component {
             let q = t.subtract(categoriescount--, 'days').format('MM/DD/YY');
             categories.push(q);
         }while(categoriescount>0);
+
         this.setState({
-            config:{
-                /* HighchartsConfig */
-                yAxis: {
-                    title: {
-                        text: 'count'
-                    }
-                },
-                plotOptions: {
-                    column: {
-                        stacking: 'normal'
-                    }
-                },
-                chart: {
-                    type: 'column'
-                },
+            config: Object.assign({}, this.state.config, {
                 xAxis: {
                     categories: categories
                 },
@@ -106,7 +109,7 @@ class Dashboard1 extends React.Component {
                     name: 'FP',
                     data: b3
                 }]
-            }
+            })
         });
     }
     //should there be any fields there is only 1 common handleChange event which matches event.id to state.<property>

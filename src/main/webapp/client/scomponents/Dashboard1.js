@@ -33,6 +33,7 @@ class Dashboard1 extends React.Component {
             },
             config:{
                 /* HighchartsConfig */
+                title: '',
                 xAxis: {
                     categories: [
                         moment().subtract(6, 'days').format('dddd'),
@@ -72,8 +73,7 @@ class Dashboard1 extends React.Component {
         let categories = new Array();
         let categoriescount = data.aggregations["2"].buckets.length;
         do{
-            // let t = Object.clone(this.state.dp.endDate);
-            let t = moment();
+            let t = this.state.dp.endDate.clone().add("1", "days");
             let q = t.subtract(categoriescount--, 'days').format('MM/DD/YY');
             categories.push(q);
         }while(categoriescount>0);

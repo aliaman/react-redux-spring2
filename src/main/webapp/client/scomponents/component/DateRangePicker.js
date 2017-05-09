@@ -26,6 +26,7 @@ class DateRangePicker extends React.Component {
                     startDate={this.props.startDate}
                     endDate={this.props.endDate}
                     onApply={this.props.clickHandler}
+                    maxDate={this.props.maxDate}
                 >
                     <div className="input-group">
                         <input type="text" className="form-control" value={label}/>

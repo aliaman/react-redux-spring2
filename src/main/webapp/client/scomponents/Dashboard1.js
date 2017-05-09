@@ -28,6 +28,7 @@ class Dashboard1 extends React.Component {
                     'This Month': [moment().startOf('month'), moment().endOf('month')],
                     'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
                 },
+                maxDate: new Date(),
                 startDate: moment().subtract(8, 'days'),
                 endDate: moment().subtract(0, 'days'),
             },
@@ -106,7 +107,7 @@ class Dashboard1 extends React.Component {
                     name: 'FP',
                     data: b2
                 },{
-                    name: 'FP',
+                    name: 'Accuracy',
                     data: b3
                 }]
             })

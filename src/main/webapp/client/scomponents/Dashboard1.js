@@ -1,8 +1,13 @@
 import React from 'react'
-import Authorization from './../utils/Authorization'
-import Highcharts from 'highcharts'
 import { connect } from 'react-redux'
+import Highcharts from 'highcharts'
+import * as RB from 'react-bootstrap'
+
+import Authorization from './../utils/Authorization'
 import { fetchEfficacyMetrics } from './../redux/actions/cynicES'
+import DateRangePicker from './component/DateRangePicker'
+import moment from 'moment';
+
 
 @connect((store) => {
     return {
@@ -12,12 +17,42 @@ import { fetchEfficacyMetrics } from './../redux/actions/cynicES'
 class Dashboard1 extends React.Component {
     constructor(props) {
         super(props);
+        this.handleApply = this.handleApply.bind(this);
+        this.state = {
+            ranges: {
+                'Today': [moment(), moment()],
+                'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+                'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+                'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+                'This Month': [moment().startOf('month'), moment().endOf('month')],
+                'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+            },
+            startDate: moment().subtract(6, 'days'),
+            endDate: moment().subtract(0, 'days')
+        }
     }
     componentWillMount(){
         this.props.dispatch(fetchEfficacyMetrics());
     }
     componentWillReceiveProps(nextProps){
         this.setState(nextProps);
+    }
+    handleChange (event){
+        let key = event.target.id;
+        let value = evemt.target.value;
+        this.setState({
+            key: value
+        });
+        console.log(JSON.stringify(this.state));
+    }
+    handleApply(event, picker) {
+        this.setState({
+            startDate: picker.startDate,
+            endDate: picker.endDate,
+        });
+    }
+    fetchMetrics(){
+        this.props.dispatch(fetchEfficacyMetrics());
     }
     _renderChart(){
         const data = this.props.data;
@@ -65,6 +100,19 @@ class Dashboard1 extends React.Component {
             <div>
                 <h3>Cynic Efficacy Metrics</h3>
                 <Chart container={'chart'} options={options} />
+                <RB.Row>
+                    <RB.Col md={3} mdOffset={7}>
+                        <DateRangePicker {...this.state} clickHandler={this.handleApply} />
+                    </RB.Col>
+                    <RB.Col md={2}>
+                        <RB.Button
+                            className="fetchMetrics"
+                            bsStyle="primary"
+                            onClick={this.fetchMetrics.bind(this)}>
+                            Fetch Metrics
+                        </RB.Button>
+                    </RB.Col>
+                </RB.Row>
             </div>
         )
     }

@@ -3,7 +3,7 @@
 <hibernate-configuration>
     <session-factory>
         <property name="hibernate.connection.driver_class">com.mysql.cj.jdbc.Driver</property>
-        <property name="hibernate.connection.url">jdbc:mysql://ci-poc-db.cdrn06pzpw23.us-east-1.rds.amazonaws.com:3306/ci_cynic?autoReconnect=true&useSSL=false</property>
+        <property name="hibernate.connection.url">jdbc:mysql://ci-poc-db.cdrn06pzpw23.us-east-1.rds.amazonaws.com:3306/ci_cynic?autoReconnect=true&amp;useSSL=false</property>
         <property name="hibernate.connection.username">cy_user</property>
         <property name="hibernate.connection.password">w84Yv!Gt4s6</property>
         <property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>

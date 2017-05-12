@@ -31,7 +31,7 @@ class DateRangePicker extends React.Component {
                     <div className="input-group">
                         <input type="text" className="form-control" value={label}/>
                         <span className="input-group-btn">
-                            <Button className="default date-range-toggle">
+                            <Button className="default date-range-toggle calspeck">
                               <i className="glyphicon glyphicon-calendar"/>
                             </Button>
                         </span>

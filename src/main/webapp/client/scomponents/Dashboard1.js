@@ -7,7 +7,8 @@ import update from 'react-addons-update'
 import Authorization from './../utils/Authorization'
 import { fetchEfficacyMetrics } from './../redux/actions/cynicES'
 import DateRangePicker from './component/DateRangePicker'
-import moment from 'moment';
+import moment from 'moment'
+import SpinnerMain from './SpinnerMain'
 
 
 @connect((store) => {
@@ -232,7 +233,7 @@ class Dashboard1 extends React.Component {
         if(this.props.data!=null){
             return this._renderChart();
         }else{
-            return (<div>Nothing</div>);
+            return (<SpinnerMain/>);
         }
 
     }

@@ -26,6 +26,7 @@
     "prop-types": "^15.5.8",
     "querystring": "^0.2.0",
     "react": "^15.5.4",
+    "react-addons-update": "^15.5.2",
     "react-bootstrap": "^0.30.9",
     "react-bootstrap-date-picker": "^5.0.1",
     "react-bootstrap-daterangepicker": "^3.2.2",

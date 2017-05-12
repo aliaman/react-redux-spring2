@@ -2,6 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import ReactHighcharts from 'react-highcharts'
 import * as RB from 'react-bootstrap'
+import update from 'react-addons-update'
 
 import Authorization from './../utils/Authorization'
 import { fetchEfficacyMetrics } from './../redux/actions/cynicES'
@@ -28,51 +29,90 @@ class Dashboard1 extends React.Component {
                     'This Month': [moment().startOf('month'), moment().endOf('month')],
                     'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
                 },
-                maxDate: new Date(),
-                startDate: moment().subtract(8, 'days'),
-                endDate: moment().subtract(0, 'days'),
+                maxDate: moment(),
+                startDate: moment().startOf('day').subtract(96, 'days'),
+                endDate: moment().endOf('day').subtract(90, 'days'),
             },
-            config:{
-                /* HighchartsConfig */
-                title:{
-                    text: ''
+            charts:{
+                volume:{
+                    /* HighchartsConfig */
+                    chart: {
+                        type: 'column',
+                        height: 350
+                    },
+                    title:{
+                        text: ''
+                    },
+                    yAxis: {
+                        title: {
+                            text: 'Count'
+                        }
+                    },
+                    tooltip: {
+                        pointFormat: '<span style="color:{series.color}">{series.name}</span>: <b>{point.y}</b> ({point.percentage:.0f}%)<br/>',
+                        shared: true
+                    },
+                    plotOptions: {
+                        column: {
+                            stacking: 'normal'
+                        },
+                        series: {
+                            dataLabels: {
+                                enabled: true,
+                                borderRadius: 2,
+                                y: -10,
+                                shape: 'callout'
+                            }
+                        }
+                    },
+                    legend: {
+                        enabled: false
+                    },
                 },
-                yAxis: {
+                percentage:{
+                    chart: {
+                        type: 'column',
+                        height: 200
+                    },
                     title: {
-                        text: 'count'
-                    }
-                },
-                plotOptions: {
-                    column: {
-                        stacking: 'normal'
-                    }
-                },
-                chart: {
-                    type: 'column'
-                },
-                xAxis: {
-                    categories: [
-                        moment().subtract(6, 'days').format('dddd'),
-                        moment().subtract(5, 'days').format('dddd'),
-                        moment().subtract(4, 'days').format('dddd'),
-                        moment().subtract(3, 'days').format('dddd'),
-                        moment().subtract(2, 'days').format('dddd'),
-                        moment().subtract(1, 'days').format('dddd'),
-                        moment().subtract(0, 'days').format('dddd')]
-                },
-                series: [{
-                    data: [0]
-                },{
-                    data: [0]
-                },{
-                    data: [0]
-                }]
-            },
+                        text: ' '
+                    },
+                    yAxis: {
+                        min: 0,
+                        title: {
+                            text: 'Percentage'
+                        }
+                    },
+                    tooltip: {
+                        pointFormat: '<span style="color:{series.color}">{series.name}</span>: <b>{point.y}</b> ({point.percentage:.0f}%)<br/>',
+                        shared: true
+                    },
+                    plotOptions: {
+                        column: {
+                            stacking: 'percent'
+                        },
+                        series: {
+                            dataLabels: {
+                                enabled: true,
+                                borderRadius: 2,
+                                y: -10,
+                                shape: 'callout',
+                                formatter: function () {
+                                    return (Math.round(this.percentage)+ "%");
+                                }
+                            }
+                        }
+                    },
+                }
+            }
+
         };
         console.log(JSON.stringify(this.state));
     }
     componentWillMount(){
-        this.props.dispatch(fetchEfficacyMetrics(this.state.dp.startDate.valueOf(), this.state.dp.endDate.valueOf()));
+        //adding an extra day and then deleting it in the end to be consistent in results
+        let end = this.state.dp.endDate.clone().add(1, "days").valueOf();
+        this.props.dispatch(fetchEfficacyMetrics(this.state.dp.startDate.valueOf(), end));
     }
     componentWillReceiveProps(nextProps){
         this.setState(nextProps);
@@ -81,6 +121,8 @@ class Dashboard1 extends React.Component {
         let b1 = new Array();
         let b2 = new Array();
         let b3 = new Array();
+        data.aggregations["2"].buckets.shift();//we dont want the first and last indicies
+        data.aggregations["2"].buckets.pop();
         for(let k in data.aggregations["2"].buckets){
             b1.push(data.aggregations["2"].buckets[k]["3"].buckets.FN.doc_count);
             b2.push(data.aggregations["2"].buckets[k]["3"].buckets.FP.doc_count);
@@ -91,25 +133,51 @@ class Dashboard1 extends React.Component {
         let categoriescount = data.aggregations["2"].buckets.length;
         do{
             let t = this.state.dp.endDate.clone().add("1", "days");
-            let q = t.subtract(categoriescount--, 'days').format('MM/DD/YY');
+            let q = t.subtract(categoriescount--, 'days').format('YYYY-MM-DD');
             categories.push(q);
         }while(categoriescount>0);
 
-        this.setState({
-            config: Object.assign({}, this.state.config, {
+        let volumeChart = update(this.state.charts.volume,
+            {$merge: {
+                xAxis: {
+                    categories: categories,
+                    labels: {
+                        enabled:false
+                    }
+                },
+                series: [{
+                    name: "FN",
+                    data: b1
+                }, {
+                    name: 'FP',
+                    data: b2
+                }, {
+                    name: 'Accuracy',
+                    data: b3
+                }]
+            }
+        });
+        let percentageChart = update(this.state.charts.percentage,
+            {$merge: {
                 xAxis: {
                     categories: categories
                 },
                 series: [{
                     name: "FN",
                     data: b1
-                },{
+                }, {
                     name: 'FP',
                     data: b2
-                },{
+                }, {
                     name: 'Accuracy',
                     data: b3
-                }]
+                }],
+            }
+            });
+        this.setState({
+            charts: Object.assign({}, this.state.charts, {
+                volume: volumeChart,
+                percentage: percentageChart
             })
         });
     }
@@ -131,14 +199,13 @@ class Dashboard1 extends React.Component {
         });
     }
     fetchMetrics(){
-        console.log(this.state.dp.startDate + '-' + this.state.dp.endDate);
-        this.props.dispatch(fetchEfficacyMetrics(this.state.dp.startDate.valueOf(), this.state.dp.endDate.valueOf()));
+        let end = this.state.dp.endDate.clone().add(1, "days").valueOf();
+        this.props.dispatch(fetchEfficacyMetrics(this.state.dp.startDate.valueOf(), end));
     }
     _renderChart(){
         return (
             <div>
-                <h3>Cynic Efficacy Metrics</h3>
-                <ReactHighcharts config={this.state.config} ref="chart">a</ReactHighcharts>
+                <h3>Cynic 90 day Retrospective Efficacy Metrics</h3>
                 <RB.Row>
                     <RB.Col md={3} mdOffset={7}>
                         <DateRangePicker {...this.state.dp} clickHandler={this.handleApply} />
@@ -151,6 +218,12 @@ class Dashboard1 extends React.Component {
                             Fetch Metrics
                         </RB.Button>
                     </RB.Col>
+                </RB.Row>
+                <RB.Row>
+                    <ReactHighcharts config={this.state.charts.volume} ref="chart">a</ReactHighcharts>
+                </RB.Row>
+                <RB.Row>
+                    <ReactHighcharts config={this.state.charts.percentage} ref="chart2">b</ReactHighcharts>
                 </RB.Row>
             </div>
         )

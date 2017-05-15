@@ -8,7 +8,7 @@ import Authorization from './../utils/Authorization'
 import { fetchEfficacyMetrics } from './../redux/actions/cynicES'
 import DateRangePicker from './component/DateRangePicker'
 import moment from 'moment'
-import SpinnerMain from './SpinnerMain'
+import ReactSpinner from 'reactjs-spinner'
 
 
 @connect((store) => {
@@ -230,10 +230,15 @@ class Dashboard1 extends React.Component {
         )
     }
     render() {
+        const style = {
+            marginTop: '140px',
+        };
         if(this.props.data!=null){
             return this._renderChart();
         }else{
-            return (<SpinnerMain/>);
+            return (<div style={style}>
+                        <ReactSpinner size={50} borderColor={"#f3f3f3"} borderTopColor={"#3498db"} />
+                    </div>);
         }
 
     }

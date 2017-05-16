@@ -1,4 +1,7 @@
 $errorcolor: #bc5c42;
+body{
+  font-family: "Roboto", Menlo, Monaco, Consolas, "Courier New", monospace;
+}
 
 .content-viewer.is--index .guide-section{
   position: static;
@@ -30,4 +33,21 @@ h1.symheading{
 }
 .calspeck{
   height: 34px;
+}
+.compactHeading{
+  margin: -24px 0 20px;
+}
+.rt-tr:HOVER .inline__edit{
+  display: block;
+}
+.rt-tbody{
+  font-size: 12px;
+}
+.inline__edit{
+  display: none;
+  margin: -5px auto;
+  padding: 2px 15px;
+}
+.ReactTable .rt-th, .ReactTable .rt-td{
+  height: 30px;
 }

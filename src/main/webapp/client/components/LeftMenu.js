@@ -29,7 +29,8 @@ export default class LeftMenu extends React.Component {
                             <Link to="/">Dashboard</Link>
                             <ul className="content-viewer-aside-subsections">
                                 { this.allowedFor(["ADMINISTRATOR"]) ? <li><Link to="/dash/1">Cynic Efficacy Metrics</Link></li> : null }
-                                { this.allowedFor(["MANAGER"]) ? <li><Link to="/dash/2">Dashboard 2</Link></li> : null }
+                                { this.allowedFor(["ADMINISTRATOR"]) ? <li><Link to="/dash/2">FN sample hash tracking</Link></li> : null }
+                                { this.allowedFor(["ADMINISTRATOR"]) ? <li><Link to="/dash/3">FP sample hash tracking</Link></li> : null }
                             </ul>
                         </li>
                     </ul>

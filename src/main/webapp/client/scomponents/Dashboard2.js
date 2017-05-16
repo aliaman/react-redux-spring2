@@ -8,18 +8,26 @@ import * as RB from 'react-bootstrap'
 
 @connect((store) => {
     return {
-        data: store.hashTracking.data
+        data: store.hashTracking.data,
+        selectedHash: store.hashTracking.selectedHash
     }
 })
 class Dashboard2 extends React.Component {
-    Dashboard2(){
-        this.setState({showModal: false})
+    constructor(props){
+        super(props);
     }
     componentWillMount(){
         this.props.dispatch(fetchHashTracking("FN"));
+        this.setState({showModal: false});
     }
-    handleClick(event, id){
-        console.log(event);
+    componentWillReceiveProps(nextProps){
+        this.setState(nextProps);
+    }
+    handleClick(id, event){
+        this.setState({
+            selectedHash: this.props.data.filter(hash => hash._id == id)[0]
+        })
+        this.open();
     }
     close(){
         this.setState({ showModal: false });
@@ -45,19 +53,7 @@ class Dashboard2 extends React.Component {
         };
 
         const dialogStyle = function() {
-            // we use some psuedo random coords so nested modals
-            // don't sit right on top of each other.
-            let top = 50 + rand();
-            let left = 50 + rand();
-
             return {
-                position: 'absolute',
-                width: 400,
-                top: top + '%', left: left + '%',
-                transform: `translate(-${top}%, -${left}%)`,
-                border: '1px solid #e5e5e5',
-                backgroundColor: 'white',
-                boxShadow: '0 5px 15px rgba(0,0,0,.5)',
                 padding: 20
             };
         };
@@ -117,12 +113,39 @@ class Dashboard2 extends React.Component {
                         columns={columns}
                         defaultPageSize={10}
                     />
+                    <RB.Modal
+                        aria-labelledby='modal-label'
+                        style={modalStyle}
+                        backdropStyle={backdropStyle}
+                        show={this.state.showModal}
+                        onHide={this.close.bind(this)}
+                    >
+                        <div style={dialogStyle()} >
+                            <span onClick={this.close.bind(this)}>
+                                <span className="glyphicon glyphicon-eject"></span>
+                            </span>
+                            <h4>Hash Details</h4>
+                            <p/>
+                            <div>Id: {this.state.selectedHash._id}</div>
+                            <div>Index: {this.state.selectedHash._index}</div>
+                            <div>Score: {this.state.selectedHash._score}</div>
+                            <div>Customer: {this.state.selectedHash._source.customer}</div>
+                            <div>Disposition: {this.state.selectedHash._source.merlin.disposition_type}</div>
+                            <div>Type: {this.state.selectedHash._type}</div>
+                            <div>SHA256: {this.state.selectedHash._source.sha256}</div>
+                            <div>Mime Type: {this.state.selectedHash._source.mime_type}</div>
+                            <div>Task Id: {this.state.selectedHash._source.task_id}</div>
+                            <div>Timestamp: {this.state.selectedHash._source.timestamp}</div>
+                            <div>Site: {this.state.selectedHash._source.site}</div>
+                            <div>Reputation: {this.state.selectedHash._source.retrospective.reputation}</div>
+                        </div>
+                    </RB.Modal>
                 </div>
             );
         }else{
             return (<div style={style}>
                 <ReactSpinner size={50} borderColor={"#f3f3f3"} borderTopColor={"#3498db"} />
-            </div>);
+            }</div>);
         }
     }
 }

@@ -130,6 +130,13 @@ class Dashboard2 extends React.Component {
     open(){
         this.setState({ showModal: true });
     }
+    getPropForKey(key, prop){
+        //TODO: filter the data for the key
+        return '';
+    }
+    autoSuggestChanged(id, value){
+        console.log(`Autosuggest changed ${id} and ${value}...`)
+    }
     render() {
         const style = {
             marginTop: '140px',
@@ -179,23 +186,29 @@ class Dashboard2 extends React.Component {
             accessor: '_id',
             Cell: props =>
                 <div>
-                    <Suggestion suggestions={this.state.autosuggest.reason} />
+                    <Suggestion
+                        id={props.value}
+                        reportChange={this.autoSuggestChanged.bind(this)}
+                        value={this.getPropForKey(props.value, "reason")}
+                        suggestions={this.state.autosuggest.reason} />
                 </div>
         },{
             Header: 'Comment',
             accessor: '_id',
-            Cell: props =>
-                <div>
-                    <Suggestion suggestions={this.state.autosuggest.comment} />
-                </div>
+            // Cell: props =>
+            //     <div>
+            //         <Suggestion
+            //             ref={(fieldEditor1) => {this.fieldEditor1 = fieldEditor1;}}
+            //             suggestions={this.state.autosuggest.comment} />
+            //     </div>
 
         },{
             Header: 'Mitigation',
             accessor: '_id',
-            Cell: props =>
-                <div>
-                    <Suggestion suggestions={this.state.autosuggest.mitigation} />
-                </div>
+            // Cell: props =>
+            //     <div>
+            //         <Suggestion suggestions={this.state.autosuggest.mitigation} />
+            //     </div>
         },{
                 Header: '',
                 accessor: '_id',

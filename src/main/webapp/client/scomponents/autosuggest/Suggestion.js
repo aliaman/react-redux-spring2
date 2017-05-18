@@ -8,7 +8,8 @@ export default class Suggestion extends React.Component {
         super(props);
 
         this.state = {
-            value: '',
+            id: this.props.id,
+            value: this.props.value,
             completelist: this.props.suggestions,
             suggestions: this.getSuggestions('')
         };
@@ -53,12 +54,18 @@ export default class Suggestion extends React.Component {
         }
     }
 
+    onBlur(event, { highlightedSuggestion }){
+        this.props.reportChange(this.state.id, this.state.value);
+    }
+
     // When suggestion is selected, we need to update `suggestions` so that,
     // if user presses Up or Down to reveal suggestions,
     // they would see the updated list.
     onSuggestionSelected(event, { suggestionValue }) {
         this.setState({
             suggestions: this.getSuggestions(suggestionValue)
+        }, function(){
+            this.props.reportChange(this.state.id, this.state.value);
         });
     }
 
@@ -73,9 +80,10 @@ export default class Suggestion extends React.Component {
     render() {
         const { value, suggestions } = this.state;
         const inputProps = {
-            placeholder: 'Type Reason',
+            placeholder: '',
             value,
-            onChange: this.onChange
+            onChange: this.onChange,
+            onBlur: this.onBlur.bind(this),
         };
 
         return (

@@ -4,6 +4,7 @@ import { connect } from 'react-redux'
 import { fetchHashTracking } from './../redux/actions/hashTrackingES'
 import ReactTable from 'react-table'
 import ReactSpinner from 'reactjs-spinner'
+import Suggestion from './autosuggest/Suggestion'
 import * as RB from 'react-bootstrap'
 
 @connect((store) => {
@@ -15,6 +16,100 @@ import * as RB from 'react-bootstrap'
 class Dashboard2 extends React.Component {
     constructor(props){
         super(props);
+        this.state = {
+            autosuggest:{
+                reason: [{
+                            name: "Reason1",
+                            value: "Reason1"
+                        },{
+                            name: "Reason2",
+                            value: "Reason2"
+                        },{
+                            name: "Reason3",
+                            value: "Reason3"
+                        },{
+                            name: "Reason4",
+                            value: "Reason4"
+                        },{
+                            name: "Reason5",
+                            value: "Reason5"
+                        },{
+                            name: "Reason6",
+                            value: "Reason6"
+                        },
+                    ],
+                comment:[{
+                            name: "Comment1",
+                            value: "Comment1"
+                        },{
+                            name: "Comment2",
+                            value: "Comment2"
+                        },{
+                            name: "Comment3",
+                            value: "Comment3"
+                        },{
+                            name: "Comment4",
+                            value: "Comment4"
+                        },{
+                            name: "Comment5",
+                            value: "Comment5"
+                        },{
+                            name: "Comment6",
+                            value: "Comment6"
+                        },
+                    ],
+                mitigation:[{
+                            name: "Mitigation1",
+                            value: "Mitigation1"
+                        },{
+                            name: "Mitigation2",
+                            value: "Mitigation2"
+                        },{
+                            name: "Mitigation3",
+                            value: "Mitigation3"
+                        },{
+                            name: "Mitigation4",
+                            value: "Mitigation4"
+                        },{
+                            name: "Mitigation5",
+                            value: "Mitigation5"
+                        },{
+                            name: "Mitigation6",
+                            value: "Mitigation6"
+                        },
+                    ]
+                },
+            selectedHash: {
+                "_index": "",
+                "_type": "",
+                "_id": "",
+                "_score": 0,
+                "_source": {
+                    "conviction_time": "",
+                    "merlin": {
+                        "disposition_type": "",
+                        "versions": {
+                            "merlin": "",
+                            "merlin_rules": ""
+                        },
+                        "is_targeted": 0,
+                        "score": 0,
+                        "applicable_rules": ""
+                    },
+                    "customer": "",
+                    "sha256": "",
+                    "broken": 0,
+                    "mime_type": "",
+                    "conviction": "",
+                    "task_id": "",
+                    "timestamp": "",
+                    "site": "",
+                    "retrospective": {
+                        "reputation": 0
+                    }
+                }
+            }
+        }
     }
     componentWillMount(){
         this.props.dispatch(fetchHashTracking("FN"));
@@ -59,34 +154,20 @@ class Dashboard2 extends React.Component {
         };
         const columns = [{
             Header: 'Id',
+            show: false,
             accessor: '_id' // String-based value accessors!
         },{
-            Header: 'Index',
-            accessor: '_index' // String-based value accessors!
-        },{
-            Header: 'Score',
-            accessor: '_score' // String-based value accessors!
-        },{
-            Header: 'Customer',
-            accessor: '_source.customer' // String-based value accessors!
-        },{
-            Header: 'Disposition',
-            accessor: '_source.merlin.disposition_type' // String-based value accessors!
-        },{
-            Header: 'Type',
-            accessor: '_type',
+            Header: 'Timestamp',
+            accessor: '_source.timestamp',
         },{
             Header: 'Hash',
             accessor: '_source.sha256',
         },{
-            Header: 'Mime',
-            accessor: '_source.mime_type',
-        },{
             Header: 'Task Id',
             accessor: '_source.task_id',
         },{
-            Header: 'Timestamp',
-            accessor: '_source.timestamp',
+            Header: 'Mime',
+            accessor: '_source.mime_type',
         },{
             Header: 'Site',
             accessor: '_source.site',
@@ -94,13 +175,36 @@ class Dashboard2 extends React.Component {
             Header: 'Reputation',
             accessor: '_source.retrospective.reputation',
         },{
-            Header: '',
+            Header: 'Reason',
             accessor: '_id',
-            Cell: props => <span className='center-block'>
-                <RB.Button className="inline__edit" onClick={this.handleClick.bind(this, props.value)}>
-                    <span className="glyphicon glyphicon-edit"></span>
-                </RB.Button>
-            </span>
+            Cell: props =>
+                <div>
+                    <Suggestion suggestions={this.state.autosuggest.reason} />
+                </div>
+        },{
+            Header: 'Comment',
+            accessor: '_id',
+            Cell: props =>
+                <div>
+                    <Suggestion suggestions={this.state.autosuggest.comment} />
+                </div>
+
+        },{
+            Header: 'Mitigation',
+            accessor: '_id',
+            Cell: props =>
+                <div>
+                    <Suggestion suggestions={this.state.autosuggest.mitigation} />
+                </div>
+        },{
+                Header: '',
+                accessor: '_id',
+                Cell: props =>
+                    <span className='center-block'>
+                        <RB.Button className="inline__edit" onClick={this.handleClick.bind(this, props.value)}>
+                            <span className="glyphicon glyphicon-edit"></span>
+                        </RB.Button>
+                    </span>
         }];
         if(this.props.data!=null){
             return (
@@ -120,6 +224,7 @@ class Dashboard2 extends React.Component {
                         show={this.state.showModal}
                         onHide={this.close.bind(this)}
                     >
+
                         <div style={dialogStyle()} >
                             <span onClick={this.close.bind(this)}>
                                 <span className="glyphicon glyphicon-eject"></span>
@@ -145,7 +250,7 @@ class Dashboard2 extends React.Component {
         }else{
             return (<div style={style}>
                 <ReactSpinner size={50} borderColor={"#f3f3f3"} borderTopColor={"#3498db"} />
-            }</div>);
+            </div>);
         }
     }
 }

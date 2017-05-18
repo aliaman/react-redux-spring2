@@ -4,7 +4,6 @@ import querystring from 'querystring';
 
 
 export function doLogin(email, password) {
-    console.log(`attempting login with ${email} and ${password}`);
     return function(dispatch) {
         axios.post(rest.LOGIN, querystring.stringify({'email': email}))
             .then((response) => {

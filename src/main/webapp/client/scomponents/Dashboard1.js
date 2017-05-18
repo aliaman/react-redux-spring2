@@ -108,7 +108,6 @@ class Dashboard1 extends React.Component {
             }
 
         };
-        console.log(JSON.stringify(this.state));
     }
     componentWillMount(){
         //adding an extra day and then deleting it in the end to be consistent in results

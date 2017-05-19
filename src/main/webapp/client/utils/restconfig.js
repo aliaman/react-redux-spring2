@@ -8,7 +8,9 @@ class RestConfig {
             'GET_ALL_USERS': this.base + 'users',
             'LOGIN': this.base + 'login',
             'GET_EFFICACY_METRICS': 'https://search-cynic-analytics-o66747gccvno7p2p5ur3atabdq.us-east-1.es.amazonaws.com/task-*/task/_search',
-            'ES_BASE': 'https://search-cynic-analytics-o66747gccvno7p2p5ur3atabdq.us-east-1.es.amazonaws.com'
+            'ES_BASE': 'https://search-cynic-analytics-o66747gccvno7p2p5ur3atabdq.us-east-1.es.amazonaws.com',
+            'GET_COMMENTS_FOR_EFFICACY_METRICS': this.base + 'comments',
+            'SAVE_COMMENTS_FOR_EFFICACY_METRICS': this.base + 'comments',
         }
     }
     prod() {
@@ -16,7 +18,9 @@ class RestConfig {
             'GET_ALL_USERS': this.base + 'users/getAllUsers',
             'LOGIN': this.base + 'auth/login',
             'GET_EFFICACY_METRICS': 'https://search-cynic-analytics-o66747gccvno7p2p5ur3atabdq.us-east-1.es.amazonaws.com/task-*/task/_search',
-            'ES_BASE': 'https://search-cynic-analytics-o66747gccvno7p2p5ur3atabdq.us-east-1.es.amazonaws.com'
+            'ES_BASE': 'https://search-cynic-analytics-o66747gccvno7p2p5ur3atabdq.us-east-1.es.amazonaws.com',
+            'GET_COMMENTS_FOR_EFFICACY_METRICS': this.base + 'esdata/comments',
+            'SAVE_COMMENTS_FOR_EFFICACY_METRICS': this.base + 'esdata/comment',
         }
     }
 }

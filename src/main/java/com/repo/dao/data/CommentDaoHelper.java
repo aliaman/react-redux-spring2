@@ -30,5 +30,25 @@ public class CommentDaoHelper {
             return allComments;
         }
     }
+
+    public static void saveComments(String id, String comment, String reason, String mitigation){
+        Session session = null;
+        try{
+            SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+            session = sessionFactory.openSession();
+
+            Comment comment1 = new Comment();
+            comment1.setId(id);
+            comment1.setComment(comment);
+            comment1.setReason(reason);
+            comment1.setMitigation(mitigation);
+            session.saveOrUpdate(comment1);
+
+        }catch(Exception e){
+
+        }finally{
+            session.close();
+        }
+    }
 }
 

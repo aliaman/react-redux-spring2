@@ -1,6 +1,7 @@
 import elasticsearch from 'elasticsearch'
+import axios from 'axios'
 import rest from './../../utils/restconfig'
-
+import querystring from 'querystring'
 
 export function fetchHashTracking(type="FP") {
 
@@ -20,5 +21,37 @@ export function fetchHashTracking(type="FP") {
         }, function (error) {
             dispatch({type: 'HASHTRACKING_REJECTED',  payload: error.message})
         });
+    }
+}
+
+export function fetchCommentsForEfficacyMetrics() {
+    return function(dispatch) {
+        axios.get(rest.GET_COMMENTS_FOR_EFFICACY_METRICS)
+            .then((response) => {
+                if(response.data.success) {
+                    dispatch({type: 'CYNIC_ES_COMMENTS_FULFILLED', payload: response.data.payload})
+                }else{
+                    dispatch({type: 'CYNIC_ES_COMMENTS_REJECTED', payload: response.data.payload});
+                }
+            })
+            .catch((err) => {
+                dispatch({type: 'CYNIC_ES_COMMENTS_REJECTED', payload: err});
+            })
+    }
+}
+
+export function saveCommentsForEfficacyMetrics(id, values) {
+    return function(dispatch) {
+        axios.post(rest.SAVE_COMMENTS_FOR_EFFICACY_METRICS, querystring.stringify({'id': id, 'comment': values.comment, 'reason': values.reason, 'mitigation': values.mitigtion}))
+            .then((response) => {
+                if(response.data.success) {
+                    dispatch({type: 'SAVE_ES_COMMENTS_FULFILLED', payload: response.data.payload})
+                }else{
+                    dispatch({type: 'SAVE_ES_COMMENTS_REJECTED', payload: response.data.payload});
+                }
+            })
+            .catch((err) => {
+                dispatch({type: 'SAVE_ES_COMMENTS_REJECTED', payload: err});
+            })
     }
 }

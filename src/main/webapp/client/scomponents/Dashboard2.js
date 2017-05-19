@@ -1,7 +1,7 @@
 import React from 'react'
 import Authorization from './../utils/Authorization'
 import { connect } from 'react-redux'
-import { fetchHashTracking } from './../redux/actions/hashTrackingES'
+import { fetchHashTracking, fetchCommentsForEfficacyMetrics, saveCommentsForEfficacyMetrics } from './../redux/actions/hashTrackingES'
 import ReactTable from 'react-table'
 import ReactSpinner from 'reactjs-spinner'
 import Suggestion from './autosuggest/Suggestion'
@@ -10,7 +10,8 @@ import update from 'react-addons-update'
 
 @connect((store) => {
     return {
-        data: store.hashTracking.data
+        data: store.hashTracking.data,
+        comments: store.hashTracking.comments
     }
 })
 class Dashboard2 extends React.Component {
@@ -116,9 +117,11 @@ class Dashboard2 extends React.Component {
     }
     componentWillMount(){
         this.props.dispatch(fetchHashTracking("FN"));
+        this.props.dispatch(fetchCommentsForEfficacyMetrics());
         this.setState({showModal: false});
     }
     componentWillReceiveProps(nextProps){
+        console.log(nextProps);
         let formatteddata = update(this.state.formatteddata,
             {
                 $merge: {
@@ -126,7 +129,7 @@ class Dashboard2 extends React.Component {
                 }
             }
         );
-        formatteddata = this.addSupplementInfo(formatteddata);
+        formatteddata = this.addSupplementInfo(formatteddata, nextProps.comments);
         console.log(formatteddata);
         this.setState({
             formatteddata: formatteddata
@@ -148,28 +151,28 @@ class Dashboard2 extends React.Component {
         let obj = this.state.formatteddata.list.filter((record)=>record._id == id)[0];
         return (obj[key]==undefined?'':obj[key]);
     }
-    autoSuggestChanged(id, value){
+    autoSuggestChanged(id, value, type){
+        console.log(`Autosuggest changed ${id} and ${value} and ${type}....`);
         //TODO: persist
-        console.log(`Autosuggest changed ${id} and ${value}...`)
+        let values = {
+            comment: null,
+            reason: null,
+            mitigation: null
+        };
+        values[type] = value;
+        this.props.dispatch(saveCommentsForEfficacyMetrics(id, values));
     }
-    addSupplementInfo(data){
-        const mockComments = [{
-            id: 'AVpsJE09t84KCCnldNvB',
-            reason: 'Reason reason reason',
-            comment: 'RandomComment'
-        },{
-            id: 'AVpr8JKVq-zzx-zFhWpZ',
-            reason: 'Reason2 reason reason'
-        }];
-
+    addSupplementInfo(data, mockComments){
         mockComments.forEach((mockComment)=>{
             let id = mockComment.id;
             let reason = mockComment.reason;
             let comment = mockComment.comment;
+            let mitigation = mockComment.mitigation;
             for(let k in data.list){
                 if(data.list[k]._id == id){
                     data.list[k]['reason'] = reason;
                     data.list[k]['comment'] = comment;
+                    data.list[k]['mitigation'] = mitigation;
                 }
             }
         });
@@ -199,7 +202,6 @@ class Dashboard2 extends React.Component {
         };
         const columns = [{
             Header: 'Id',
-            show: false,
             accessor: '_id' // String-based value accessors!
         },{
             Header: 'Timestamp',
@@ -226,6 +228,7 @@ class Dashboard2 extends React.Component {
                 <div>
                     <Suggestion
                         id={props.value}
+                        type="reason"
                         reportChange={this.autoSuggestChanged.bind(this)}
                         value={this.getPropForKey(props.value, "reason")}
                         suggestions={this.state.autosuggest.reason} />
@@ -237,6 +240,7 @@ class Dashboard2 extends React.Component {
                 <div>
                     <Suggestion
                         id={props.value}
+                        type="comment"
                         reportChange={this.autoSuggestChanged.bind(this)}
                         value={this.getPropForKey(props.value, "comment")}
                         suggestions={this.state.autosuggest.comment} />
@@ -249,6 +253,7 @@ class Dashboard2 extends React.Component {
                 <div>
                     <Suggestion
                         id={props.value}
+                        type="mitigation"
                         reportChange={this.autoSuggestChanged.bind(this)}
                         value={this.getPropForKey(props.value, "mitigation")}
                         suggestions={this.state.autosuggest.mitigation} />

@@ -9,6 +9,7 @@ export default class Suggestion extends React.Component {
 
         this.state = {
             id: this.props.id,
+            type: this.props.type,
             value: this.props.value,
             completelist: this.props.suggestions,
             suggestions: this.getSuggestions('')
@@ -55,7 +56,7 @@ export default class Suggestion extends React.Component {
     }
 
     onBlur(event, { highlightedSuggestion }){
-        this.props.reportChange(this.state.id, this.state.value);
+        this.props.reportChange(this.state.id, this.state.value, this.state.type);
     }
 
     // When suggestion is selected, we need to update `suggestions` so that,
@@ -65,7 +66,7 @@ export default class Suggestion extends React.Component {
         this.setState({
             suggestions: this.getSuggestions(suggestionValue)
         }, function(){
-            this.props.reportChange(this.state.id, this.state.value);
+            this.props.reportChange(this.state.id, this.state.value, this.state.type);
         });
     }
 
@@ -89,6 +90,7 @@ export default class Suggestion extends React.Component {
         return (
             <Autosuggest suggestions={suggestions}
                          id={this.props.id}
+                         type={this.props.type}
                          getSuggestionValue={this.getSuggestionValue.bind(this)}
                          renderSuggestion={this.renderSuggestion.bind(this)}
                          inputProps={inputProps}

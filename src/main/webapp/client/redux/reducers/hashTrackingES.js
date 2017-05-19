@@ -3,36 +3,7 @@ let initialState = {
     fetched: false,
     error: null,
     data: null,
-    selectedHash: {
-        "_index": "",
-        "_type": "",
-        "_id": "",
-        "_score": 0,
-        "_source": {
-            "conviction_time": "",
-            "merlin": {
-                "disposition_type": "",
-                "versions": {
-                    "merlin": "",
-                    "merlin_rules": ""
-                },
-                "is_targeted": 0,
-                "score": 0,
-                "applicable_rules": ""
-            },
-            "customer": "",
-            "sha256": "",
-            "broken": 0,
-            "mime_type": "",
-            "conviction": "",
-            "task_id": "",
-            "timestamp": "",
-            "site": "",
-            "retrospective": {
-                "reputation": 0
-            }
-        }
-    }
+    comments: []
 };
 
 const hashTrackingESReducer = (state=initialState, action) => {
@@ -54,6 +25,45 @@ const hashTrackingESReducer = (state=initialState, action) => {
                 fetched: true,
                 error: null,
                 data: action.payload.data.hits.hits
+            }
+        }
+        //get comments
+        case "CYNIC_ES_COMMENTS_PENDING": {
+            return {...state, fetching: true}
+        }
+        case "CYNIC_ES_COMMENTS_REJECTED": {
+            return {
+                ...state,
+                fetching: false,
+                error: action.payload,
+            }
+        }
+        case "CYNIC_ES_COMMENTS_FULFILLED": {
+            return {
+                ...state,
+                fetching: false,
+                fetched: true,
+                error: null,
+                comments: action.payload
+            }
+        }
+        //Save Comments
+        case "SAVE_ES_COMMENTS_PENDING": {
+            return {...state, fetching: true}
+        }
+        case "SAVE_ES_COMMENTS_REJECTED": {
+            return {
+                ...state,
+                fetching: false,
+                error: action.payload,
+            }
+        }
+        case "SAVE_ES_COMMENTS_FULFILLED": {
+            return {
+                ...state,
+                fetching: false,
+                fetched: true,
+                error: null
             }
         }
     }

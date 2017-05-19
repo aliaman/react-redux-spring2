@@ -36,5 +36,8 @@
       },
       "success": true
     }
+  },
+  "/comments":{
+    "get":{"payload":[{"reason":"Random2 Reasom","mitigation":"Mitigation2","id":"AVpr8JKVq-zzx-zFhWpZ"},{"reason":"Random1 Reasom","comment":"Comment1","id":"AVpsJE09t84KCCnldNvB"}],"success":true}
   }
 }

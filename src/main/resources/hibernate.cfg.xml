@@ -11,5 +11,6 @@
         <!-- mappings for annotated classes -->
         <mapping class="com.repo.dao.pojo.User"/>
         <mapping class="com.repo.dao.pojo.Role"/>
+        <mapping class="com.repo.dao.pojo.Comment"/>
     </session-factory>
 </hibernate-configuration>

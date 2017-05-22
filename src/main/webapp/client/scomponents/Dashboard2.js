@@ -152,14 +152,26 @@ class Dashboard2 extends React.Component {
         return (obj[key]==undefined?'':obj[key]);
     }
     autoSuggestChanged(id, value, type){
-        console.log(`Autosuggest changed ${id} and ${value} and ${type}....`);
         //TODO: persist
-        let values = {
-            comment: null,
-            reason: null,
-            mitigation: null
-        };
-        values[type] = value;
+        let values = new Map();
+        values.set('comment', null);
+        values.set('reason', null);
+        values.set('mitigation', null);
+        let keysToCheck = new Set(["mitigation", "reason", "comment"]);
+        let keyJustChanged = new Set([type]);
+        let difference = new Set(
+            [...keysToCheck].filter(x => !keyJustChanged.has(x)));
+
+        for(let k of difference.keys()){
+            let obj = this.state.formatteddata.list.filter(l => l._id == id)[0];
+            values.set(k, (obj[k]==undefined?'':obj[k]));
+        }
+        //modify the state
+        this.state.formatteddata.list.filter(l => l._id == id)[0][type] = value;
+        //modify the data structure
+        values.set(type, value);
+
+        console.log(`Autosuggest changed ${id} and ${values} and ${type}....`);
         this.props.dispatch(saveCommentsForEfficacyMetrics(id, values));
     }
     addSupplementInfo(data, mockComments){

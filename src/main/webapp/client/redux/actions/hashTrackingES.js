@@ -42,7 +42,7 @@ export function fetchCommentsForEfficacyMetrics() {
 
 export function saveCommentsForEfficacyMetrics(id, values) {
     return function(dispatch) {
-        axios.post(rest.SAVE_COMMENTS_FOR_EFFICACY_METRICS, querystring.stringify({'id': id, 'comment': values.comment, 'reason': values.reason, 'mitigation': values.mitigtion}))
+        axios.post(rest.SAVE_COMMENTS_FOR_EFFICACY_METRICS, querystring.stringify({'id': id, 'comment': values.get('comment'), 'reason': values.get('reason'), 'mitigation': values.get('mitigation')}))
             .then((response) => {
                 if(response.data.success) {
                     dispatch({type: 'SAVE_ES_COMMENTS_FULFILLED', payload: response.data.payload})

@@ -3,6 +3,7 @@ package com.repo.dao.data;
 import com.repo.dao.pojo.Comment;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 
 import javax.persistence.Query;
 import java.util.ArrayList;
@@ -36,6 +37,7 @@ public class CommentDaoHelper {
         try{
             SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
             session = sessionFactory.openSession();
+            Transaction tx = session.beginTransaction();
 
             Comment comment1 = new Comment();
             comment1.setId(id);
@@ -43,6 +45,7 @@ public class CommentDaoHelper {
             comment1.setReason(reason);
             comment1.setMitigation(mitigation);
             session.saveOrUpdate(comment1);
+            tx.commit();
 
         }catch(Exception e){
 

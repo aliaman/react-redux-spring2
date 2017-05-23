@@ -40,6 +40,22 @@ export function fetchCommentsForEfficacyMetrics() {
     }
 }
 
+export function fetchUniqueComments(){
+    return function(dispatch) {
+        axios.get(rest.GET_UNIQUE_COMMENTS_FOR_EFFICACY_METRICS)
+            .then((response) => {
+                if(response.data.success) {
+                    dispatch({type: 'ES_COMMENTS_UNIQUE_FULFILLED', payload: response.data.payload})
+                }else{
+                    dispatch({type: 'ES_COMMENTS_UNIQUE_REJECTED', payload: response.data.payload});
+                }
+            })
+            .catch((err) => {
+                dispatch({type: 'ES_COMMENTS_UNIQUE_REJECTED', payload: err});
+            })
+    }
+}
+
 export function saveCommentsForEfficacyMetrics(id, values) {
     return function(dispatch) {
         axios.post(rest.SAVE_COMMENTS_FOR_EFFICACY_METRICS, querystring.stringify({'id': id, 'comment': values.get('comment'), 'reason': values.get('reason'), 'mitigation': values.get('mitigation')}))

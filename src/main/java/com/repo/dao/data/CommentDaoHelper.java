@@ -1,13 +1,19 @@
 package com.repo.dao.data;
 
 import com.repo.dao.pojo.Comment;
+import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
+import org.hibernate.criterion.Projection;
+import org.hibernate.criterion.Projections;
 
 import javax.persistence.Query;
+import javax.persistence.criteria.CriteriaBuilder;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Vector;
 
 /**
  * Created by ali_jalbani on 5/19/17.
@@ -51,6 +57,29 @@ public class CommentDaoHelper {
 
         }finally{
             session.close();
+        }
+    }
+
+    public static List<Object> getDistinctColumn(String column){
+        Session session = null;
+        List<Object> uniqueComments = new ArrayList<>();
+        try{
+            SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+            session = sessionFactory.openSession();
+
+            uniqueComments = session.createQuery(
+                    "SELECT DISTINCT c." + column + " " +
+                            "FROM Comment c " + " " +
+                    "WHERE c." + column + " !=''" , Object.class )
+                    .getResultList();
+
+            System.out.println(uniqueComments);
+
+        }catch(Exception e){
+
+        }finally{
+            session.close();
+            return uniqueComments;
         }
     }
 }

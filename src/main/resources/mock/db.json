@@ -40,6 +40,8 @@
   "/comments":{
     "get":{"payload":[{"reason":"Random2 Reasom","mitigation":"Mitigation2","id":"AVpr8JKVq-zzx-zFhWpZ"},{"reason":"Random1 Reasom","comment":"Comment1","id":"AVpsJE09t84KCCnldNvB"}],"success":true},
     "post":{"payload":"Saved", "success": true}
-
+  },
+  "/getUniqueComments":{
+    "get":{"payload":{"reason":["r1","r"],"mitigation":["m2","m4","m"],"comment":["c1"]},"success":true}
   }
 }

@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Created by ali_jalbani on 5/19/17.
@@ -52,6 +53,31 @@ public class ESDataService extends GeneralService {
         try {
             CommentDaoHelper.saveComments(id, comment, reason, mitigation);
             data.put("payload", "Comment Saved");
+            data.put("success", true);
+        }catch( Exception e ){
+            data.put("success", false);
+            data.put("payload", e.toString());
+            e.printStackTrace();
+        }finally{
+            return data;
+        }
+    }
+
+    @RequestMapping(value = "/getUniqueComments",
+            method = RequestMethod.GET,
+            produces= MediaType.APPLICATION_JSON_VALUE)
+    public JSONObject getUniqueComments() throws RuntimeException {
+        JSONObject data = getSkeletonJson();
+        try {
+            List<Object> comment = CommentDaoHelper.getDistinctColumn("comment");
+            List<Object> reason = CommentDaoHelper.getDistinctColumn("reason");
+            List<Object> mitigation = CommentDaoHelper.getDistinctColumn("mitigation");
+            JSONObject lists = new JSONObject();
+            lists.put("comment", comment);
+            lists.put("reason", reason);
+            lists.put("mitigation", mitigation);
+
+            data.put("payload", lists);
             data.put("success", true);
         }catch( Exception e ){
             data.put("success", false);

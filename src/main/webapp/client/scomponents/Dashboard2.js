@@ -1,7 +1,7 @@
 import React from 'react'
 import Authorization from './../utils/Authorization'
 import { connect } from 'react-redux'
-import { fetchHashTracking, fetchCommentsForEfficacyMetrics, saveCommentsForEfficacyMetrics } from './../redux/actions/hashTrackingES'
+import { fetchHashTracking, fetchCommentsForEfficacyMetrics, saveCommentsForEfficacyMetrics, fetchUniqueComments } from './../redux/actions/hashTrackingES'
 import ReactTable from 'react-table'
 import ReactSpinner from 'reactjs-spinner'
 import Suggestion from './autosuggest/Suggestion'
@@ -10,8 +10,13 @@ import update from 'react-addons-update'
 
 @connect((store) => {
     return {
+        fetchedData: store.hashTracking.fetchedData,
+        fetchedComments: store.hashTracking.fetchedComments,
+        fetchedUniqueComments: store.hashTracking.fetchedUniqueComments,
+
         data: store.hashTracking.data,
-        comments: store.hashTracking.comments
+        comments: store.hashTracking.comments,
+        uniqueComments: store.hashTracking.uniqueComments,
     }
 })
 class Dashboard2 extends React.Component {
@@ -21,68 +26,7 @@ class Dashboard2 extends React.Component {
             formatteddata:{
                 list: []
             },
-            autosuggest:{
-                reason: [{
-                            name: "Reason1",
-                            value: "Reason1"
-                        },{
-                            name: "Reason2",
-                            value: "Reason2"
-                        },{
-                            name: "Reason3",
-                            value: "Reason3"
-                        },{
-                            name: "Reason4",
-                            value: "Reason4"
-                        },{
-                            name: "Reason5",
-                            value: "Reason5"
-                        },{
-                            name: "Reason6",
-                            value: "Reason6"
-                        },
-                    ],
-                comment:[{
-                            name: "Comment1",
-                            value: "Comment1"
-                        },{
-                            name: "Comment2",
-                            value: "Comment2"
-                        },{
-                            name: "Comment3",
-                            value: "Comment3"
-                        },{
-                            name: "Comment4",
-                            value: "Comment4"
-                        },{
-                            name: "Comment5",
-                            value: "Comment5"
-                        },{
-                            name: "Comment6",
-                            value: "Comment6"
-                        },
-                    ],
-                mitigation:[{
-                            name: "Mitigation1",
-                            value: "Mitigation1"
-                        },{
-                            name: "Mitigation2",
-                            value: "Mitigation2"
-                        },{
-                            name: "Mitigation3",
-                            value: "Mitigation3"
-                        },{
-                            name: "Mitigation4",
-                            value: "Mitigation4"
-                        },{
-                            name: "Mitigation5",
-                            value: "Mitigation5"
-                        },{
-                            name: "Mitigation6",
-                            value: "Mitigation6"
-                        },
-                    ]
-                },
+            autosuggest:{},
             selectedHash: {
                 "_index": "",
                 "_type": "",
@@ -118,22 +62,28 @@ class Dashboard2 extends React.Component {
     componentWillMount(){
         this.props.dispatch(fetchHashTracking("FN"));
         this.props.dispatch(fetchCommentsForEfficacyMetrics());
-        this.setState({showModal: false});
+        this.props.dispatch(fetchUniqueComments());
+        if(this.props.fetchedComments && this.props.fetchedData){
+            this.setState({showModal: false});
+        }
     }
     componentWillReceiveProps(nextProps){
-        console.log(nextProps);
-        let formatteddata = update(this.state.formatteddata,
-            {
-                $merge: {
-                    list: nextProps.data
+        if(nextProps.fetchedComments && nextProps.fetchedData && nextProps.fetchedUniqueComments) {
+            console.log(nextProps);
+            let formatteddata = update(this.state.formatteddata,
+                {
+                    $merge: {
+                        list: nextProps.data
+                    }
                 }
-            }
-        );
-        formatteddata = this.addSupplementInfo(formatteddata, nextProps.comments);
-        console.log(formatteddata);
-        this.setState({
-            formatteddata: formatteddata
-        });
+            );
+            formatteddata = this.addSupplementInfo(formatteddata, nextProps.comments);
+            console.log(formatteddata);
+            this.setState({
+                formatteddata: formatteddata,
+                autosuggest: nextProps.uniqueComments
+            });
+        }
     }
     handleClick(id, event){
         this.setState({
@@ -190,6 +140,14 @@ class Dashboard2 extends React.Component {
         });
         return data;
     }
+    getSuggestions(type){
+        let suggestions = [];
+        for(let k in this.state.autosuggest[type]){
+            suggestions.push({name: this.state.autosuggest[type][k],
+                value: this.state.autosuggest[type][k]});
+        }
+        return suggestions;
+    }
     render() {
         const style = {
             marginTop: '140px',
@@ -212,75 +170,75 @@ class Dashboard2 extends React.Component {
                 padding: 20
             };
         };
-        const columns = [{
-            Header: 'Id',
-            accessor: '_id' // String-based value accessors!
-        },{
-            Header: 'Timestamp',
-            accessor: '_source.timestamp',
-        },{
-            Header: 'Hash',
-            accessor: '_source.sha256',
-        },{
-            Header: 'Task Id',
-            accessor: '_source.task_id',
-        },{
-            Header: 'Mime',
-            accessor: '_source.mime_type',
-        },{
-            Header: 'Site',
-            accessor: '_source.site',
-        },{
-            Header: 'Reputation',
-            accessor: '_source.retrospective.reputation',
-        },{
-            Header: 'Reason',
-            accessor: '_id',
-            Cell: props =>
-                <div>
-                    <Suggestion
-                        id={props.value}
-                        type="reason"
-                        reportChange={this.autoSuggestChanged.bind(this)}
-                        value={this.getPropForKey(props.value, "reason")}
-                        suggestions={this.state.autosuggest.reason} />
-                </div>
-        },{
-            Header: 'Comment',
-            accessor: '_id',
-            Cell: props =>
-                <div>
-                    <Suggestion
-                        id={props.value}
-                        type="comment"
-                        reportChange={this.autoSuggestChanged.bind(this)}
-                        value={this.getPropForKey(props.value, "comment")}
-                        suggestions={this.state.autosuggest.comment} />
-                </div>
+        if(this.props.fetchedComments && this.props.fetchedData && this.props.fetchedUniqueComments){
+            const columns = [{
+                Header: 'Id',
+                accessor: '_id' // String-based value accessors!
+            },{
+                Header: 'Timestamp',
+                accessor: '_source.timestamp',
+            },{
+                Header: 'Hash',
+                accessor: '_source.sha256',
+            },{
+                Header: 'Task Id',
+                accessor: '_source.task_id',
+            },{
+                Header: 'Mime',
+                accessor: '_source.mime_type',
+            },{
+                Header: 'Site',
+                accessor: '_source.site',
+            },{
+                Header: 'Reputation',
+                accessor: '_source.retrospective.reputation',
+            },{
+                Header: 'Reason',
+                accessor: '_id',
+                Cell: props =>
+                    <div>
+                        <Suggestion
+                            id={props.value}
+                            type="reason"
+                            reportChange={this.autoSuggestChanged.bind(this)}
+                            value={this.getPropForKey(props.value, "reason")}
+                            suggestions={this.getSuggestions("reason")} />
+                    </div>
+            },{
+                Header: 'Comment',
+                accessor: '_id',
+                Cell: props =>
+                    <div>
+                        <Suggestion
+                            id={props.value}
+                            type="comment"
+                            reportChange={this.autoSuggestChanged.bind(this)}
+                            value={this.getPropForKey(props.value, "comment")}
+                            suggestions={this.getSuggestions("comment")} />
+                    </div>
 
-        },{
-            Header: 'Mitigation',
-            accessor: '_id',
-            Cell: props =>
-                <div>
-                    <Suggestion
-                        id={props.value}
-                        type="mitigation"
-                        reportChange={this.autoSuggestChanged.bind(this)}
-                        value={this.getPropForKey(props.value, "mitigation")}
-                        suggestions={this.state.autosuggest.mitigation} />
-                </div>
-        },{
-            Header: '',
-            accessor: '_id',
-            Cell: props =>
-                <span className='center-block'>
+            },{
+                Header: 'Mitigation',
+                accessor: '_id',
+                Cell: props =>
+                    <div>
+                        <Suggestion
+                            id={props.value}
+                            type="mitigation"
+                            reportChange={this.autoSuggestChanged.bind(this)}
+                            value={this.getPropForKey(props.value, "mitigation")}
+                            suggestions={this.getSuggestions("mitigation")} />
+                    </div>
+            },{
+                Header: '',
+                accessor: '_id',
+                Cell: props =>
+                    <span className='center-block'>
                         <RB.Button className="inline__edit" onClick={this.handleClick.bind(this, props.value)}>
                             <span className="glyphicon glyphicon-edit"></span>
                         </RB.Button>
                     </span>
-        }];
-        if(this.props.data!=null){
+            }];
             return (
                 <div>
                     <h3>False Negatives</h3>

@@ -148,6 +148,16 @@ class Dashboard2 extends React.Component {
         }
         return suggestions;
     }
+    getLastUpdatedBy(id){
+        let lastUpdatedBy = '';
+        try {
+            lastUpdatedBy = this.props.comments.filter(comment => comment.id == id)[0].auditList.pop().user.name;
+        }catch(err){
+            // let lastUpdatedBy = '';
+        }finally{
+            return lastUpdatedBy;
+        }
+    }
     render() {
         const style = {
             marginTop: '140px',
@@ -229,6 +239,13 @@ class Dashboard2 extends React.Component {
                             value={this.getPropForKey(props.value, "mitigation")}
                             suggestions={this.getSuggestions("mitigation")} />
                     </div>
+            },{
+                Header: 'Last Changed By',
+                accessor: '_id',
+                Cell: props =>
+                    <span className='center-block'>
+                        {this.getLastUpdatedBy(props.value)}
+                    </span>
             },{
                 Header: '',
                 accessor: '_id',

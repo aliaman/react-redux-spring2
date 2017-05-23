@@ -7,6 +7,7 @@ import ReactSpinner from 'reactjs-spinner'
 import Suggestion from './autosuggest/Suggestion'
 import * as RB from 'react-bootstrap'
 import update from 'react-addons-update'
+import ls from 'localstorage-ttl'
 
 @connect((store) => {
     return {
@@ -122,7 +123,9 @@ class Dashboard2 extends React.Component {
         values.set(type, value);
 
         console.log(`Autosuggest changed ${id} and ${values} and ${type}....`);
-        this.props.dispatch(saveCommentsForEfficacyMetrics(id, values));
+        let userObj = ls.get("auth");
+        userObj = JSON.parse(userObj);
+        this.props.dispatch(saveCommentsForEfficacyMetrics(id, values, userObj.id));
     }
     addSupplementInfo(data, mockComments){
         mockComments.forEach((mockComment)=>{

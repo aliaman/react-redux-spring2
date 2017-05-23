@@ -55,12 +55,13 @@ public class ESDataService extends GeneralService {
             method = RequestMethod.POST,
             produces= MediaType.APPLICATION_JSON_VALUE)
     public JSONObject postComment(@RequestParam(value = "id", required = true) String id,
+                                  @RequestParam(value = "user_id", required = true) int user_id,
                                   @RequestParam(value = "comment", required = false) String comment,
                                   @RequestParam(value = "reason", required = false) String reason,
                                   @RequestParam(value = "mitigation", required = false) String mitigation) throws RuntimeException {
         JSONObject data = getSkeletonJson();
         try {
-            CommentDaoHelper.saveComments(id, comment, reason, mitigation);
+            CommentDaoHelper.saveComments(id, comment, reason, mitigation, user_id);
             data.put("payload", "Comment Saved");
             data.put("success", true);
         }catch( Exception e ){

@@ -33,13 +33,18 @@ public class UserDaoHelper {
 
     public static User findUserByEmail(String email) throws NoResultException{
         User user = null;
-        SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
-        Session session = sessionFactory.openSession();
-        Query query = session.
-                createQuery("from User where email=:email");
-        query.setParameter("email", email);
-        user = (User) query.getSingleResult();
-        session.close();
-        return user;
+        try {
+            SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+            Session session = sessionFactory.openSession();
+            Query query = session.
+                    createQuery("from User where email=:email");
+            query.setParameter("email", email);
+            user = (User) query.getSingleResult();
+            session.close();
+        }catch(Exception e){
+            System.out.println(e);
+        }finally {
+            return user;
+        }
     }
 }

@@ -1,8 +1,12 @@
 package com.repo.rest;
 
+import com.google.gson.ExclusionStrategy;
+import com.google.gson.FieldAttributes;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.repo.dao.data.CommentDaoHelper;
 import com.repo.dao.pojo.Comment;
+import com.repo.dao.pojo.Role;
 import org.json.simple.JSONObject;
 import org.springframework.http.MediaType;
 import org.json.simple.parser.JSONParser;
@@ -29,7 +33,12 @@ public class ESDataService extends GeneralService {
         JSONObject data = getSkeletonJson();
         try {
             List<Comment> comments = CommentDaoHelper.getAllComments();
-            String json = new Gson().toJson(comments);
+
+            Gson gson = new GsonBuilder()
+                    .excludeFieldsWithoutExposeAnnotation()
+                    .create();
+
+            String json = gson.toJson(comments);
             JSONParser parser = new JSONParser();
             data.put("payload", parser.parse(json));
             data.put("success", true);

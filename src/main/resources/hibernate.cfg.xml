@@ -12,5 +12,6 @@
         <mapping class="com.repo.dao.pojo.User"/>
         <mapping class="com.repo.dao.pojo.Role"/>
         <mapping class="com.repo.dao.pojo.Comment"/>
+        <mapping class="com.repo.dao.pojo.Audit"/>
     </session-factory>
 </hibernate-configuration>

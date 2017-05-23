@@ -1,7 +1,10 @@
 package com.repo.dao.pojo;
 
+import com.google.gson.annotations.Expose;
+
 import javax.persistence.*;
 import java.sql.Timestamp;
+import java.util.List;
 
 /**
  * Created by ali_jalbani on 4/25/17.
@@ -61,12 +64,26 @@ public class User {
 
     @Id
     private int id;
+
+    @Expose
     private String email;
+
+    @Expose
     private String name;
     private String password;
     private Timestamp lastUpdated;
 
     @ManyToOne
+    @JoinColumn(name="role_id")
     private Role role;
+
+//    public List<Audit> getAuditList() {
+//        return auditList;
+//    }
+//    public void setAuditList(List<Audit> auditList) {
+//        this.auditList = auditList;
+//    }
+//    @OneToMany(mappedBy = "id", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+//    private List<Audit> auditList;
 
 }

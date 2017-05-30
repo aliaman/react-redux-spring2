@@ -12,6 +12,7 @@ export default class Suggestion extends React.Component {
             type: this.props.type,
             value: this.props.value,
             completelist: this.props.suggestions,
+            top: 0,
             suggestions: this.getSuggestions('')
         };
 
@@ -36,10 +37,38 @@ export default class Suggestion extends React.Component {
     }
 
     renderSuggestion(suggestion) {
+        let el = document.getElementsByClassName('rt-table')[0];
+
+        let top = document.activeElement.getBoundingClientRect().top;
+        let left = document.activeElement.getBoundingClientRect().left;
+        let container = document.getElementsByClassName("react-autosuggest__suggestions-container--open")[0];
+        let aside = document.getElementsByClassName("portal__navigation")[0].clientWidth;
+
+        container.style.top = top + 10 + "px";
+        container.style.left = left - aside - 20 + el.scrollLeft + 0 + "px";
         return (
             <span>{suggestion.name}</span>
         );
     }
+    // renderSuggestionsContainer({ containerProps , children, query }) {
+    //     console.log(document.activeElement.tagName);
+    //     let top = document.activeElement.getBoundingClientRect().top;
+    //     let atop = 1;
+    //     if(top>0){
+    //         atop = top;
+    //     }
+    //     const suggestStyle = {
+    //         top: atop + 10 + "px",
+    //     };
+    //     if(document.activeElement.tagName=="INPUT"){
+    //         return (
+    //             <div {... containerProps} style={suggestStyle}>
+    //                 {children}
+    //                 Please...
+    //             </div>
+    //         );
+    //     }
+    // }
 
 
     onChange(event, { newValue, method }) {
@@ -53,6 +82,12 @@ export default class Suggestion extends React.Component {
                 value: newValue
             });
         }
+    }
+
+    onOpen(event){
+        let top = document.activeElement.getBoundingClientRect().top;
+        console.log(top);
+        //document.getElementsByClassName("react-autosuggest__suggestions-container--open")[0].style.top = top + "px";
     }
 
     onBlur(event, { highlightedSuggestion }){
@@ -86,7 +121,7 @@ export default class Suggestion extends React.Component {
             onChange: this.onChange,
             onBlur: this.onBlur.bind(this),
         };
-
+        {/*renderSuggestionsContainer={this.renderSuggestionsContainer.bind({ inputProps, suggestions })}*/}
         return (
             <Autosuggest suggestions={suggestions}
                          id={this.props.id}

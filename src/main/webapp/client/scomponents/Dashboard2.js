@@ -11,19 +11,20 @@ import ls from 'localstorage-ttl'
 
 @connect((store) => {
     return {
-        fetchedData: store.hashTracking.fetchedData,
-        fetchedComments: store.hashTracking.fetchedComments,
-        fetchedUniqueComments: store.hashTracking.fetchedUniqueComments,
+        fetchedData: store.fnHashTracking.fetchedData,
+        fetchedComments: store.fnHashTracking.fetchedComments,
+        fetchedUniqueComments: store.fnHashTracking.fetchedUniqueComments,
 
-        data: store.hashTracking.data,
-        comments: store.hashTracking.comments,
-        uniqueComments: store.hashTracking.uniqueComments,
+        data: store.fnHashTracking.data,
+        comments: store.fnHashTracking.comments,
+        uniqueComments: store.fnHashTracking.uniqueComments,
     }
 })
 class Dashboard2 extends React.Component {
     constructor(props){
         super(props);
         this.state = {
+            type: "FN",
             formatteddata:{
                 list: []
             },
@@ -61,9 +62,9 @@ class Dashboard2 extends React.Component {
         }
     }
     componentWillMount(){
-        this.props.dispatch(fetchHashTracking("FN"));
-        this.props.dispatch(fetchCommentsForEfficacyMetrics());
-        this.props.dispatch(fetchUniqueComments());
+        this.props.dispatch(fetchHashTracking(this.state.type));
+        this.props.dispatch(fetchCommentsForEfficacyMetrics(this.state.type));
+        this.props.dispatch(fetchUniqueComments(this.state.type));
         if(this.props.fetchedComments && this.props.fetchedData){
             this.setState({showModal: false});
         }
@@ -99,8 +100,15 @@ class Dashboard2 extends React.Component {
         this.setState({ showModal: true });
     }
     getPropForKey(id, key){
-        let obj = this.state.formatteddata.list.filter((record)=>record._id == id)[0];
-        return (obj[key]==undefined?'':obj[key]);
+        let obj = {};
+        try{
+            obj = this.state.formatteddata.list.filter((record)=>record._id == id)[0];
+            console.log(obj);
+        }catch(err){
+            console.log(err);
+        }finally{
+            return (obj[key]==undefined?'':obj[key]);
+        }
     }
     autoSuggestChanged(id, value, type){
         //TODO: persist
@@ -125,19 +133,25 @@ class Dashboard2 extends React.Component {
         console.log(`Autosuggest changed ${id} and ${values} and ${type}....`);
         let userObj = ls.get("auth");
         userObj = JSON.parse(userObj);
-        this.props.dispatch(saveCommentsForEfficacyMetrics(id, values, userObj.id));
+        this.props.dispatch(saveCommentsForEfficacyMetrics(this.state.type, id, values, userObj.id));
     }
     addSupplementInfo(data, mockComments){
+        let supplementalids = ["c_id", "m_id", "l_id", "r_id", "a_id"];
+        for(let k in data.list) {
+            for (let l in supplementalids) {
+                data.list[k][supplementalids[l]] = data.list[k]._id;
+            }
+        }
         mockComments.forEach((mockComment)=>{
             let id = mockComment.id;
             let reason = mockComment.reason;
             let comment = mockComment.comment;
             let mitigation = mockComment.mitigation;
-            for(let k in data.list){
-                if(data.list[k]._id == id){
-                    data.list[k]['reason'] = reason;
-                    data.list[k]['comment'] = comment;
-                    data.list[k]['mitigation'] = mitigation;
+            for(let m in data.list){
+                if(data.list[m]._id == id){
+                    data.list[m]['reason'] = reason;
+                    data.list[m]['comment'] = comment;
+                    data.list[m]['mitigation'] = mitigation;
                 }
             }
         });
@@ -207,7 +221,7 @@ class Dashboard2 extends React.Component {
                 accessor: '_source.retrospective.reputation',
             },{
                 Header: 'Reason',
-                accessor: '_id',
+                accessor: 'r_id',
                 Cell: props =>
                     <div>
                         <Suggestion
@@ -219,7 +233,7 @@ class Dashboard2 extends React.Component {
                     </div>
             },{
                 Header: 'Comment',
-                accessor: '_id',
+                accessor: 'c_id',
                 Cell: props =>
                     <div>
                         <Suggestion
@@ -232,7 +246,7 @@ class Dashboard2 extends React.Component {
 
             },{
                 Header: 'Mitigation',
-                accessor: '_id',
+                accessor: 'm_id',
                 Cell: props =>
                     <div>
                         <Suggestion
@@ -244,14 +258,14 @@ class Dashboard2 extends React.Component {
                     </div>
             },{
                 Header: 'Last Changed By',
-                accessor: '_id',
+                accessor: 'l_id',
                 Cell: props =>
                     <span className='center-block'>
                         {this.getLastUpdatedBy(props.value)}
                     </span>
             },{
                 Header: '',
-                accessor: '_id',
+                accessor: 'a_id',
                 Cell: props =>
                     <span className='center-block'>
                         <RB.Button className="inline__edit" onClick={this.handleClick.bind(this, props.value)}>
@@ -266,6 +280,7 @@ class Dashboard2 extends React.Component {
                     <ReactTable
                         className="-striped -highlight"
                         data={this.state.formatteddata.list}
+                        sortable={false}
                         columns={columns}
                         defaultPageSize={10}
                     />

@@ -24,16 +24,29 @@ export default class LeftMenu extends React.Component {
                             <Link to="/">Cynic</Link>
                         </h1>
                     </div>
-                    <ul className="content-viewer-aside-sections">
-                        <li>
-                            <Link to="/">Dashboard</Link>
-                            <ul className="content-viewer-aside-subsections">
-                                { this.allowedFor(["ADMINISTRATOR"]) ? <li><Link to="/dash/1"><span>Cynic Efficacy Metrics</span></Link></li> : null }
-                                { this.allowedFor(["ADMINISTRATOR"]) ? <li><Link to="/dash/2"><span>FN sample hash tracking</span></Link></li> : null }
-                                { this.allowedFor(["ADMINISTRATOR"]) ? <li><Link to="/dash/3"><span>FP sample hash tracking</span></Link></li> : null }
-                            </ul>
-                        </li>
-                    </ul>
+                    { this.allowedFor(["ADMINISTRATOR"]) ?
+                        <ul className="content-viewer-aside-sections">
+                            <li>
+                                <Link to="/">Administration</Link>
+                                <ul className="content-viewer-aside-subsections">
+                                    { this.allowedFor(["ADMINISTRATOR"]) ? <li><Link to="/um"><span>User Management</span></Link></li> : null }
+                                </ul>
+                            </li>
+                        </ul>
+                        : null }
+
+                    { this.allowedFor(["ADMINISTRATOR", "ANALYST", "REPORTER"]) ?
+                        <ul className="content-viewer-aside-sections">
+                            <li>
+                                <Link to="/">Dashboard</Link>
+                                <ul className="content-viewer-aside-subsections">
+                                    { this.allowedFor(["ADMINISTRATOR", "ANALYST", "REPORTER"]) ? <li><Link to="/dash/1"><span>Cynic Efficacy Metrics</span></Link></li> : null }
+                                    { this.allowedFor(["ADMINISTRATOR", "ANALYST"]) ? <li><Link to="/dash/2"><span>FN sample hash tracking</span></Link></li> : null }
+                                    { this.allowedFor(["ADMINISTRATOR", "ANALYST"]) ? <li><Link to="/dash/3"><span>FP sample hash tracking</span></Link></li> : null }
+                                </ul>
+                            </li>
+                        </ul>
+                        : null }
 
                     <ul className="content-viewer-aside-sections">
                         <li>

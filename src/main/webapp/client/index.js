@@ -16,6 +16,7 @@ import Dashboard from './components/Dashboard';
 import Dashboard1 from './scomponents/Dashboard1';
 import Dashboard2 from './scomponents/Dashboard2';
 import Dashboard3 from './scomponents/Dashboard3';
+import UserManagement from './scomponents/UserManagement';
 
 import { Router, IndexRoute, Route, hashHistory } from 'react-router';
 
@@ -36,6 +37,7 @@ render(
         <Router history={hashHistory}>
             <Route path="/" component={App}>
                 <IndexRoute component={SplashScreen}/>
+                <Route path="um" component={UserManagement} />
                 <Route path="dash" component={Dashboard}>
                     <Route path="1" component={Dashboard1} />
                     <Route path="2" component={Dashboard2} />

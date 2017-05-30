@@ -3,14 +3,16 @@ import userReducer from './userReducer';
 import tweetsReducer from './tweetsReducer'
 import loginReducer from './login'
 import cynicEfficacyReducer from './cynicES'
-import hashTrackingReducer from './hashTrackingES'
+import fnHashTrackingReducer from './fnHashTrackingES'
+import fpHashTrackingReducer from './fpHashTrackingES'
 
 const reducers = combineReducers({
     user: userReducer,
     tweets: tweetsReducer,
     login: loginReducer,
     cynic: cynicEfficacyReducer,
-    hashTracking: hashTrackingReducer,
+    fnHashTracking: fnHashTrackingReducer,
+    fpHashTracking: fpHashTrackingReducer,
 });
 
 export default reducers;

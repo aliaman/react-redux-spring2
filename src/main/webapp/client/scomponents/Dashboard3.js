@@ -1,21 +1,34 @@
 import React from 'react'
 import Authorization from './../utils/Authorization'
 import { connect } from 'react-redux'
-import { fetchHashTracking } from './../redux/actions/hashTrackingES'
+import { fetchHashTracking, fetchCommentsForEfficacyMetrics, saveCommentsForEfficacyMetrics, fetchUniqueComments } from './../redux/actions/hashTrackingES'
 import ReactTable from 'react-table'
 import ReactSpinner from 'reactjs-spinner'
+import Suggestion from './autosuggest/Suggestion'
 import * as RB from 'react-bootstrap'
+import update from 'react-addons-update'
+import ls from 'localstorage-ttl'
 
 @connect((store) => {
     return {
-        data: store.hashTracking.data,
-        selectedHash: store.hashTracking.selectedHash
+        fetchedData: store.fpHashTracking.fetchedData,
+        fetchedComments: store.fpHashTracking.fetchedComments,
+        fetchedUniqueComments: store.fpHashTracking.fetchedUniqueComments,
+
+        data: store.fpHashTracking.data,
+        comments: store.fpHashTracking.comments,
+        uniqueComments: store.fpHashTracking.uniqueComments,
     }
 })
-class Dashboard3 extends React.Component {
+class Dashboard2 extends React.Component {
     constructor(props){
         super(props);
         this.state = {
+            type: "FP",
+            formatteddata:{
+                list: []
+            },
+            autosuggest:{},
             selectedHash: {
                 "_index": "",
                 "_type": "",
@@ -49,16 +62,35 @@ class Dashboard3 extends React.Component {
         }
     }
     componentWillMount(){
-        this.props.dispatch(fetchHashTracking("FP"));
-        this.setState({showModal: false});
+        this.props.dispatch(fetchHashTracking(this.state.type));
+        this.props.dispatch(fetchCommentsForEfficacyMetrics(this.state.type));
+        this.props.dispatch(fetchUniqueComments(this.state.type));
+        if(this.props.fetchedComments && this.props.fetchedData){
+            this.setState({showModal: false});
+        }
     }
     componentWillReceiveProps(nextProps){
-        this.setState(nextProps);
+        if(nextProps.fetchedComments && nextProps.fetchedData && nextProps.fetchedUniqueComments) {
+            console.log(nextProps);
+            let formatteddata = update(this.state.formatteddata,
+                {
+                    $merge: {
+                        list: nextProps.data
+                    }
+                }
+            );
+            formatteddata = this.addSupplementInfo(formatteddata, nextProps.comments);
+            console.log(formatteddata);
+            this.setState({
+                formatteddata: formatteddata,
+                autosuggest: nextProps.uniqueComments
+            });
+        }
     }
     handleClick(id, event){
         this.setState({
             selectedHash: this.props.data.filter(hash => hash._id == id)[0]
-        })
+        });
         this.open();
     }
     close(){
@@ -66,6 +98,82 @@ class Dashboard3 extends React.Component {
     }
     open(){
         this.setState({ showModal: true });
+    }
+    getPropForKey(id, key){
+        let obj = {};
+        try{
+            obj = this.state.formatteddata.list.filter((record)=>record._id == id)[0];
+            console.log(obj);
+        }catch(err){
+            console.log(err);
+        }finally{
+            return (obj[key]==undefined?'':obj[key]);
+        }
+    }
+    autoSuggestChanged(id, value, type){
+        //TODO: persist
+        let values = new Map();
+        values.set('comment', null);
+        values.set('reason', null);
+        values.set('mitigation', null);
+        let keysToCheck = new Set(["mitigation", "reason", "comment"]);
+        let keyJustChanged = new Set([type]);
+        let difference = new Set(
+            [...keysToCheck].filter(x => !keyJustChanged.has(x)));
+
+        for(let k of difference.keys()){
+            let obj = this.state.formatteddata.list.filter(l => l._id == id)[0];
+            values.set(k, (obj[k]==undefined?'':obj[k]));
+        }
+        //modify the state
+        this.state.formatteddata.list.filter(l => l._id == id)[0][type] = value;
+        //modify the data structure
+        values.set(type, value);
+
+        console.log(`Autosuggest changed ${id} and ${values} and ${type}....`);
+        let userObj = ls.get("auth");
+        userObj = JSON.parse(userObj);
+        this.props.dispatch(saveCommentsForEfficacyMetrics(this.state.type, id, values, userObj.id));
+    }
+    addSupplementInfo(data, mockComments){
+        let supplementalids = ["c_id", "m_id", "l_id", "r_id", "a_id"];
+        for(let k in data.list) {
+            for (let l in supplementalids) {
+                data.list[k][supplementalids[l]] = data.list[k]._id;
+            }
+        }
+        mockComments.forEach((mockComment)=>{
+            let id = mockComment.id;
+            let reason = mockComment.reason;
+            let comment = mockComment.comment;
+            let mitigation = mockComment.mitigation;
+            for(let m in data.list){
+                if(data.list[m]._id == id){
+                    data.list[m]['reason'] = reason;
+                    data.list[m]['comment'] = comment;
+                    data.list[m]['mitigation'] = mitigation;
+                }
+            }
+        });
+        return data;
+    }
+    getSuggestions(type){
+        let suggestions = [];
+        for(let k in this.state.autosuggest[type]){
+            suggestions.push({name: this.state.autosuggest[type][k],
+                value: this.state.autosuggest[type][k]});
+        }
+        return suggestions;
+    }
+    getLastUpdatedBy(id){
+        let lastUpdatedBy = '';
+        try {
+            lastUpdatedBy = this.props.comments.filter(comment => comment.id == id)[0].auditList.pop().user.name;
+        }catch(err){
+            // let lastUpdatedBy = '';
+        }finally{
+            return lastUpdatedBy;
+        }
     }
     render() {
         const style = {
@@ -89,59 +197,90 @@ class Dashboard3 extends React.Component {
                 padding: 20
             };
         };
-        const columns = [{
-            Header: 'Id',
-            accessor: '_id' // String-based value accessors!
-        },{
-            Header: 'Index',
-            accessor: '_index' // String-based value accessors!
-        },{
-            Header: 'Score',
-            accessor: '_score' // String-based value accessors!
-        },{
-            Header: 'Customer',
-            accessor: '_source.customer' // String-based value accessors!
-        },{
-            Header: 'Disposition',
-            accessor: '_source.merlin.disposition_type' // String-based value accessors!
-        },{
-            Header: 'Type',
-            accessor: '_type',
-        },{
-            Header: 'Hash',
-            accessor: '_source.sha256',
-        },{
-            Header: 'Mime',
-            accessor: '_source.mime_type',
-        },{
-            Header: 'Task Id',
-            accessor: '_source.task_id',
-        },{
-            Header: 'Timestamp',
-            accessor: '_source.timestamp',
-        },{
-            Header: 'Site',
-            accessor: '_source.site',
-        },{
-            Header: 'Reputation',
-            accessor: '_source.retrospective.reputation',
-        },{
-            Header: '',
-            accessor: '_id',
-            Cell: props => <span className='center-block'>
-                <RB.Button className="inline__edit" onClick={this.handleClick.bind(this, props.value)}>
-                    <span className="glyphicon glyphicon-edit"></span>
-                </RB.Button>
-            </span>
-        }];
-        if(this.props.data!=null){
+        if(this.props.fetchedComments && this.props.fetchedData && this.props.fetchedUniqueComments){
+            const columns = [{
+                Header: 'Id',
+                accessor: '_id' // String-based value accessors!
+            },{
+                Header: 'Timestamp',
+                accessor: '_source.timestamp',
+            },{
+                Header: 'Hash',
+                accessor: '_source.sha256',
+            },{
+                Header: 'Task Id',
+                accessor: '_source.task_id',
+            },{
+                Header: 'Mime',
+                accessor: '_source.mime_type',
+            },{
+                Header: 'Site',
+                accessor: '_source.site',
+            },{
+                Header: 'Reputation',
+                accessor: '_source.retrospective.reputation',
+            },{
+                Header: 'Reason',
+                accessor: 'r_id',
+                Cell: props =>
+                    <div>
+                        <Suggestion
+                            id={props.value}
+                            type="reason"
+                            reportChange={this.autoSuggestChanged.bind(this)}
+                            value={this.getPropForKey(props.value, "reason")}
+                            suggestions={this.getSuggestions("reason")} />
+                    </div>
+            },{
+                Header: 'Comment',
+                accessor: 'c_id',
+                Cell: props =>
+                    <div>
+                        <Suggestion
+                            id={props.value}
+                            type="comment"
+                            reportChange={this.autoSuggestChanged.bind(this)}
+                            value={this.getPropForKey(props.value, "comment")}
+                            suggestions={this.getSuggestions("comment")} />
+                    </div>
+
+            },{
+                Header: 'Mitigation',
+                accessor: 'm_id',
+                Cell: props =>
+                    <div>
+                        <Suggestion
+                            id={props.value}
+                            type="mitigation"
+                            reportChange={this.autoSuggestChanged.bind(this)}
+                            value={this.getPropForKey(props.value, "mitigation")}
+                            suggestions={this.getSuggestions("mitigation")} />
+                    </div>
+            },{
+                Header: 'Last Changed By',
+                accessor: 'l_id',
+                Cell: props =>
+                    <span className='center-block'>
+                        {this.getLastUpdatedBy(props.value)}
+                    </span>
+            },{
+                Header: '',
+                accessor: 'a_id',
+                Cell: props =>
+                    <span className='center-block'>
+                        <RB.Button className="inline__edit" onClick={this.handleClick.bind(this, props.value)}>
+                            <span className="glyphicon glyphicon-edit"></span>
+                        </RB.Button>
+                    </span>
+            }];
             return (
                 <div>
                     <h3>False Positives</h3>
                     <h4 className="compactHeading">Sample Hash Tracking</h4>
                     <ReactTable
                         className="-striped -highlight"
-                        data={this.props.data}
+                        data={this.state.formatteddata.list}
+                        sortable={false}
                         columns={columns}
                         defaultPageSize={10}
                     />
@@ -152,6 +291,7 @@ class Dashboard3 extends React.Component {
                         show={this.state.showModal}
                         onHide={this.close.bind(this)}
                     >
+
                         <div style={dialogStyle()} >
                             <span onClick={this.close.bind(this)}>
                                 <span className="glyphicon glyphicon-eject"></span>
@@ -181,4 +321,4 @@ class Dashboard3 extends React.Component {
         }
     }
 }
-export default Authorization(Dashboard3, ['ADMINISTRATOR'])
+export default Authorization(Dashboard2, ['ADMINISTRATOR'])

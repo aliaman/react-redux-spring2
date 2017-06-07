@@ -1,0 +1,88 @@
+import React from 'react'
+import {BootstrapTable, TableHeaderColumn} from 'react-bootstrap-table'
+
+export default class UsersTable extends React.Component{
+
+    constructor(props){
+        super(props)
+    }
+
+    renderShowsTotal(start, to, total) {
+        return (
+            <p style={ { color: 'blue' } }>
+                From { start } to { to }, totals is { total }&nbsp;&nbsp;(its a customize text)
+            </p>
+        );
+    }
+
+    format(users){
+        for(let k in users){
+            users[k]['roledisplay'] = users[k].role.display;
+        }
+        return users;
+    }
+    onAfterSaveCell(row, cellName, cellValue) {
+        alert(`Save cell ${cellName} with value ${cellValue}`);
+
+        let rowStr = '';
+        for (const prop in row) {
+            rowStr += prop + ': ' + row[prop] + '\n';
+        }
+
+        alert('Thw whole row :\n' + rowStr);
+    }
+    render() {
+        let users = this.format(this.props.data);
+        const roleTypes = [
+            "Administrator",
+            "Super User",
+            "Analyst",
+            "Reporting"
+        ];
+        const options = {
+            page: 2,  // which page you want to show as default
+            sizePerPageList: [ {
+                text: '5', value: 5
+            }, {
+                text: '10', value: 10
+            }, {
+                text: 'All', value: users.length
+            } ], // you can change the dropdown list for size per page
+            sizePerPage: 5,  // which size per page you want to locate as default
+            pageStartIndex: 0, // where to start counting the pages
+            paginationSize: 3,  // the pagination bar size.
+            prePage: 'Prev', // Previous page button text
+            nextPage: 'Next', // Next page button text
+            firstPage: 'First', // First page button text
+            lastPage: 'Last', // Last page button text
+            paginationShowsTotal: this.renderShowsTotal,  // Accept bool or function
+            paginationPosition: 'top'  // default is bottom, top and both is all available
+            // hideSizePerPage: true > You can hide the dropdown for sizePerPage
+            // alwaysShowAllBtns: true // Always show next and previous button
+            // withFirstAndLast: false > Hide the going to First and Last page button
+        };
+        const selectRowProp = {
+            mode: 'radio'
+        };
+        const cellEditProp = {
+            mode: 'click',
+            blurToSave: true,
+            afterSaveCell: this.onAfterSaveCell
+        };
+        if(users!=undefined) {
+            return (
+                // selectRow={ selectRowProp }
+                <BootstrapTable data={ users } pagination cellEdit={ cellEditProp }>
+                    <TableHeaderColumn dataField='id' isKey hidden>ID</TableHeaderColumn>
+                    <TableHeaderColumn dataField='name'>Name</TableHeaderColumn>
+                    <TableHeaderColumn dataField='email'>Email</TableHeaderColumn>
+                    <TableHeaderColumn dataField='roledisplay' editable={ { type: 'select', options: { values: roleTypes } } }>Role</TableHeaderColumn>
+                </BootstrapTable>
+            );
+        }else{
+            return (
+                <div>Empty.</div>
+            )
+        }
+    }
+}

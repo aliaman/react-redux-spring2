@@ -3,6 +3,7 @@ const initialState = {
     fetched: false,
     users: [],
     error: null,
+    userObj: {}
 };
 
 const userReducer = (state=initialState, action) => {
@@ -19,6 +20,29 @@ const userReducer = (state=initialState, action) => {
                 fetching: false,
                 fetched: true,
                 users: action.payload,
+            }
+        }
+
+
+        //saving user
+        case "POST_USER_FIELD_PENDING": {
+            return {...state, fetching: true}
+        }
+        case "POST_USER_FIELD_REJECTED": {
+            return {
+                ...state,
+                fetching: false,
+                error: action.payload
+            }
+        }
+        case "POST_USER_FIELD_FULFILLED": {
+            //establish session for 3 hours
+            return {
+                ...state,
+                fetching: false,
+                fetched: true,
+                error: null,
+                userObj: action.payload
             }
         }
     }

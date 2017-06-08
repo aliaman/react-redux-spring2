@@ -1,5 +1,6 @@
 import axios from 'axios';
 import rest from './../../utils/restconfig';
+import querystring from 'querystring';
 
 export function fetchUsers() {
     return function(dispatch) {
@@ -14,6 +15,26 @@ export function fetchUsers() {
             .catch((err) => {
                 dispatch({type: 'FETCH_USERS_REJECTED', payload: err});
             })
+    }
+}
+export function saveUserField(id, field, value){
+    return function(dispatch) {
+        axios.post(rest.POST_USER_FIELD, querystring.stringify(
+            {
+                'id': id,
+                'field': field,
+                'value': value
+            }
+        ))
+            .then((response) => {
+                if(response.data.success===true){
+                    dispatch({type: 'POST_USER_FIELD_FULFILLED', payload: response.data.payload})
+                }else{
+                    dispatch({type: 'POST_USER_FIELD_REJECTED',  payload: response.data.payload})
+                }
+            }).catch((err) => {
+            dispatch({type: 'POST_USER_FIELD_REJECTED',  payload: err})
+        });
     }
 }
 export function setUserName(name) {

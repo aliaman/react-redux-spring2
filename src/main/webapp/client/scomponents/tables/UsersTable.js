@@ -1,5 +1,6 @@
 import React from 'react'
 import {BootstrapTable, TableHeaderColumn} from 'react-bootstrap-table'
+import Constants from './../../../client/utils/Constants'
 
 export default class UsersTable extends React.Component{
 
@@ -22,23 +23,21 @@ export default class UsersTable extends React.Component{
         return users;
     }
     onAfterSaveCell(row, cellName, cellValue) {
-        alert(`Save cell ${cellName} with value ${cellValue}`);
+        //alert(`Save cell ${cellName} with value ${cellValue}`);
 
         let rowStr = '';
         for (const prop in row) {
             rowStr += prop + ': ' + row[prop] + '\n';
         }
-
-        alert('Thw whole row :\n' + rowStr);
+        this.props.editUser(row.id, cellName, cellValue);
+        //alert('Thw whole row :\n' + rowStr);
     }
     render() {
         let users = this.format(this.props.data);
-        const roleTypes = [
-            "Administrator",
-            "Super User",
-            "Analyst",
-            "Reporting"
-        ];
+        let roleTypes = [];
+        for(let role of Constants.ROLES){
+            roleTypes.push(role.display)
+        }
         const options = {
             page: 2,  // which page you want to show as default
             sizePerPageList: [ {
@@ -67,7 +66,7 @@ export default class UsersTable extends React.Component{
         const cellEditProp = {
             mode: 'click',
             blurToSave: true,
-            afterSaveCell: this.onAfterSaveCell
+            afterSaveCell: this.onAfterSaveCell.bind(this)
         };
         if(users!=undefined) {
             return (

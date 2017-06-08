@@ -10,6 +10,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.io.FileReader;
@@ -52,6 +53,28 @@ public class UsersService extends GeneralService {
         try {
             List<User> users = UserDaoHelper.getAllUsers();
             String json = new Gson().toJson(users);
+            JSONParser parser = new JSONParser();
+            data.put("payload", parser.parse(json));
+            data.put("success", true);
+        }catch( Exception e ){
+            data.put("success", false);
+            data.put("payload", e.toString());
+            e.printStackTrace();
+        }finally{
+            return data;
+        }
+    }
+
+    @RequestMapping(value = "/savefield",
+            method = RequestMethod.POST,
+            produces= MediaType.APPLICATION_JSON_VALUE)
+    public JSONObject login(@RequestParam(value = "id") Integer id,
+                            @RequestParam(value = "id") String field,
+                            @RequestParam(value = "id") String value) throws RuntimeException {
+        JSONObject data = getSkeletonJson();
+        try {
+            User user = UserDaoHelper.updateUser(id, field, value);
+            String json = new Gson().toJson(user);
             JSONParser parser = new JSONParser();
             data.put("payload", parser.parse(json));
             data.put("success", true);

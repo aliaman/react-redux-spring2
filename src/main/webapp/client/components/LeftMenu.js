@@ -35,12 +35,12 @@ export default class LeftMenu extends React.Component {
                         </ul>
                         : null }
 
-                    { this.allowedFor(["ADMINISTRATOR", "ANALYST", "REPORTER"]) ?
+                    { this.allowedFor(["ADMINISTRATOR", "ANALYST", "REPORTING"]) ?
                         <ul className="content-viewer-aside-sections">
                             <li>
                                 <Link to="/">Dashboard</Link>
                                 <ul className="content-viewer-aside-subsections">
-                                    { this.allowedFor(["ADMINISTRATOR", "ANALYST", "REPORTER"]) ? <li><Link to="/dash/1"><span>Cynic Efficacy Metrics</span></Link></li> : null }
+                                    { this.allowedFor(["ADMINISTRATOR", "ANALYST", "REPORTING"]) ? <li><Link to="/dash/1"><span>Cynic Efficacy Metrics</span></Link></li> : null }
                                     { this.allowedFor(["ADMINISTRATOR", "ANALYST"]) ? <li><Link to="/dash/2"><span>FN sample hash tracking</span></Link></li> : null }
                                     { this.allowedFor(["ADMINISTRATOR", "ANALYST"]) ? <li><Link to="/dash/3"><span>FP sample hash tracking</span></Link></li> : null }
                                 </ul>

@@ -62,7 +62,7 @@ public class UserDaoHelper {
             user = session.get(User.class, id);
             switch (field){
                 case "role":
-                    user.setRole(session.get(Role.class, value));
+                    user.setRole(session.get(Role.class, Integer.parseInt(value)));
                     break;
                 case "email":
                     //TODO: Validate email;

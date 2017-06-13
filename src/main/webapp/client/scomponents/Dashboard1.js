@@ -244,4 +244,4 @@ class Dashboard1 extends React.Component {
     }
 }
 
-export default Authorization(Dashboard1, ['ADMINISTRATOR'])
+export default Authorization(Dashboard1, ['ADMINISTRATOR', 'ANALYST', 'REPORTING'])

@@ -8,6 +8,8 @@ import Suggestion from './autosuggest/Suggestion'
 import * as RB from 'react-bootstrap'
 import update from 'react-addons-update'
 import ls from 'localstorage-ttl'
+import DateRangePicker from './component/DateRangePicker'
+import moment from 'moment'
 
 @connect((store) => {
     return {
@@ -23,7 +25,21 @@ import ls from 'localstorage-ttl'
 class Dashboard2 extends React.Component {
     constructor(props){
         super(props);
+        this.handleApply = this.handleApply.bind(this);
         this.state = {
+            dp: {
+                ranges: {
+                    'Today': [moment(), moment()],
+                    'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+                    'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+                    'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+                    'This Month': [moment().startOf('month'), moment().endOf('month')],
+                    'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+                },
+                maxDate: moment(),
+                startDate: moment().startOf('day').subtract(96, 'days'),
+                endDate: moment().endOf('day').subtract(90, 'days'),
+            },
             type: "FN",
             formatteddata:{
                 list: []
@@ -72,6 +88,7 @@ class Dashboard2 extends React.Component {
     componentWillReceiveProps(nextProps){
         if(nextProps.fetchedComments && nextProps.fetchedData && nextProps.fetchedUniqueComments) {
             console.log(nextProps);
+            console.log(nextProps);
             let formatteddata = update(this.state.formatteddata,
                 {
                     $merge: {
@@ -103,7 +120,6 @@ class Dashboard2 extends React.Component {
         let obj = {};
         try{
             obj = this.state.formatteddata.list.filter((record)=>record._id == id)[0];
-            console.log(obj);
         }catch(err){
             console.log(err);
         }finally{
@@ -174,6 +190,15 @@ class Dashboard2 extends React.Component {
         }finally{
             return lastUpdatedBy;
         }
+    }
+    //this function is a handler for the datetime range picker
+    handleApply(event, picker) {
+        this.setState({
+            dp: Object.assign({}, this.state.dp, {
+                startDate: picker.startDate,
+                endDate: picker.endDate
+            })
+        });
     }
     render() {
         const style = {
@@ -275,8 +300,20 @@ class Dashboard2 extends React.Component {
             }];
             return (
                 <div>
-                    <h3>False Negatives</h3>
-                    <h4 className="compactHeading">Sample Hash Tracking</h4>
+                    <RB.Row>
+                        <RB.Col md={6}>
+                            <h3>False Negatives</h3>
+                            <h4 className="compactHeading">Sample Hash Tracking</h4>
+                        </RB.Col>
+                        <RB.Col md={3} mdOffset={3}>
+                            <br/>
+                            <br/>
+                            <br/>
+                            <DateRangePicker {...this.state.dp} clickHandler={this.handleApply} />
+                            <br/>
+                        </RB.Col>
+                    </RB.Row>
+
                     <ReactTable
                         className="-striped -highlight"
                         data={this.state.formatteddata.list}
@@ -321,4 +358,4 @@ class Dashboard2 extends React.Component {
         }
     }
 }
-export default Authorization(Dashboard2, ['ADMINISTRATOR'])
+export default Authorization(Dashboard2, ['ADMINISTRATOR', 'ANALYST'])

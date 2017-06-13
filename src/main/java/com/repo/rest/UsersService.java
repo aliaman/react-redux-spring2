@@ -69,8 +69,8 @@ public class UsersService extends GeneralService {
             method = RequestMethod.POST,
             produces= MediaType.APPLICATION_JSON_VALUE)
     public JSONObject login(@RequestParam(value = "id") Integer id,
-                            @RequestParam(value = "id") String field,
-                            @RequestParam(value = "id") String value) throws RuntimeException {
+                            @RequestParam(value = "field") String field,
+                            @RequestParam(value = "value") String value) throws RuntimeException {
         JSONObject data = getSkeletonJson();
         try {
             User user = UserDaoHelper.updateUser(id, field, value);

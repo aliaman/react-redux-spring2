@@ -18,7 +18,9 @@ export default class UsersTable extends React.Component{
 
     format(users){
         for(let k in users){
-            users[k]['roledisplay'] = users[k].role.display;
+            if(users[k].role !=undefined) {
+                users[k]['roledisplay'] = users[k].role.display;
+            }
         }
         return users;
     }
@@ -31,6 +33,28 @@ export default class UsersTable extends React.Component{
         }
         this.props.editUser(row.id, cellName, cellValue);
         //alert('Thw whole row :\n' + rowStr);
+    }
+    readyForDelete(rows){
+
+    }
+    onRowSelect(row, isSelected, e) {
+        let rowStr = '';
+        for (const prop in row) {
+            rowStr += prop + ': "' + row[prop] + '"';
+        }
+        console.log(e);
+        alert(`is selected: ${isSelected}, ${rowStr}`);
+    }
+    onSelectAll(isSelected, rows) {
+        alert(`is select all: ${isSelected}`);
+        if (isSelected) {
+            alert('Current display and selected data: ');
+        } else {
+            alert('unselect rows: ');
+        }
+        for (let i = 0; i < rows.length; i++) {
+            alert(rows[i].id);
+        }
     }
     render() {
         let users = this.format(this.props.data);
@@ -61,7 +85,12 @@ export default class UsersTable extends React.Component{
             // withFirstAndLast: false > Hide the going to First and Last page button
         };
         const selectRowProp = {
-            mode: 'radio'
+            mode: 'checkbox',
+            clickToSelect: true,
+            unselectable: [ 1 ],
+            bgColor: '#fff2fc',
+            onSelect: this.onRowSelect.bind(this),
+            onSelectAll: this.onSelectAll.bind(this)
         };
         const cellEditProp = {
             mode: 'click',
@@ -70,8 +99,7 @@ export default class UsersTable extends React.Component{
         };
         if(users!=undefined) {
             return (
-                // selectRow={ selectRowProp }
-                <BootstrapTable data={ users } pagination cellEdit={ cellEditProp }>
+                <BootstrapTable data={ users } pagination cellEdit={ cellEditProp } selectRow={ selectRowProp }>
                     <TableHeaderColumn dataField='id' isKey hidden>ID</TableHeaderColumn>
                     <TableHeaderColumn dataField='name'>Name</TableHeaderColumn>
                     <TableHeaderColumn dataField='email'>Email</TableHeaderColumn>

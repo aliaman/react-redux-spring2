@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.persistence.NonUniqueResultException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.List;
@@ -68,7 +69,7 @@ public class UsersService extends GeneralService {
     @RequestMapping(value = "/savefield",
             method = RequestMethod.POST,
             produces= MediaType.APPLICATION_JSON_VALUE)
-    public JSONObject login(@RequestParam(value = "id") Integer id,
+    public JSONObject updateUser(@RequestParam(value = "id") Integer id,
                             @RequestParam(value = "field") String field,
                             @RequestParam(value = "value") String value) throws RuntimeException {
         JSONObject data = getSkeletonJson();
@@ -78,6 +79,31 @@ public class UsersService extends GeneralService {
             JSONParser parser = new JSONParser();
             data.put("payload", parser.parse(json));
             data.put("success", true);
+        }catch( Exception e ){
+            data.put("success", false);
+            data.put("payload", e.toString());
+            e.printStackTrace();
+        }finally{
+            return data;
+        }
+    }
+
+    @RequestMapping(value = "/newUser",
+            method = RequestMethod.POST,
+            produces= MediaType.APPLICATION_JSON_VALUE)
+    public JSONObject createNewUser(@RequestParam(value = "role") Integer role,
+                            @RequestParam(value = "email") String email,
+                            @RequestParam(value = "name") String name) throws RuntimeException {
+        JSONObject data = getSkeletonJson();
+        try {
+            User user = UserDaoHelper.createNewUser(name, email, role);
+            String json = new Gson().toJson(user);
+            JSONParser parser = new JSONParser();
+            data.put("payload", parser.parse(json));
+            data.put("success", true);
+        }catch(NonUniqueResultException e){
+            data.put("payload", "User already exists for this email.");
+            data.put("success", false);
         }catch( Exception e ){
             data.put("success", false);
             data.put("payload", e.toString());

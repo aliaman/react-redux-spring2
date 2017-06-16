@@ -24,7 +24,7 @@ const userReducer = (state=initialState, action) => {
         }
 
 
-        //saving user
+        //saving user fields (edit)
         case "POST_USER_FIELD_PENDING": {
             return {...state, fetching: true}
         }
@@ -45,8 +45,31 @@ const userReducer = (state=initialState, action) => {
                 userObj: action.payload
             }
         }
+
+        //save new user
+        case "POST_NEW_USER_PENDING": {
+
+            return {...state, fetching: true}
+        }
+        case "POST_NEW_USER_REJECTED": {
+            return {
+                ...state,
+                fetching: false,
+                error: action.payload
+            }
+        }
+        case "POST_NEW_USER_FULFILLED": {
+            //establish session for 3 hours
+            return {
+                ...state,
+                fetching: false,
+                fetched: true,
+                error: null,
+                userObj: action.payload
+            }
+        }
     }
-    return state
+    return state;
 }
 
 export default userReducer;

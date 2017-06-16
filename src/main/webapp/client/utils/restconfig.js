@@ -13,6 +13,7 @@ class RestConfig {
             'GET_UNIQUE_COMMENTS_FOR_EFFICACY_METRICS': this.base + 'getUniqueComments',
             'SAVE_COMMENTS_FOR_EFFICACY_METRICS': this.base + 'comments',
             'POST_USER_FIELD': this.base + 'savefield',
+            'POST_NEW_USER': this.base + 'newUser',
         }
     }
     prod() {
@@ -25,6 +26,8 @@ class RestConfig {
             'GET_UNIQUE_COMMENTS_FOR_EFFICACY_METRICS': this.base + 'esdata/getUniqueComments',
             'SAVE_COMMENTS_FOR_EFFICACY_METRICS': this.base + 'esdata/comment',
             'POST_USER_FIELD': this.base + 'users/savefield',
+            'POST_NEW_USER': this.base + 'users/newUser',
+
         }
     }
 }

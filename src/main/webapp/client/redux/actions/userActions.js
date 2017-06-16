@@ -25,8 +25,7 @@ export function saveUserField(id, field, value){
                 'field': field,
                 'value': value
             }
-        ))
-            .then((response) => {
+        )).then((response) => {
                 if(response.data.success===true){
                     dispatch({type: 'POST_USER_FIELD_FULFILLED', payload: response.data.payload})
                 }else{
@@ -37,14 +36,24 @@ export function saveUserField(id, field, value){
         });
     }
 }
-export function setUserName(name) {
-    return {
-        type: 'SET_USER_NAME',
-        payload: name
-    }
-}export function setUserAge(age) {
-    return {
-        type: 'SET_USER_NAME',
-        payload: age
+export function saveUser(user){
+    return function(dispatch) {
+        axios.post(rest.POST_NEW_USER, querystring.stringify(
+            {
+                'email': user.email,
+                'name': user.name,
+                'role': user.selectedRole
+            }
+        ))
+            .then((response) => {
+                if(response.data.success===true){
+                    dispatch(fetchUsers());
+                    dispatch({type: 'POST_NEW_USER_FULFILLED', payload: response.data.payload})
+                }else{
+                    dispatch({type: 'POST_NEW_USER_REJECTED',  payload: response.data.payload})
+                }
+            }).catch((err) => {
+            dispatch({type: 'POST_NEW_USER_REJECTED',  payload: err})
+        });
     }
 }

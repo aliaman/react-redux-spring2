@@ -1,11 +1,13 @@
 import React from 'react'
+import ReactDOM from 'react-dom'
 import Authorization from './../utils/Authorization'
 import { connect } from 'react-redux'
-import { fetchUsers, saveUserField } from './../redux/actions/userActions'
+import { fetchUsers, saveUserField, saveUser } from './../redux/actions/userActions'
 import * as RB from 'react-bootstrap'
 import UsersTable from './tables/UsersTable'
 import Constants from './../utils/Constants'
 import Select from 'react-select'
+import update from 'react-addons-update'
 
 @connect((store) => {
     return {
@@ -17,7 +19,12 @@ class UserManagement extends React.Component {
         super(props);
         this.state = {
             showNewUserModal: false,
-            selectedRole: 0
+            newUser: {
+                selectedRole: 0,
+                name: '',
+                email: ''
+
+            }
         }
     }
 
@@ -25,6 +32,22 @@ class UserManagement extends React.Component {
     }
     componentWillMount() {
         this.props.dispatch(fetchUsers());
+    }
+    submitNewUser(event){
+        event.preventDefault();
+        let newUser = update(this.state.newUser,
+            {
+                $merge: {
+                    name: ReactDOM.findDOMNode(this.userName).value,
+                    email: ReactDOM.findDOMNode(this.userEmail).value,
+                }
+            });
+        this.setState({
+                newUser: newUser,
+                showNewUserModal: false
+            }, function(){
+            this.props.dispatch(saveUser(this.state.newUser));
+        });
     }
     editUser(id, field, value){
         // alert(id + " " + field + " " + value);
@@ -49,7 +72,13 @@ class UserManagement extends React.Component {
     }
     logChange(val){
         console.log("Selected: " + val);
-        this.setState({selectedRole: val});
+        let newUser = update(this.state.newUser,
+            {
+                $merge: {
+                    selectedRole: val.value
+                }
+            });
+        this.setState({newUser: newUser});
     }
     render(){
         const style = {
@@ -68,9 +97,9 @@ class UserManagement extends React.Component {
             opacity: 0.5
         };
         const options = [
-            { value: '1', label: 'Administrator' },
-            { value: '2', label: 'Analyst' },
-            { value: '3', label: 'Reporting' }
+            { value: 1, label: 'Administrator' },
+            { value: 2, label: 'Analyst' },
+            { value: 3, label: 'Reporting' }
         ];
         const dialogStyle = function() {
             return {
@@ -119,31 +148,31 @@ class UserManagement extends React.Component {
                        </div>
                        <h3 className="h3">Add User</h3>
                        <p/>
-                       <RB.Form horizontal>
-                           <RB.FormGroup controlId="formHorizontalEmail">
+                       <RB.Form onSubmit={this.submitNewUser.bind(this)} horizontal>
+                           <RB.FormGroup controlId="formHorizontalName" >
                                <RB.Col componentClass={RB.ControlLabel} sm={2}>
                                    Name
                                </RB.Col>
                                <RB.Col sm={10}>
-                                   <RB.FormControl type="text" placeholder="Name" />
+                                   <RB.FormControl type="text" placeholder="Name" ref={ref => this.userName = ref}  />
                                </RB.Col>
                            </RB.FormGroup>
-                           <RB.FormGroup controlId="formHorizontalEmail">
+                           <RB.FormGroup controlId="formHorizontalEmail" >
                                <RB.Col componentClass={RB.ControlLabel} sm={2}>
                                    Email
                                </RB.Col>
                                <RB.Col sm={10}>
-                                   <RB.FormControl type="email" placeholder="Email" />
+                                   <RB.FormControl type="email" placeholder="Email" ref={ref => this.userEmail = ref} />
                                </RB.Col>
                            </RB.FormGroup>
-                           <RB.FormGroup controlId="formHorizontalEmail">
+                           <RB.FormGroup controlId="formHorizontalRole">
                                <RB.Col componentClass={RB.ControlLabel} sm={2}>
                                    Role
                                </RB.Col>
                                <RB.Col sm={10}>
                                    <Select
                                        name="form-field-name"
-                                       value={this.state.selectedRole}
+                                       value={this.state.newUser.selectedRole}
                                        onChange={this.logChange.bind(this)}
                                        options={options}
                                    />

@@ -8,6 +8,7 @@ import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 
 import javax.persistence.NoResultException;
+import javax.persistence.NonUniqueResultException;
 import javax.persistence.Query;
 import java.util.ArrayList;
 import java.util.List;
@@ -75,6 +76,36 @@ public class UserDaoHelper {
                     //TODO: throw Unrecognized field updated Exception
             }
             session.update(user);
+            tx.commit();
+            session.close();
+        }catch(Exception e){
+            System.out.println(e);
+        }finally {
+            return user;
+        }
+    }
+
+    public static User createNewUser(String name, String email, int role) throws NonUniqueResultException{
+        User user = new User();
+        try {
+            SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+            Session session = sessionFactory.openSession();
+            Transaction tx = session.beginTransaction();
+
+            //find if we already have that email
+            Query query= session.createQuery("from User where email=:email");
+            query.setParameter("email", email);
+
+            List<User> users = query.getResultList();
+            if(! users.isEmpty()){
+                throw new NonUniqueResultException("Email already in the system");
+            }
+
+            user.setName(name);
+            user.setEmail(email);
+            user.setRole(session.get(Role.class, role));
+
+            session.save(user);
             tx.commit();
             session.close();
         }catch(Exception e){

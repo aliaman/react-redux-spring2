@@ -26,6 +26,18 @@
           "name": "Usman Jalbani",
           "id": 2,
           "email": "usman@symantec.com"
+        },{
+          "lastUpdated": "Apr 25, 2017 2:35:45 PM",
+          "password": "",
+          "role": {
+            "lastUpdated": "Apr 25, 2017 2:35:44 PM",
+            "display": "Administrator",
+            "name": "ADMINISTRATOR",
+            "id": 1
+          },
+          "name": "Usman Jalbani",
+          "id": 3,
+          "email": "usman@symantec.com"
         }
       ],
       "success": true
@@ -57,6 +69,9 @@
     "get":{"payload":{"reason":["r1","r"],"mitigation":["m2","m4","m"],"comment":["c1"]},"success":true}
   },
   "/savefield":{
+    "post":{"payload":{"lastUpdated":"Apr 25, 2017 2:35:45 PM","password":"","role":{"lastUpdated":"Apr 25, 2017 2:35:44 PM","display":"Administrator","name":"ADMINISTRATOR","id":1},"name":"Ali Jalbani","id":1,"email":"ali_jalbani@symantec.com"}, "success": true}
+  },
+  "/newUser":{
     "post":{"payload":{"lastUpdated":"Apr 25, 2017 2:35:45 PM","password":"","role":{"lastUpdated":"Apr 25, 2017 2:35:44 PM","display":"Administrator","name":"ADMINISTRATOR","id":1},"name":"Ali Jalbani","id":1,"email":"ali_jalbani@symantec.com"}, "success": true}
   }
 }

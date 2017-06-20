@@ -34,27 +34,17 @@ export default class UsersTable extends React.Component{
         this.props.editUser(row.id, cellName, cellValue);
         //alert('Thw whole row :\n' + rowStr);
     }
-    readyForDelete(rows){
-
-    }
     onRowSelect(row, isSelected, e) {
-        let rowStr = '';
-        for (const prop in row) {
-            rowStr += prop + ': "' + row[prop] + '"';
-        }
-        console.log(e);
-        alert(`is selected: ${isSelected}, ${rowStr}`);
+        let selected = new Selected();
+        selected.rows = [row];
+        selected.selected = isSelected;
+        this.props.onRowSelect(selected);
     }
     onSelectAll(isSelected, rows) {
-        alert(`is select all: ${isSelected}`);
-        if (isSelected) {
-            alert('Current display and selected data: ');
-        } else {
-            alert('unselect rows: ');
-        }
-        for (let i = 0; i < rows.length; i++) {
-            alert(rows[i].id);
-        }
+        let selected = new Selected();
+        selected.rows = rows;
+        selected.selected = isSelected;
+        this.props.onRowSelect(selected);
     }
     render() {
         let users = this.format(this.props.data);
@@ -112,4 +102,27 @@ export default class UsersTable extends React.Component{
             )
         }
     }
+}
+
+export class Selected{
+    get rows() {
+        return this._rows;
+    }
+
+    set rows(value) {
+        this._rows = value;
+    }
+
+    get selected() {
+        return this._selected;
+    }
+
+    set selected(value) {
+        this._selected = value;
+    }
+    constructor(){
+        this._rows = new Array();
+        this._selected = new Boolean();
+    }
+
 }

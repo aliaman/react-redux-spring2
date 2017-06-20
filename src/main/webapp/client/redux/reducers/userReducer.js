@@ -68,6 +68,27 @@ const userReducer = (state=initialState, action) => {
                 userObj: action.payload
             }
         }
+
+        //delete user
+        case "DELETE_USER_PENDING": {
+
+            return {...state, fetching: true}
+        }
+        case "DELETE_USER_REJECTED": {
+            return {
+                ...state,
+                fetching: false,
+                error: action.payload
+            }
+        }
+        case "DELETE_USER_FULFILLED": {
+            return {
+                ...state,
+                fetching: false,
+                fetched: true,
+                error: null,
+            }
+        }
     }
     return state;
 }

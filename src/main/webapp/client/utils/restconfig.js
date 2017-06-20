@@ -14,6 +14,7 @@ class RestConfig {
             'SAVE_COMMENTS_FOR_EFFICACY_METRICS': this.base + 'comments',
             'POST_USER_FIELD': this.base + 'savefield',
             'POST_NEW_USER': this.base + 'newUser',
+            'DELETE_USER': this.base + 'deleteUser',
         }
     }
     prod() {
@@ -27,7 +28,7 @@ class RestConfig {
             'SAVE_COMMENTS_FOR_EFFICACY_METRICS': this.base + 'esdata/comment',
             'POST_USER_FIELD': this.base + 'users/savefield',
             'POST_NEW_USER': this.base + 'users/newUser',
-
+            'DELETE_USER': this.base + 'users/deleteUser',
         }
     }
 }

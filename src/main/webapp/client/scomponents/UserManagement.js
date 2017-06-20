@@ -2,9 +2,9 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import Authorization from './../utils/Authorization'
 import { connect } from 'react-redux'
-import { fetchUsers, saveUserField, saveUser } from './../redux/actions/userActions'
+import { fetchUsers, saveUserField, saveUser, deleteUser } from './../redux/actions/userActions'
 import * as RB from 'react-bootstrap'
-import UsersTable from './tables/UsersTable'
+import UsersTable, {Selected} from './tables/UsersTable'
 import Constants from './../utils/Constants'
 import Select from 'react-select'
 import update from 'react-addons-update'
@@ -24,7 +24,8 @@ class UserManagement extends React.Component {
                 name: '',
                 email: ''
 
-            }
+            },
+            selectedUsers: []
         }
     }
 
@@ -64,6 +65,26 @@ class UserManagement extends React.Component {
         }
         this.props.dispatch(saveUserField(id, actualfield, actualvalue));
     }
+    onRowSelect(s){
+        let selectedUsers = this.state.selectedUsers;
+        if(s.selected) {
+            for (let k in s.rows) {
+                let id = s.rows[k].id;
+                if(selectedUsers.find(user => user.id == id ) == undefined){
+                    selectedUsers.push(s.rows[k]);
+                }
+            }
+        }
+        if(! s.selected){
+            for (let k in s.rows) {
+                let id = s.rows[k].id;
+                let index = selectedUsers.findIndex(user => user.id == id);
+                selectedUsers.splice(index, 1);
+            }
+        }
+        console.log(selectedUsers);
+        this.setState({selectedUsers: selectedUsers});
+    }
     newUser(){
         this.setState({showNewUserModal: true});
     }
@@ -79,6 +100,10 @@ class UserManagement extends React.Component {
                 }
             });
         this.setState({newUser: newUser});
+    }
+    deleteUser(){
+        let ids = this.state.selectedUsers.map(function(a) {return a.id;});
+        this.props.dispatch(deleteUser(ids));
     }
     render(){
         const style = {
@@ -109,6 +134,9 @@ class UserManagement extends React.Component {
         const rowmargin = {
             paddingBottom: 10
         };
+        const applyMargin = {
+            marginRight: 5
+        };
        return (
            <div>
                <RB.Row>
@@ -118,17 +146,32 @@ class UserManagement extends React.Component {
                </RB.Row>
                <RB.Row style={rowmargin}>
                    <RB.Col md={4} mdOffset={8}>
-                       <RB.Button
-                           className="rightAlignedBtn"
-                           bsStyle="primary"
-                           onClick={this.newUser.bind(this)}>
-                           New User
-                       </RB.Button>
+                       <div className="right">
+                           <RB.Button
+                               className="actionBtn"
+                               style={ applyMargin }
+                               bsStyle="primary"
+                               onClick={this.deleteUser.bind(this)}
+                               disabled = {this.state.selectedUsers.length == 0}>
+                               Delete User
+                           </RB.Button>
+                           <RB.Button
+                               className="actionBtn"
+                               bsStyle="primary"
+                               onClick={this.newUser.bind(this)}>
+                               New User
+                           </RB.Button>
+                       </div>
                    </RB.Col>
                </RB.Row>
                <RB.Row>
                    <RB.Col md={12}>
-                       <UsersTable data={ this.props.users } editUser={ this.editUser.bind(this) } />
+                       <UsersTable
+                           data={ this.props.users }
+                           editUser={ this.editUser.bind(this) }
+                           onRowSelect={ this.onRowSelect.bind(this)}
+                       />
+
                    </RB.Col>
                </RB.Row>
 

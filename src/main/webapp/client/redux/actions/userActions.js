@@ -57,3 +57,23 @@ export function saveUser(user){
         });
     }
 }
+
+export function deleteUser(ids){
+    return function(dispatch) {
+        axios.post(rest.DELETE_USER, querystring.stringify(
+            {
+                'ids': ids
+            }
+        ))
+            .then((response) => {
+                if(response.data.success===true){
+                    dispatch(fetchUsers());
+                    dispatch({type: 'DELETE_USER_FULFILLED', payload: response.data.payload})
+                }else{
+                    dispatch({type: 'DELETE_USER_REJECTED',  payload: response.data.payload})
+                }
+            }).catch((err) => {
+            dispatch({type: 'DELETE_USER_REJECTED',  payload: err})
+        });
+    }
+}

@@ -112,4 +112,22 @@ public class UsersService extends GeneralService {
             return data;
         }
     }
+
+    @RequestMapping(value = "/deleteUser",
+            method = RequestMethod.POST,
+            produces= MediaType.APPLICATION_JSON_VALUE)
+    public JSONObject createNewUser(@RequestParam(value = "ids") int ids[]) throws RuntimeException {
+        JSONObject data = getSkeletonJson();
+        try {
+            boolean success = UserDaoHelper.deleteUsers(ids);
+            data.put("payload", "NA");
+            data.put("success", success);
+        }catch( Exception e ){
+            data.put("success", false);
+            data.put("payload", e.toString());
+            e.printStackTrace();
+        }finally{
+            return data;
+        }
+    }
 }

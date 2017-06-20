@@ -73,5 +73,8 @@
   },
   "/newUser":{
     "post":{"payload":{"lastUpdated":"Apr 25, 2017 2:35:45 PM","password":"","role":{"lastUpdated":"Apr 25, 2017 2:35:44 PM","display":"Administrator","name":"ADMINISTRATOR","id":1},"name":"Ali Jalbani","id":1,"email":"ali_jalbani@symantec.com"}, "success": true}
+  },
+  "/deleteUser":{
+    "post":{"payload":"Deleted", "success": true}
   }
 }

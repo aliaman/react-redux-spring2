@@ -114,4 +114,26 @@ public class UserDaoHelper {
             return user;
         }
     }
+
+    public static boolean deleteUsers(int ids[]) throws Exception{
+
+        boolean success = false;
+        try {
+            SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+            Session session = sessionFactory.openSession();
+            Transaction tx = session.beginTransaction();
+            User user = null;
+            for(int id : ids){
+                user = session.load(User.class,id);
+                session.delete(user);
+            }
+            tx.commit();
+            session.close();
+            success = true;
+        }catch(Exception e){
+            System.out.println(e);
+        }finally {
+            return success;
+        }
+    }
 }

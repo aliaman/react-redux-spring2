@@ -89,11 +89,11 @@ export default class UsersTable extends React.Component{
         };
         if(users!=undefined) {
             return (
-                <BootstrapTable data={ users } pagination cellEdit={ cellEditProp } selectRow={ selectRowProp }>
-                    <TableHeaderColumn dataField='id' isKey hidden>ID</TableHeaderColumn>
-                    <TableHeaderColumn dataField='name'>Name</TableHeaderColumn>
-                    <TableHeaderColumn dataField='email'>Email</TableHeaderColumn>
-                    <TableHeaderColumn dataField='roledisplay' editable={ { type: 'select', options: { values: roleTypes } } }>Role</TableHeaderColumn>
+                <BootstrapTable ref='userstable' data={ users } pagination cellEdit={ cellEditProp } selectRow={ selectRowProp }>
+                    <TableHeaderColumn dataField='id' isKey hidden dataSort={ true }>ID</TableHeaderColumn>
+                    <TableHeaderColumn dataField='name' dataSort={ true }>Name</TableHeaderColumn>
+                    <TableHeaderColumn dataField='email' dataSort={ true }>Email</TableHeaderColumn>
+                    <TableHeaderColumn dataField='roledisplay' dataSort={ true } editable={ { type: 'select', options: { values: roleTypes } } }>Role</TableHeaderColumn>
                 </BootstrapTable>
             );
         }else{

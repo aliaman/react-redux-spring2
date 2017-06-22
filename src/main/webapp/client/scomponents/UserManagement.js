@@ -82,7 +82,6 @@ class UserManagement extends React.Component {
                 selectedUsers.splice(index, 1);
             }
         }
-        console.log(selectedUsers);
         this.setState({selectedUsers: selectedUsers});
     }
     newUser(){
@@ -92,7 +91,6 @@ class UserManagement extends React.Component {
         this.setState({showNewUserModal: false});
     }
     logChange(val){
-        console.log("Selected: " + val);
         let newUser = update(this.state.newUser,
             {
                 $merge: {
@@ -114,7 +112,6 @@ class UserManagement extends React.Component {
             zIndex: 1040,
             top: 0, bottom: 0, left: 0, right: 0
         };
-
         const backdropStyle = {
             ...modalStyle,
             zIndex: 'auto',

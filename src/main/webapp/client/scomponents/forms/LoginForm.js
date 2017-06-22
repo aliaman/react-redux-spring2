@@ -2,14 +2,16 @@ import React from 'react';
 import { Row, Col, FormGroup, Form, FormControl, ControlLabel, HelpBlock, Button } from 'react-bootstrap';
 import { connect } from 'react-redux'
 import { doLogin } from './../../redux/actions/login'
-import { hashHistory } from 'react-router';
-import PropTypes from 'prop-types';
+import { hashHistory } from 'react-router'
+import PropTypes from 'prop-types'
+import ReactSpinner from 'reactjs-spinner'
 
 @connect((store) => {
     return {
         userObj: store.login.userObj,
         authenticated: store.login.authenticated,
-        error: store.login.error
+        error: store.login.error,
+        fetching: store.login.fetching
     }
 })
 export default class LoginForm extends React.Component {
@@ -49,7 +51,24 @@ export default class LoginForm extends React.Component {
             userObj: varVal
         });
     }
-    render() {
+    render(){
+        return (
+            <div>
+                 {(this.props.fetching)
+                     ?this.waitOrLoad()
+                     :this.renderForm()}
+            </div>
+        )
+    }
+    waitOrLoad(){
+        const style = {
+            marginTop: '180px',
+        };
+        return (<div style={style}>
+            <ReactSpinner size={50} borderColor={"#f3f3f3"} borderTopColor={"#3498db"} />
+        </div>);
+    }
+    renderForm() {
         return (
         <div className="container">
             <Row style={rowStyles}>

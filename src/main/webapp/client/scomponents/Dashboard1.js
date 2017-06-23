@@ -21,6 +21,7 @@ class Dashboard1 extends React.Component {
         super(props);
         this.handleApply = this.handleApply.bind(this);
         this.state = {
+            refresh: true,
             dp: {
                 ranges: {
                     'Today': [moment(), moment()],
@@ -111,76 +112,84 @@ class Dashboard1 extends React.Component {
     }
     componentWillMount(){
         //adding an extra day and then deleting it in the end to be consistent in results
-        let end = this.state.dp.endDate.clone().add(1, "days").valueOf();
-        this.props.dispatch(fetchEfficacyMetrics(this.state.dp.startDate.valueOf(), end));
+        let end = this.state.dp.endDate.clone().add(2, "days").valueOf();
+        this.props.dispatch(fetchEfficacyMetrics(this.state.dp.startDate.valueOf(),
+            end));
     }
     componentWillReceiveProps(nextProps){
-        this.setState(nextProps);
-        const data = nextProps.data;
-        if(data){
-            let b1 = new Array();
-            let b2 = new Array();
-            let b3 = new Array();
-            data.aggregations["2"].buckets.shift();//we dont want the first and last indicies
-            data.aggregations["2"].buckets.pop();
-            for(let k in data.aggregations["2"].buckets){
-                b1.push(data.aggregations["2"].buckets[k]["3"].buckets.FN.doc_count);
-                b2.push(data.aggregations["2"].buckets[k]["3"].buckets.FP.doc_count);
-                b3.push(data.aggregations["2"].buckets[k]["3"].buckets.Accuracy.doc_count);
-            }
+        if(this.state.refresh) {
+            this.setState(nextProps);
+            const data = nextProps.data;
+            if (data) {
+                let b1 = new Array();
+                let b2 = new Array();
+                let b3 = new Array();
+                data.aggregations["2"].buckets.shift();//we dont want the first and last indicies
+                data.aggregations["2"].buckets.pop();
+                for (let k in data.aggregations["2"].buckets) {
+                    b1.push(data.aggregations["2"].buckets[k]["3"].buckets.FN.doc_count);
+                    b2.push(data.aggregations["2"].buckets[k]["3"].buckets.FP.doc_count);
+                    b3.push(data.aggregations["2"].buckets[k]["3"].buckets.Accuracy.doc_count);
+                }
 
-            let categories = new Array();
-            let categoriescount = data.aggregations["2"].buckets.length;
-            do{
-                let t = this.state.dp.endDate.clone().add("1", "days");
-                let q = t.subtract(categoriescount--, 'days').format('YYYY-MM-DD');
-                categories.push(q);
-            }while(categoriescount>0);
+                let categories = new Array();
+                let categoriescount = data.aggregations["2"].buckets.length;
+                do {
+                    let t = this.state.dp.endDate.clone().add("1", "days");
+                    let q = t.subtract(categoriescount--, 'days').format('YYYY-MM-DD');
+                    categories.push(q);
+                } while (categoriescount > 0);
 
-            let volumeChart = update(this.state.charts.volume,
-                {$merge: {
-                    xAxis: {
-                        categories: categories,
-                        labels: {
-                            enabled:false
+                let volumeChart = update(this.state.charts.volume,
+                    {
+                        $merge: {
+                            xAxis: {
+                                categories: categories,
+                                labels: {
+                                    enabled: false
+                                }
+                            },
+                            series: [{
+                                name: "FN",
+                                data: b1
+                            }, {
+                                name: 'FP',
+                                data: b2
+                            }, {
+                                name: 'Accuracy',
+                                data: b3
+                            }]
                         }
-                    },
-                    series: [{
-                        name: "FN",
-                        data: b1
-                    }, {
-                        name: 'FP',
-                        data: b2
-                    }, {
-                        name: 'Accuracy',
-                        data: b3
-                    }]
-                }
+                    });
+                let percentageChart = update(this.state.charts.percentage,
+                    {
+                        $merge: {
+                            xAxis: {
+                                categories: categories
+                            },
+                            series: [{
+                                name: "FN",
+                                data: b1
+                            }, {
+                                name: 'FP',
+                                data: b2
+                            }, {
+                                name: 'Accuracy',
+                                data: b3
+                            }],
+                        }
+                    });
+                this.setState({
+                    charts: Object.assign({}, this.state.charts, {
+                        volume: volumeChart,
+                        percentage: percentageChart
+                    })
                 });
-            let percentageChart = update(this.state.charts.percentage,
-                {$merge: {
-                    xAxis: {
-                        categories: categories
-                    },
-                    series: [{
-                        name: "FN",
-                        data: b1
-                    }, {
-                        name: 'FP',
-                        data: b2
-                    }, {
-                        name: 'Accuracy',
-                        data: b3
-                    }],
-                }
-                });
-            this.setState({
-                charts: Object.assign({}, this.state.charts, {
-                    volume: volumeChart,
-                    percentage: percentageChart
-                })
-            });
+            }
         }
+        this.setState({
+            refresh: false
+        });
     }
     //should there be any fields there is only 1 common handleChange event which matches event.id to state.<property>
     handleChange (event){
@@ -200,7 +209,10 @@ class Dashboard1 extends React.Component {
         });
     }
     fetchMetrics(){
-        let end = this.state.dp.endDate.clone().add(1, "days").valueOf();
+        this.setState({
+            refresh: true
+        });
+        let end = this.state.dp.endDate.clone().add(2, "days").valueOf();
         this.props.dispatch(fetchEfficacyMetrics(this.state.dp.startDate.valueOf(), end));
     }
     _renderChart(){

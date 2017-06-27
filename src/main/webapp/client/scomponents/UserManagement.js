@@ -180,13 +180,13 @@ class UserManagement extends React.Component {
                    onHide={this.close.bind(this)}
                >
 
-                   <div style={dialogStyle()} >
+                   <div style={dialogStyle()}>
                        <div className="right">
                             <span onClick={this.close.bind(this)}>
                                 <span className="glyphicon glyphicon-eject"></span>
                             </span>
                        </div>
-                       <h3 className="h3">Add User</h3>
+                       <h3 className="clear">Add User</h3>
                        <p/>
                        <RB.Form onSubmit={this.submitNewUser.bind(this)} horizontal>
                            <RB.FormGroup controlId="formHorizontalName" >
@@ -205,7 +205,7 @@ class UserManagement extends React.Component {
                                    <RB.FormControl type="email" placeholder="Email" ref={ref => this.userEmail = ref} />
                                </RB.Col>
                            </RB.FormGroup>
-                           <RB.FormGroup controlId="formHorizontalRole">
+                           <RB.FormGroup controlId="formHorizontalRole">F
                                <RB.Col componentClass={RB.ControlLabel} sm={2}>
                                    Role
                                </RB.Col>

@@ -222,6 +222,7 @@ class Dashboard2 extends React.Component {
             },{
                 Header: 'Reason',
                 accessor: 'r_id',
+                width: 160,
                 Cell: props =>
                     <div>
                         <Suggestion
@@ -234,6 +235,7 @@ class Dashboard2 extends React.Component {
             },{
                 Header: 'Comment',
                 accessor: 'c_id',
+                width: 160,
                 Cell: props =>
                     <div>
                         <Suggestion
@@ -247,6 +249,7 @@ class Dashboard2 extends React.Component {
             },{
                 Header: 'Mitigation',
                 accessor: 'm_id',
+            width: 160,
                 Cell: props =>
                     <div>
                         <Suggestion

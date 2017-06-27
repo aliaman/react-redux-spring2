@@ -1,6 +1,7 @@
 import React from 'react'
 import {BootstrapTable, TableHeaderColumn} from 'react-bootstrap-table'
 import Constants from './../../../client/utils/Constants'
+import Suggestion from './../autosuggest/Suggestion'
 
 export default class UsersTable extends React.Component{
 
@@ -46,6 +47,16 @@ export default class UsersTable extends React.Component{
         selected.selected = isSelected;
         this.props.onRowSelect(selected);
     }
+    emailFormatter(cell, row){
+        return cell;
+        // return (<div>
+        //     <Suggestion
+        //         id={Math.random()}
+        //         type="mitigation"
+        //         value="abc"
+        //         suggestions={[{name: "a", value: "a"},{name: "aa", value: "aa"},{name: "aaa", value: "aaa"},{name: "aaaa", value: "aaaa"},{name: "aaaaa", value: "aaaaa"}]} />
+        // </div>)
+    }
     render() {
         let users = this.format(this.props.data);
         let roleTypes = [];
@@ -89,10 +100,10 @@ export default class UsersTable extends React.Component{
         };
         if(users!=undefined) {
             return (
-                <BootstrapTable ref='userstable' data={ users } pagination cellEdit={ cellEditProp } selectRow={ selectRowProp }>
+                <BootstrapTable ref='userstable' data={ users } pagination cellEdit={ cellEditProp } selectRow={ selectRowProp } striped={true}>
                     <TableHeaderColumn dataField='id' isKey hidden dataSort={ true }>ID</TableHeaderColumn>
                     <TableHeaderColumn dataField='name' dataSort={ true }>Name</TableHeaderColumn>
-                    <TableHeaderColumn dataField='email' dataSort={ true }>Email</TableHeaderColumn>
+                    <TableHeaderColumn dataField='email' dataSort={ true } dataFormat={this.emailFormatter.bind(this)}>Email</TableHeaderColumn>
                     <TableHeaderColumn dataField='roledisplay' dataSort={ true } editable={ { type: 'select', options: { values: roleTypes } } }>Role</TableHeaderColumn>
                 </BootstrapTable>
             );

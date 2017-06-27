@@ -34,6 +34,9 @@ h1.symheading{
 .actionBtn{
   width: 135px;
 }
+.goBtn{
+  width: 50px;
+}
 .calspeck{
   height: 34px;
 }
@@ -54,6 +57,9 @@ h1.symheading{
 .autosuggest-list{
   display: none;
 }
+.left{
+  float: left;
+}
 .right{
   float: right;
 }
@@ -68,4 +74,9 @@ h1.symheading{
 }
 .ReactTable.-striped .rt-tr.-odd{
   background-color: #f9f9f9;
+}
+.dpdiv{
+  float: left;
+  margin-right: 8px;
+  width: 217px;
 }

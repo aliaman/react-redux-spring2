@@ -10,6 +10,7 @@ import update from 'react-addons-update'
 import ls from 'localstorage-ttl'
 import DateRangePicker from './component/DateRangePicker'
 import moment from 'moment'
+import HashTracking from '../scomponents/tables/HashTracking'
 
 @connect((store) => {
     return {
@@ -27,6 +28,7 @@ class Dashboard2 extends React.Component {
         super(props);
         this.handleApply = this.handleApply.bind(this);
         this.state = {
+            selectedRows:[],
             dp: {
                 ranges: {
                     'Today': [moment(), moment()],
@@ -36,6 +38,7 @@ class Dashboard2 extends React.Component {
                     'This Month': [moment().startOf('month'), moment().endOf('month')],
                     'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
                 },
+                width: 200,
                 maxDate: moment(),
                 startDate: moment().startOf('day').subtract(96, 'days'),
                 endDate: moment().endOf('day').subtract(90, 'days'),
@@ -85,11 +88,20 @@ class Dashboard2 extends React.Component {
             this.setState({showModal: false});
         }
     }
+    flatten(data){
+        for(let l in data){
+            for(let k in data[l]._source){
+                if(! (data[l]._source[k] instanceof Object)) {
+                    data[l][k] = data[l]._source[k];
+                }
+            }
+        }
+        return data;
+    }
     componentWillReceiveProps(nextProps){
         if(nextProps.fetchedComments && nextProps.fetchedData && nextProps.fetchedUniqueComments) {
-            console.log(nextProps);
-            console.log(nextProps);
-            let formatteddata = update(this.state.formatteddata,
+            let formatteddata = this.flatten(nextProps.data);
+            formatteddata = update(formatteddata,
                 {
                     $merge: {
                         list: nextProps.data
@@ -97,7 +109,6 @@ class Dashboard2 extends React.Component {
                 }
             );
             formatteddata = this.addSupplementInfo(formatteddata, nextProps.comments);
-            console.log(formatteddata);
             this.setState({
                 formatteddata: formatteddata,
                 autosuggest: nextProps.uniqueComments
@@ -200,6 +211,34 @@ class Dashboard2 extends React.Component {
             })
         });
     }
+    onRowSelect(s){
+        let selectedRows = this.state.selectedRows;
+        if(s.selected) {
+            for (let k in s.rows) {
+                let id = s.rows[k]._id;
+                if(selectedRows.find(user => user._id == id ) == undefined){
+                    selectedRows.push(s.rows[k]);
+                }
+            }
+        }
+        if(! s.selected){
+            for (let k in s.rows) {
+                let id = s.rows[k]._id;
+                let index = selectedRows.findIndex(user => user._id == id);
+                selectedRows.splice(index, 1);
+            }
+        }
+        this.setState({selectedRows: selectedRows});
+    }
+    deleteUser(){
+
+    }
+    newUser(){
+
+    }
+    edit(){
+
+    }
     render() {
         const style = {
             marginTop: '140px',
@@ -209,149 +248,63 @@ class Dashboard2 extends React.Component {
             zIndex: 1040,
             top: 0, bottom: 0, left: 0, right: 0
         };
-
         const backdropStyle = {
             ...modalStyle,
             zIndex: 'auto',
             backgroundColor: '#000',
             opacity: 0.5
         };
-
         const dialogStyle = function() {
             return {
                 padding: 20
             };
         };
+        const rowmargin = {
+            paddingBottom: 10
+        };
+        const applyMargin = {
+            marginRight: 5
+        };
         if(this.props.fetchedComments && this.props.fetchedData && this.props.fetchedUniqueComments){
-            const columns = [{
-                Header: 'Id',
-                accessor: '_id' // String-based value accessors!
-            },{
-                Header: 'Timestamp',
-                accessor: '_source.timestamp',
-            },{
-                Header: 'Hash',
-                accessor: '_source.sha256',
-            },{
-                Header: 'Task Id',
-                accessor: '_source.task_id',
-            },{
-                Header: 'Mime',
-                accessor: '_source.mime_type',
-            },{
-                Header: 'Site',
-                accessor: '_source.site',
-            },{
-                Header: 'Reputation',
-                accessor: '_source.retrospective.reputation',
-            },{
-                Header: 'Reason',
-                accessor: 'r_id',
-                width: 160,
-                Cell: props =>
-                    <div>
-                        <Suggestion
-                            id={props.value}
-                            type="reason"
-                            reportChange={this.autoSuggestChanged.bind(this)}
-                            value={this.getPropForKey(props.value, "reason")}
-                            suggestions={this.getSuggestions("reason")} />
-                    </div>
-            },{
-                Header: 'Comment',
-                accessor: 'c_id',
-                width: 160,
-                Cell: props =>
-                    <div>
-                        <Suggestion
-                            id={props.value}
-                            type="comment"
-                            reportChange={this.autoSuggestChanged.bind(this)}
-                            value={this.getPropForKey(props.value, "comment")}
-                            suggestions={this.getSuggestions("comment")} />
-                    </div>
-
-            },{
-                Header: 'Mitigation',
-                accessor: 'm_id',
-                width: 160,
-                Cell: props =>
-                    <div>
-                        <Suggestion
-                            id={props.value}
-                            type="mitigation"
-                            reportChange={this.autoSuggestChanged.bind(this)}
-                            value={this.getPropForKey(props.value, "mitigation")}
-                            suggestions={this.getSuggestions("mitigation")} />
-                    </div>
-            },{
-                Header: 'Last Changed By',
-                accessor: 'l_id',
-                Cell: props =>
-                    <span className='center-block'>
-                        {this.getLastUpdatedBy(props.value)}
-                    </span>
-            },{
-                Header: '',
-                accessor: 'a_id',
-                Cell: props =>
-                    <span className='center-block'>
-                        <RB.Button className="inline__edit" onClick={this.handleClick.bind(this, props.value)}>
-                            <span className="glyphicon glyphicon-edit"></span>
-                        </RB.Button>
-                    </span>
-            }];
             return (
                 <div>
                     <RB.Row>
-                        <RB.Col md={6}>
+                        <RB.Col md={4}>
                             <h3>False Negatives</h3>
-                            <h4 className="compactHeading">Sample Hash Tracking</h4>
-                        </RB.Col>
-                        <RB.Col md={3} mdOffset={3}>
-                            <br/>
-                            <br/>
-                            <br/>
-                            <DateRangePicker {...this.state.dp} clickHandler={this.handleApply} />
-                            <br/>
                         </RB.Col>
                     </RB.Row>
-
-                    <ReactTable
-                        className="-striped -highlight"
-                        data={this.state.formatteddata.list}
-                        sortable={false}
-                        columns={columns}
-                        defaultPageSize={10}
-                    />
-                    <RB.Modal
-                        aria-labelledby='modal-label'
-                        style={modalStyle}
-                        backdropStyle={backdropStyle}
-                        show={this.state.showModal}
-                        onHide={this.close.bind(this)}
-                    >
-
-                        <div style={dialogStyle()} >
-                            <span onClick={this.close.bind(this)}>
-                                <span className="glyphicon glyphicon-eject"></span>
-                            </span>
-                            <h4>Hash Details</h4>
-                            <p/>
-                            <div>Id: {this.state.selectedHash._id}</div>
-                            <div>Index: {this.state.selectedHash._index}</div>
-                            <div>Score: {this.state.selectedHash._score}</div>
-                            <div>Customer: {this.state.selectedHash._source.customer}</div>
-                            <div>Disposition: {this.state.selectedHash._source.merlin.disposition_type}</div>
-                            <div>Type: {this.state.selectedHash._type}</div>
-                            <div>SHA256: {this.state.selectedHash._source.sha256}</div>
-                            <div>Mime Type: {this.state.selectedHash._source.mime_type}</div>
-                            <div>Task Id: {this.state.selectedHash._source.task_id}</div>
-                            <div>Timestamp: {this.state.selectedHash._source.timestamp}</div>
-                            <div>Site: {this.state.selectedHash._source.site}</div>
-                            <div>Reputation: {this.state.selectedHash._source.retrospective.reputation}</div>
-                        </div>
-                    </RB.Modal>
+                    <RB.Row style={rowmargin}>
+                        <RB.Col md={4} mdOffset={0}>
+                            <div className="dpdiv">
+                                <DateRangePicker
+                                    {...this.state.dp}
+                                    clickHandler={this.handleApply} />
+                            </div>
+                            <RB.Button
+                                className="goBtn"
+                                bsStyle="primary"
+                                onClick={this.edit.bind(this)}>
+                                Go
+                            </RB.Button>
+                        </RB.Col>
+                        <RB.Col md={2} mdOffset={6}>
+                            <RB.Button
+                                className="actionBtn"
+                                bsStyle="primary"
+                                disabled = {this.state.selectedRows.length == 0}
+                                onClick={this.edit.bind(this)}>
+                                Edit Remarks
+                            </RB.Button>
+                        </RB.Col>
+                    </RB.Row>
+                    <RB.Row>
+                        <RB.Col md={12}>
+                            <HashTracking
+                                data={ this.state.formatteddata.list }
+                                onRowSelect={ this.onRowSelect.bind(this)}
+                            />
+                        </RB.Col>
+                    </RB.Row>
                 </div>
             );
         }else{

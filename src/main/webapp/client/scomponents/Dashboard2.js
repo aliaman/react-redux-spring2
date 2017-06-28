@@ -47,6 +47,7 @@ class Dashboard2 extends React.Component {
             formatteddata:{
                 list: []
             },
+            showModal: true,
             autosuggest:{},
             selectedHash: {
                 "_index": "",
@@ -237,9 +238,18 @@ class Dashboard2 extends React.Component {
 
     }
     edit(){
+        this.open();
+    }
+    submitedit(){
+
+    }
+    handleChange(){
 
     }
     render() {
+        const rowStyles = {
+            paddingTop: '100px'
+        };
         const style = {
             marginTop: '140px',
         };
@@ -261,9 +271,6 @@ class Dashboard2 extends React.Component {
         };
         const rowmargin = {
             paddingBottom: 10
-        };
-        const applyMargin = {
-            marginRight: 5
         };
         if(this.props.fetchedComments && this.props.fetchedData && this.props.fetchedUniqueComments){
             return (
@@ -305,6 +312,69 @@ class Dashboard2 extends React.Component {
                             />
                         </RB.Col>
                     </RB.Row>
+                    <RB.Modal
+                        aria-labelledby='modal-label'
+                        style={modalStyle}
+                        backdropStyle={backdropStyle}
+                        show={this.state.showModal}
+                        onHide={this.close.bind(this)}
+                    >
+
+                        <div style={dialogStyle()} >
+                            <div className="right" onClick={this.close.bind(this)}>
+                                <span className="glyphicon glyphicon-eject"></span>
+                            </div>
+                            <RB.Row>
+                                <RB.Col lg={12} lgOffset={0}>
+                                    <h3 className="symheading">Edit Remarks</h3>
+                                    <div className="error">{this.state.error}</div>
+                                    <RB.Form horizontal onSubmit={this.submitedit.bind(this)}>
+                                        <RB.FormGroup>
+                                            <RB.Col sm={2}>
+                                                <span className="hformspan">ID</span>
+                                            </RB.Col>
+                                            <RB.Col sm={10}>
+                                                <RB.FormControl id="email"
+                                                             readonly
+                                                             type="text"
+                                                             value={this.state.selectedHash._id}
+                                                             onChange={this.handleChange.bind(this)}/>
+                                            </RB.Col>
+                                        </RB.FormGroup>
+                                        <RB.FormGroup controlId="comment">
+                                            <RB.Col sm={2}>
+                                                <span className="hformspan">Comment</span>
+                                            </RB.Col>
+                                            <RB.Col sm={10}>
+                                                <RB.FormControl id="comment"
+                                                             type="text"
+                                                             value={this.state.selectedHash.comment}
+                                                             onChange={this.handleChange.bind(this)}/>
+                                            </RB.Col>
+                                        </RB.FormGroup>
+                                        <div className="right">
+                                            <RB.Button type="submit"
+                                                       bsStyle="primary">
+                                                Submit
+                                            </RB.Button>
+                                        </div>
+                                    </RB.Form>
+                                </RB.Col>
+                            </RB.Row>
+                            <div>Id: {this.state.selectedHash._id}</div>
+                            <div>Index: {this.state.selectedHash._index}</div>
+                            <div>Score: {this.state.selectedHash._score}</div>
+                            <div>Customer: {this.state.selectedHash._source.customer}</div>
+                            <div>Disposition: {this.state.selectedHash._source.merlin.disposition_type}</div>
+                            <div>Type: {this.state.selectedHash._type}</div>
+                            <div>SHA256: {this.state.selectedHash._source.sha256}</div>
+                            <div>Mime Type: {this.state.selectedHash._source.mime_type}</div>
+                            <div>Task Id: {this.state.selectedHash._source.task_id}</div>
+                            <div>Timestamp: {this.state.selectedHash._source.timestamp}</div>
+                            <div>Site: {this.state.selectedHash._source.site}</div>
+                            <div>Reputation: {this.state.selectedHash._source.retrospective.reputation}</div>
+                        </div>
+                    </RB.Modal>
                 </div>
             );
         }else{

@@ -67,7 +67,7 @@ export default class HashTracking extends React.Component{
             // withFirstAndLast: false > Hide the going to First and Last page button
         };
         const selectRowProp = {
-            mode: 'checkbox',
+            mode: 'radio',
             clickToSelect: true,
             unselectable: [ 1 ],
             bgColor: '#fff2fc',

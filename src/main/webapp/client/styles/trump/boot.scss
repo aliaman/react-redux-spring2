@@ -81,10 +81,42 @@ h1.symheading{
   width: 217px;
 }
 .hformspan{
-  line-height: 33px;
   font-size: 14px;
-
+  float: right;
+}
+.hformspan.lh{
+  line-height: 33px;
+}
+.hformspan::after {
+  content: ":";
 }
 .formgroup{
   margin-bottom: 8px;
+}
+.hformanswer{
+  font-size: 12px;
+  padding: 9px;
+}
+.formh{
+  font-size: 12px;
+  margin-top: 15px;
+}
+.form-group.has-error .Select-control{
+  border: 1px solid #a94442;
+}
+.form-control{
+  font-size: 12px;
+}
+.cynic-title{
+  display: inline-block;
+  line-height: 29px;
+  vertical-align: top;
+  padding-left: 4px;
+}
+.overflow-ellipses{
+  overflow: hidden;
+  -ms-text-overflow: ellipsis;
+  -o-text-overflow: ellipsis;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }

@@ -37,15 +37,6 @@ export default class Suggestion extends React.Component {
     }
 
     renderSuggestion(suggestion) {
-        let el = document.getElementsByClassName('rt-table')[0];
-
-        let top = document.activeElement.getBoundingClientRect().top;
-        let left = document.activeElement.getBoundingClientRect().left;
-        let container = document.getElementsByClassName("react-autosuggest__suggestions-container--open")[0];
-        let aside = document.getElementsByClassName("portal__navigation")[0].clientWidth;
-
-        container.style.top = top + 10 + "px";
-        container.style.left = left - aside - 20 + el.scrollLeft + 0 + "px";
         return (
             <span>{suggestion.name}</span>
         );

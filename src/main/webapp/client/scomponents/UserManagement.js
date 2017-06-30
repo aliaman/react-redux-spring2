@@ -19,6 +19,8 @@ class UserManagement extends React.Component {
         super(props);
         this.state = {
             showNewUserModal: false,
+            newUserSubmitted: false,
+            newUserValid: true,
             newUser: {
                 selectedRole: 0,
                 name: '',
@@ -34,6 +36,50 @@ class UserManagement extends React.Component {
     componentWillMount() {
         this.props.dispatch(fetchUsers());
     }
+    getValidationState(name){
+        let newUserValid = true;
+        if(this.state.newUserSubmitted) {
+            switch (name) {
+                case "name":
+                    if (this.state.newUser[name] == "") {
+                        newUserValid = false;
+                        return "error"
+                    }
+                    break;
+               case "email":
+                   let re = /[A-Z0-9._%+-]+@[A-Z0-9.-]+.[A-Z]{2,4}/igm;
+                   if (this.state.newUser[name] == "") {
+                       newUserValid = false;
+                       return "error";
+                   }else if(!re.test(this.state.newUser[name])){
+                       newUserValid = false;
+                       return "error";
+                   }
+                   break;
+               case "selectedRole":
+                   if (this.state.newUser[name] == 0) {
+                       newUserValid = false;
+                       return "error";
+                   }
+                   break;
+                default:
+                   break;
+            }
+            return null;
+        }
+        return null;
+    }
+    getValidationStateForm(){
+        let valid = true;
+        if (this.state.newUser.name == "") {
+            valid = false;
+        }else if (this.state.newUser.email == "") {
+            valid = false;
+        }else if (this.state.newUser.selectedRole == 0) {
+            valid = false;
+        }
+        return valid;
+    }
     submitNewUser(event){
         event.preventDefault();
         let newUser = update(this.state.newUser,
@@ -43,11 +89,15 @@ class UserManagement extends React.Component {
                     email: ReactDOM.findDOMNode(this.userEmail).value,
                 }
             });
+        let isFormValid = this.getValidationStateForm();
         this.setState({
+                newUserSubmitted: true,
                 newUser: newUser,
-                showNewUserModal: false
+                showNewUserModal: (!isFormValid),
             }, function(){
-            this.props.dispatch(saveUser(this.state.newUser));
+                if(isFormValid) {
+                    this.props.dispatch(saveUser(this.state.newUser));
+                }
         });
     }
     editUser(id, field, value){
@@ -88,20 +138,45 @@ class UserManagement extends React.Component {
         this.setState({showNewUserModal: true});
     }
     close(){
-        this.setState({showNewUserModal: false});
-    }
-    logChange(val){
         let newUser = update(this.state.newUser,
             {
                 $merge: {
-                    selectedRole: val.value
+                    selectedRole: 0
                 }
             });
-        this.setState({newUser: newUser});
+        this.setState({
+            showNewUserModal: false,
+            newUserSubmitted: false,
+            newUser: newUser,
+        });
+    }
+    logChange(val){
+        if(val==null) {
+            this.setState({newUser: { value: 0, label: ""}});
+        }else{
+            let newUser = update(this.state.newUser,
+                {
+                    $merge: {
+                        selectedRole: val.value
+                    }
+                });
+            this.setState({newUser: newUser});
+        }
     }
     deleteUser(){
         let ids = this.state.selectedUsers.map(function(a) {return a.id;});
         this.props.dispatch(deleteUser(ids));
+    }
+    handleChange(event){
+        let fieldName = event.target.name;
+        let fleldVal = event.target.value;
+        let obj = {};
+        obj[fieldName] = fleldVal;
+        let newUser = update(this.state.newUser,
+            {
+                $merge: obj
+            });
+        this.setState({newUser: newUser});
     }
     render(){
         const style = {
@@ -182,36 +257,55 @@ class UserManagement extends React.Component {
 
                    <div style={dialogStyle()}>
                        <div className="right">
-                            <span onClick={this.close.bind(this)}>
-                                <span className="glyphicon glyphicon-eject"></span>
+                            <span onClick={this.close.bind(this)} className="Select-clear-zone">
+                                <span className="Select-clear">x</span>
                             </span>
                        </div>
                        <h3 className="clear">Add User</h3>
-                       <p/>
-                       <RB.Form onSubmit={this.submitNewUser.bind(this)} horizontal>
-                           <RB.FormGroup controlId="formHorizontalName" >
-                               <RB.Col componentClass={RB.ControlLabel} sm={2}>
-                                   Name
+                       <p>&nbsp;</p>
+                       <RB.Form onSubmit={this.submitNewUser.bind(this)} horizontal className="formh">
+                           <RB.FormGroup
+                               name="name"
+                               validationState={this.getValidationState("name")}
+                               controlId="formHorizontalName" >
+                               <RB.Col sm={2}>
+                                   <span className="hformspan lh">Name</span>
                                </RB.Col>
                                <RB.Col sm={10}>
-                                   <RB.FormControl type="text" placeholder="Name" ref={ref => this.userName = ref}  />
+                                   <RB.FormControl
+                                       required
+                                       name="name"
+                                       onChange={this.handleChange.bind(this)}
+                                       type="text"
+                                       placeholder="Name"
+                                       ref={ref => this.userName = ref}  />
                                </RB.Col>
                            </RB.FormGroup>
-                           <RB.FormGroup controlId="formHorizontalEmail" >
-                               <RB.Col componentClass={RB.ControlLabel} sm={2}>
-                                   Email
+                           <RB.FormGroup
+                               validationState={this.getValidationState("email")}
+                               controlId="formHorizontalEmail" >
+                               <RB.Col sm={2}>
+                                   <span className="hformspan lh">Email</span>
                                </RB.Col>
                                <RB.Col sm={10}>
-                                   <RB.FormControl type="email" placeholder="Email" ref={ref => this.userEmail = ref} />
+                                   <RB.FormControl
+                                       required
+                                       name="email"
+                                       onChange={this.handleChange.bind(this)}
+                                       type="email"
+                                       placeholder="Email"
+                                       ref={ref => this.userEmail = ref} />
                                </RB.Col>
                            </RB.FormGroup>
-                           <RB.FormGroup controlId="formHorizontalRole">F
-                               <RB.Col componentClass={RB.ControlLabel} sm={2}>
-                                   Role
+                           <RB.FormGroup
+                               validationState={this.getValidationState("selectedRole")}
+                               controlId="formHorizontalRole">
+                               <RB.Col sm={2}>
+                                   <span className="hformspan lh">Role</span>
                                </RB.Col>
                                <RB.Col sm={10}>
                                    <Select
-                                       name="form-field-name"
+                                       name="selectedRole"
                                        value={this.state.newUser.selectedRole}
                                        onChange={this.logChange.bind(this)}
                                        options={options}

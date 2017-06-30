@@ -23,7 +23,7 @@ import HashTracking from '../scomponents/tables/HashTracking'
         uniqueComments: store.fnHashTracking.uniqueComments,
     }
 })
-class Dashboard2 extends React.Component {
+class DashboardHashTracking extends React.Component {
     constructor(props){
         super(props);
         this.handleApply = this.handleApply.bind(this);
@@ -43,7 +43,6 @@ class Dashboard2 extends React.Component {
                 startDate: moment().startOf('day').subtract(96, 'days'),
                 endDate: moment().endOf('day').subtract(90, 'days'),
             },
-            type: "FN",
             formatteddata:{
                 list: []
             },
@@ -53,9 +52,9 @@ class Dashboard2 extends React.Component {
         }
     }
     componentWillMount(){
-        this.props.dispatch(fetchHashTracking(this.state.type));
-        this.props.dispatch(fetchCommentsForEfficacyMetrics(this.state.type));
-        this.props.dispatch(fetchUniqueComments(this.state.type));
+        this.props.dispatch(fetchHashTracking(this.props.type));
+        this.props.dispatch(fetchCommentsForEfficacyMetrics(this.props.type));
+        this.props.dispatch(fetchUniqueComments(this.props.type));
         if(this.props.fetchedComments && this.props.fetchedData){
             this.setState({showModal: false});
         }
@@ -118,7 +117,7 @@ class Dashboard2 extends React.Component {
     }
     autoSuggestChanged(idd, value, type){
         let id = this.state.selectedHash[0]._id;
-        this.props.dispatch(saveCommentsForEfficacyMetrics(this.state.type, id, values, userObj.id));
+        this.props.dispatch(saveCommentsForEfficacyMetrics(this.props.type, id, values, userObj.id));
     }
     addSupplementInfo(data, mockComments){
         let supplementalids = ["c_id", "m_id", "l_id", "r_id", "a_id"];
@@ -354,4 +353,4 @@ class Dashboard2 extends React.Component {
     }
 
 }
-export default Authorization(Dashboard2, ['ADMINISTRATOR', 'ANALYST'])
+export default Authorization(DashboardHashTracking, ['ADMINISTRATOR', 'ANALYST'])

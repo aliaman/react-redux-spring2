@@ -14,8 +14,8 @@ import SplashScreen from './components/SplashScreen';
 
 import Dashboard from './components/Dashboard';
 import Dashboard1 from './scomponents/Dashboard1';
-import Dashboard2 from './scomponents/Dashboard2';
-import Dashboard3 from './scomponents/Dashboard3';
+import DashboardFalseNegatives from './scomponents/DashboardFalseNegatives';
+import DashboardFalsePositives from './scomponents/DashboardFalsePositives';
 import UserManagement from './scomponents/UserManagement';
 
 import { Router, IndexRoute, Route, hashHistory } from 'react-router';
@@ -40,8 +40,8 @@ render(
                 <Route path="um" component={UserManagement} />
                 <Route path="dash" component={Dashboard}>
                     <Route path="1" component={Dashboard1} />
-                    <Route path="2" component={Dashboard2} />
-                    <Route path="3" component={Dashboard3} />
+                    <Route path="2" component={DashboardFalseNegatives} />
+                    <Route path="3" component={DashboardFalsePositives} />
                 </Route>
             </Route>
             <Route path="login" component={Login} />

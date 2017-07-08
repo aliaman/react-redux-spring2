@@ -105,10 +105,10 @@ export default class Suggestion extends React.Component {
     }
 
     render() {
-        const { value, suggestions } = this.state;
+        const { suggestions } = this.state;
         const inputProps = {
             placeholder: '',
-            value,
+            value: this.state.value,
             onChange: this.onChange,
             onBlur: this.onBlur.bind(this),
         };

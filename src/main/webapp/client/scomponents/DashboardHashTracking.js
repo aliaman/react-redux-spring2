@@ -14,13 +14,25 @@ import HashTracking from '../scomponents/tables/HashTracking'
 
 @connect((store) => {
     return {
-        fetchedData: store.fnHashTracking.fetchedData,
-        fetchedComments: store.fnHashTracking.fetchedComments,
-        fetchedUniqueComments: store.fnHashTracking.fetchedUniqueComments,
+        FN: {
+            fetchedData: store.fnHashTracking.fetchedData,
+            fetchedComments: store.fnHashTracking.fetchedComments,
+            fetchedUniqueComments: store.fnHashTracking.fetchedUniqueComments,
 
-        data: store.fnHashTracking.data,
-        comments: store.fnHashTracking.comments,
-        uniqueComments: store.fnHashTracking.uniqueComments,
+            data: store.fnHashTracking.data,
+            comments: store.fnHashTracking.comments,
+            uniqueComments: store.fnHashTracking.uniqueComments,
+        },
+        FP: {
+            fetchedData: store.fpHashTracking.fetchedData,
+            fetchedComments: store.fpHashTracking.fetchedComments,
+            fetchedUniqueComments: store.fpHashTracking.fetchedUniqueComments,
+
+            data: store.fpHashTracking.data,
+            comments: store.fpHashTracking.comments,
+            uniqueComments: store.fpHashTracking.uniqueComments,
+        }
+
     }
 })
 class DashboardHashTracking extends React.Component {
@@ -28,7 +40,8 @@ class DashboardHashTracking extends React.Component {
         super(props);
         this.handleApply = this.handleApply.bind(this);
         this.state = {
-            selectedRows:[],
+            heading: null,
+            selectedRows: [],
             dp: {
                 ranges: {
                     'Today': [moment(), moment()],
@@ -43,20 +56,26 @@ class DashboardHashTracking extends React.Component {
                 startDate: moment().startOf('day').subtract(96, 'days'),
                 endDate: moment().endOf('day').subtract(90, 'days'),
             },
-            formatteddata:{
-                list: []
-            },
+            formatteddata: [],
             showModal: false,
-            autosuggest:{},
+            autosuggest: {},
             selectedHash: []
         }
+
     }
     componentWillMount(){
-        this.props.dispatch(fetchHashTracking(this.props.type));
-        this.props.dispatch(fetchCommentsForEfficacyMetrics(this.props.type));
-        this.props.dispatch(fetchUniqueComments(this.props.type));
-        if(this.props.fetchedComments && this.props.fetchedData){
-            this.setState({showModal: false});
+        if (this.props[this.props.type].fetchedComments && this.props[this.props.type].fetchedData) {
+            this.setState({
+                showModal: false,
+                heading: (this.props.type == "FN") ? "False Negatives" : "False Positives"
+            });
+        }
+        if(this.props[this.props.type].fetchedData==false) {
+            this.props.dispatch(fetchHashTracking(this.props.type));
+            this.props.dispatch(fetchCommentsForEfficacyMetrics(this.props.type));
+            this.props.dispatch(fetchUniqueComments(this.props.type));
+        }else{
+            this.setDataState(this.props);
         }
     }
     flatten(data){
@@ -70,43 +89,23 @@ class DashboardHashTracking extends React.Component {
         return data;
     }
     componentWillReceiveProps(nextProps){
-        if(nextProps.fetchedComments && nextProps.fetchedData && nextProps.fetchedUniqueComments) {
-            let formatteddata = this.flatten(nextProps.data);
-            formatteddata = update(formatteddata,
-                {
-                    $merge: {
-                        list: nextProps.data
-                    }
-                }
-            );
-            formatteddata = this.addSupplementInfo(formatteddata, nextProps.comments);
+        this.setDataState(nextProps);
+    }
+    setDataState(props){
+        if (props[props.type].fetchedComments && props[props.type].fetchedData) {
+            let formatteddata = this.flatten(props[this.props.type].data);
+            formatteddata = this.addSupplementInfo(formatteddata, props[this.props.type].comments);
             this.setState({
                 formatteddata: formatteddata,
-                autosuggest: nextProps.uniqueComments
+                autosuggest: props[this.props.type].uniqueComments
             });
         }
-    }
-    handleClick(id, event){
-        this.setState({
-            selectedHash: this.props.data.filter(hash => hash._id == id)[0]
-        });
-        this.open();
     }
     close(){
         this.setState({ showModal: false });
     }
     open(){
         this.setState({ showModal: true });
-    }
-    getPropForKey(id, key){
-        let obj = {};
-        try{
-            obj = this.state.formatteddata.list.filter((record)=>record._id == id)[0];
-        }catch(err){
-            console.log(err);
-        }finally{
-            return (obj[key]==undefined?'':obj[key]);
-        }
     }
     formatComment(arr){
         let a = [];
@@ -116,26 +115,33 @@ class DashboardHashTracking extends React.Component {
         return a;
     }
     autoSuggestChanged(idd, value, type){
-        let id = this.state.selectedHash[0]._id;
-        this.props.dispatch(saveCommentsForEfficacyMetrics(this.props.type, id, values, userObj.id));
+        // let userObj = ls.get("auth");
+        let selectedHash = this.state.selectedHash;
+        selectedHash[0][type] = value;
+        this.setState({ selectedHash: selectedHash },
+        function(){
+            console.log(selectedHash);
+        });
+
+        // let id = this.state.selectedHash[0]._id;
+        //this.props.dispatch(saveCommentsForEfficacyMetrics(this.props.type, id, values, userObj.id));
     }
     addSupplementInfo(data, mockComments){
-        let supplementalids = ["c_id", "m_id", "l_id", "r_id", "a_id"];
-        for(let k in data.list) {
-            for (let l in supplementalids) {
-                data.list[k][supplementalids[l]] = data.list[k]._id;
-            }
+        for(let m in data) {
+            data[m]['reason'] = '';
+            data[m]['comment'] = '';
+            data[m]['mitigation'] = '';
         }
         mockComments.forEach((mockComment)=>{
             let id = mockComment.id;
             let reason = mockComment.reason;
             let comment = mockComment.comment;
             let mitigation = mockComment.mitigation;
-            for(let m in data.list){
-                if(data.list[m]._id == id){
-                    data.list[m]['reason'] = reason;
-                    data.list[m]['comment'] = comment;
-                    data.list[m]['mitigation'] = mitigation;
+            for(let m in data){
+                if(data[m]._id == id){
+                    data[m]['reason'] = reason;
+                    data[m]['comment'] = comment;
+                    data[m]['mitigation'] = mitigation;
                 }
             }
         });
@@ -169,25 +175,26 @@ class DashboardHashTracking extends React.Component {
         });
     }
     onRowSelect(s){
-        this.setState({selectedHash: s._rows});
-    }
-    deleteUser(){
-
-    }
-    newUser(){
-
+        this.setState(
+            {selectedHash: s._rows},
+            function () {
+                console.log(this.state.selectedHash[0]);
+            }
+        );
     }
     edit(){
         this.open();
     }
     submitedit(event){
+        let userObj = ls.get("auth");
+        let values = {
+            'comment': this.state.selectedHash[0].comment,
+            'reason': this.state.selectedHash[0].reason,
+            'mitigation': this.state.selectedHash[0].mitigation,
+        };
+        let id = this.state.selectedHash[0]._id;
+        this.props.dispatch(saveCommentsForEfficacyMetrics(this.props.type, id, values, userObj.id));
         event.preventDefault();
-        console.log(this.state.selectedHash[0].comment);
-        console.log(this.state.selectedHash[0].reason);
-        console.log(this.state.selectedHash[0].mitigation);
-    }
-    handleChange(){
-
     }
     render() {
         const rowStyles = {
@@ -199,12 +206,12 @@ class DashboardHashTracking extends React.Component {
         const rowmargin = {
             paddingBottom: 10
         };
-        if(this.props.fetchedComments && this.props.fetchedData){
+        if(this.props[this.props.type].fetchedComments && this.props[this.props.type].fetchedData){
             return (
                 <div>
                     <RB.Row>
                         <RB.Col md={4}>
-                            <h3>False Negatives</h3>
+                            <h3>{this.state.heading}</h3>
                         </RB.Col>
                     </RB.Row>
                     <RB.Row style={rowmargin}>
@@ -234,7 +241,7 @@ class DashboardHashTracking extends React.Component {
                     <RB.Row>
                         <RB.Col md={12}>
                             <HashTracking
-                                data={ this.state.formatteddata.list }
+                                data={ this.state.formatteddata }
                                 onRowSelect={ this.onRowSelect.bind(this)}
                             />
                         </RB.Col>
@@ -268,7 +275,7 @@ class DashboardHashTracking extends React.Component {
             zIndex: 1040,
             top: 0, bottom: 0, left: 0, right: 0
         };
-        if(this.state.selectedHash.length==1 && this.props.fetchedUniqueComments===true){
+        if(this.state.selectedHash.length==1 && this.props[this.props.type].fetchedUniqueComments===true){
             return(
                 <RB.Modal
                     aria-labelledby='modal-label'

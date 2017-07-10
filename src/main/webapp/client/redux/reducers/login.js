@@ -1,6 +1,3 @@
-import ls from 'localstorage-ttl'
-import Constants from './../../utils/Constants'
-
 const initialState = {
     fetching: false,
     fetched: false,
@@ -36,7 +33,6 @@ const loginReducer = (state=initialState, action) => {
         }
         case "LOGIN_FULFILLED": {
             //establish session for 3 hours
-            ls.set("auth", JSON.stringify(action.payload), Constants.MILLISECONDS_IN_HOUR * 3);
             return {
                 ...state,
                 fetching: false,

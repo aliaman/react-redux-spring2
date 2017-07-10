@@ -115,16 +115,14 @@ class DashboardHashTracking extends React.Component {
         return a;
     }
     autoSuggestChanged(idd, value, type){
-        // let userObj = ls.get("auth");
         let selectedHash = this.state.selectedHash;
+        let formatteddata = this.state.formatteddata;
+        formatteddata.find(data => data._id == selectedHash[0]._id)[type] = value;
         selectedHash[0][type] = value;
-        this.setState({ selectedHash: selectedHash },
+        this.setState({ selectedHash, formatteddata },
         function(){
             console.log(selectedHash);
         });
-
-        // let id = this.state.selectedHash[0]._id;
-        //this.props.dispatch(saveCommentsForEfficacyMetrics(this.props.type, id, values, userObj.id));
     }
     addSupplementInfo(data, mockComments){
         for(let m in data) {
@@ -165,7 +163,7 @@ class DashboardHashTracking extends React.Component {
             return lastUpdatedBy;
         }
     }
-    //this function is a handler for the datetime range picker
+    //this function is a handlthis.props.dispatch(fetchHashTracking(this.props.type));closeer for the datetime range picker
     handleApply(event, picker) {
         this.setState({
             dp: Object.assign({}, this.state.dp, {
@@ -187,6 +185,7 @@ class DashboardHashTracking extends React.Component {
     }
     submitedit(event){
         let userObj = ls.get("auth");
+        userObj = JSON.parse(userObj);
         let values = {
             'comment': this.state.selectedHash[0].comment,
             'reason': this.state.selectedHash[0].reason,
@@ -194,6 +193,7 @@ class DashboardHashTracking extends React.Component {
         };
         let id = this.state.selectedHash[0]._id;
         this.props.dispatch(saveCommentsForEfficacyMetrics(this.props.type, id, values, userObj.id));
+        this.close();
         event.preventDefault();
     }
     render() {

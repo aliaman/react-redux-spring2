@@ -61,6 +61,8 @@ export function saveCommentsForEfficacyMetrics(type="FP", id, values, user_id) {
         axios.post(rest.SAVE_COMMENTS_FOR_EFFICACY_METRICS, querystring.stringify({'user_id': user_id, 'id': id, 'comment': values['comment'], 'reason': values['reason'], 'mitigation': values['mitigation']}))
             .then((response) => {
                 if(response.data.success) {
+                    dispatch(fetchCommentsForEfficacyMetrics(type));
+                    dispatch(fetchUniqueComments(type));
                     dispatch({type: type + '_SAVE_ES_COMMENTS_FULFILLED', payload: response.data.payload})
                 }else{
                     dispatch({type: type + '_SAVE_ES_COMMENTS_REJECTED', payload: response.data.payload});

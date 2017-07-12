@@ -67,16 +67,38 @@ class DashboardHashTracking extends React.Component {
         if (this.props[this.props.type].fetchedComments && this.props[this.props.type].fetchedData) {
             this.setState({
                 showModal: false,
-                heading: (this.props.type == "FN") ? "False Negatives" : "False Positives"
+                heading: ((this.props.type == "FN") ? "False Negatives" : "False Positives"),
+                dp: Object.assign({}, this.state.dp, {
+                    startDate: moment().startOf('day').subtract(96, 'days'),
+                    endDate: moment().endOf('day').subtract(90, 'days')
+                })
             });
         }
         if(this.props[this.props.type].fetchedData==false) {
-            this.props.dispatch(fetchHashTracking(this.props.type));
+
+            let end = this.state.dp.endDate.clone().add(2, "days").valueOf();
+            let start = this.state.dp.startDate.valueOf();
+
+            this.props.dispatch(fetchHashTracking(this.props.type, start, end));
             this.props.dispatch(fetchCommentsForEfficacyMetrics(this.props.type));
             this.props.dispatch(fetchUniqueComments(this.props.type));
         }else{
             this.setDataState(this.props);
         }
+    }
+    handleApply(event, picker) {
+        this.setState({
+            dp: Object.assign({}, this.state.dp, {
+                startDate: picker.startDate,
+                endDate: picker.endDate
+            })
+        });
+    }
+    fetchData(){
+        let end = this.state.dp.endDate.clone().add(2, "days").valueOf();
+        let start = this.state.dp.startDate.valueOf();
+
+        this.props.dispatch(fetchHashTracking(this.props.type, start, end));
     }
     flatten(data){
         for(let l in data){
@@ -163,15 +185,6 @@ class DashboardHashTracking extends React.Component {
             return lastUpdatedBy;
         }
     }
-    //this function is a handlthis.props.dispatch(fetchHashTracking(this.props.type));closeer for the datetime range picker
-    handleApply(event, picker) {
-        this.setState({
-            dp: Object.assign({}, this.state.dp, {
-                startDate: picker.startDate,
-                endDate: picker.endDate
-            })
-        });
-    }
     onRowSelect(s){
         this.setState(
             {selectedHash: s._rows},
@@ -224,7 +237,7 @@ class DashboardHashTracking extends React.Component {
                             <RB.Button
                                 className="goBtn"
                                 bsStyle="primary"
-                                onClick={this.edit.bind(this)}>
+                                onClick={this.fetchData.bind(this)}>
                                 Go
                             </RB.Button>
                         </RB.Col>

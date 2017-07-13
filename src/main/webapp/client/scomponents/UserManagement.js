@@ -25,7 +25,6 @@ class UserManagement extends React.Component {
                 selectedRole: 0,
                 name: '',
                 email: ''
-
             },
             selectedUsers: []
         }

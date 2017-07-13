@@ -70,35 +70,29 @@ export default class LoginForm extends React.Component {
     }
     renderForm() {
         return (
-        <div className="container">
-            <Row style={rowStyles}>
-                <Col lg={6} lgOffset={3}>
-                    <h1 className="symheading">Login</h1>
-                    <div className="error">{this.state.error}</div>
-                    <form onSubmit={this.login.bind(this)}>
-                        <FormGroup>
-                            <ControlLabel>Email address</ControlLabel>
-                            <FormControl id="email"
-                                         type="text"
-                                         placeholder="Enter email"
-                                         value={this.state.userObj.email}
-                                         onChange={this.handleChange.bind(this)}/>
-                        </FormGroup>
-                        <FormGroup controlId="password">
-                            <ControlLabel>Password</ControlLabel>
-                            <FormControl id="password"
-                                         type="password"
-                                         value={this.state.userObj.password}
-                                         onChange={this.handleChange.bind(this)}/>
-                        </FormGroup>
-                        <Button type="submit" >
-                            Submit
-                        </Button>
-                    </form>
-                </Col>
-            </Row>
-        </div>
-
+            <div>
+                <div className="error">{this.state.error}</div>
+                <form onSubmit={this.login.bind(this)}>
+                    <FormGroup>
+                        <ControlLabel>Email address</ControlLabel>
+                        <FormControl id="email"
+                                     type="text"
+                                     placeholder="Enter email"
+                                     value={this.state.userObj.email}
+                                     onChange={this.handleChange.bind(this)}/>
+                    </FormGroup>
+                    <FormGroup controlId="password">
+                        <ControlLabel>Password</ControlLabel>
+                        <FormControl id="password"
+                                     type="password"
+                                     value={this.state.userObj.password}
+                                     onChange={this.handleChange.bind(this)}/>
+                    </FormGroup>
+                    <Button type="submit" >
+                        Submit
+                    </Button>
+                </form>
+            </div>
         );
     }
     _handleValidSubmit(values) {
@@ -120,7 +114,4 @@ LoginForm.defaultProps = {
     error:  null,
     authenticated: false,
     userObj: null
-};
-const rowStyles = {
-    paddingTop: '100px'
 };

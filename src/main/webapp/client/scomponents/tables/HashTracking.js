@@ -1,7 +1,6 @@
 import React from 'react'
 import {BootstrapTable, TableHeaderColumn} from 'react-bootstrap-table'
 import Constants from './../../../client/utils/Constants'
-import Suggestion from './../autosuggest/Suggestion'
 
 export default class HashTracking extends React.Component{
 
@@ -77,10 +76,10 @@ export default class HashTracking extends React.Component{
         if(data!=undefined) {
             return (
                 <BootstrapTable ref='hashtrackTable' data={ data } pagination selectRow={ selectRowProp } striped={true}>
-                    <TableHeaderColumn dataField='_id' isKey dataSort={ true }>ID</TableHeaderColumn>
+                    <TableHeaderColumn dataField='_id' isKey dataSort={ true } hidden={true}>ID</TableHeaderColumn>
+                    <TableHeaderColumn dataField='task_id' dataSort={ true }>Task ID</TableHeaderColumn>
                     <TableHeaderColumn dataField='timestamp' dataSort={ true }>Timestamp</TableHeaderColumn>
                     <TableHeaderColumn dataField='sha256' dataSort={ true }>Hash</TableHeaderColumn>
-                    <TableHeaderColumn dataField='task_id' dataSort={ true }>Task ID</TableHeaderColumn>
                     <TableHeaderColumn dataField='mime_type' dataSort={ true }>Mime</TableHeaderColumn>
                     <TableHeaderColumn dataField='site' dataSort={ true }>Site</TableHeaderColumn>
                     <TableHeaderColumn dataField='comment' dataSort={ true }>Comment</TableHeaderColumn>

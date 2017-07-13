@@ -11,6 +11,19 @@ class DateRangePicker extends React.Component {
 
     constructor(props) {
         super(props);
+        this.state = {
+            dateLimit: {
+                "months": 1
+            },
+            ranges: {
+                'Today': [moment(), moment()],
+                'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+                'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')],
+                '2 Months Ago': [moment().subtract(2, 'month').startOf('month'), moment().subtract(2, 'month').endOf('month')],
+                '3 Months Ago': [moment().subtract(3, 'month').startOf('month'), moment().subtract(3, 'month').endOf('month')],
+                '4 Months Ago': [moment().subtract(4, 'month').startOf('month'), moment().subtract(4, 'month').endOf('month')],
+            },
+        };
     }
     render() {
         let start = this.props.startDate.format('YYYY-MM-DD');
@@ -23,6 +36,8 @@ class DateRangePicker extends React.Component {
 
         return (
                 <DatetimeRangePicker
+                    dateLimit={this.state.dateLimit}
+                    ranges={this.state.ranges}
                     startDate={this.props.startDate}
                     endDate={this.props.endDate}
                     onApply={this.props.clickHandler}

@@ -10,7 +10,7 @@ const HtmlWebpackPluginConfig = new HtmlWebpackPlugin({
 })
 
 module.exports = {
-    entry: './client/index.js',
+    entry: './client/App.js',
     devtool: 'sourcemaps',
     cache: true,
     output: {
@@ -34,7 +34,7 @@ module.exports = {
         HtmlWebpackPluginConfig,
         new ExtractTextPlugin('bundle.css'),
         new webpack.DefinePlugin({
-            __DEVELOPMENT__: false,
+            global: {__DEVELOPMENT__: false},
             'process.env': {
                 NODE_ENV: JSON.stringify('production')
             }

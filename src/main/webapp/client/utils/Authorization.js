@@ -1,6 +1,6 @@
 import React from 'react';
-import NotAuthorized from './../components/NotAuthorized';
-import Login from './../components/Login';
+import NotAuthorized from '../components/NotAuthorized/NotAuthorized';
+import Login from './../components/Login/Login';
 import ls from 'localstorage-ttl';
 
 const Authorization = function(WrappedComponent, allowedRoles)

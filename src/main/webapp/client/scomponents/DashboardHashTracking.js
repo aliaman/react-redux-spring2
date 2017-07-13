@@ -2,11 +2,9 @@ import React from 'react'
 import Authorization from './../utils/Authorization'
 import { connect } from 'react-redux'
 import { fetchHashTracking, fetchCommentsForEfficacyMetrics, saveCommentsForEfficacyMetrics, fetchUniqueComments } from './../redux/actions/hashTrackingES'
-import ReactTable from 'react-table'
 import ReactSpinner from 'reactjs-spinner'
 import Suggestion from './autosuggest/Suggestion'
 import * as RB from 'react-bootstrap'
-import update from 'react-addons-update'
 import ls from 'localstorage-ttl'
 import DateRangePicker from './component/DateRangePicker'
 import moment from 'moment'
@@ -40,21 +38,13 @@ class DashboardHashTracking extends React.Component {
         super(props);
         this.handleApply = this.handleApply.bind(this);
         this.state = {
-            heading: null,
+            heading: ((this.props.type == "FN") ? "False Negatives" : "False Positives"),
             selectedRows: [],
             dp: {
-                ranges: {
-                    'Today': [moment(), moment()],
-                    'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
-                    'Last 7 Days': [moment().subtract(6, 'days'), moment()],
-                    'Last 30 Days': [moment().subtract(29, 'days'), moment()],
-                    'This Month': [moment().startOf('month'), moment().endOf('month')],
-                    'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
-                },
                 width: 200,
                 maxDate: moment(),
-                startDate: moment().startOf('day').subtract(96, 'days'),
-                endDate: moment().endOf('day').subtract(90, 'days'),
+                startDate: moment().startOf('day').add(-96, 'days').utc(),
+                endDate: moment().endOf('day').add(-90, "days").utc(),
             },
             formatteddata: [],
             showModal: false,
@@ -75,11 +65,7 @@ class DashboardHashTracking extends React.Component {
             });
         }
         if(this.props[this.props.type].fetchedData==false) {
-
-            let end = this.state.dp.endDate.clone().add(2, "days").valueOf();
-            let start = this.state.dp.startDate.valueOf();
-
-            this.props.dispatch(fetchHashTracking(this.props.type, start, end));
+            this._fetchData();
             this.props.dispatch(fetchCommentsForEfficacyMetrics(this.props.type));
             this.props.dispatch(fetchUniqueComments(this.props.type));
         }else{
@@ -94,11 +80,13 @@ class DashboardHashTracking extends React.Component {
             })
         });
     }
-    fetchData(){
-        let end = this.state.dp.endDate.clone().add(2, "days").valueOf();
-        let start = this.state.dp.startDate.valueOf();
-
+    _fetchData(){
+        let end = this.state.dp.endDate.clone().add(0, "days").utc().valueOf();
+        let start = this.state.dp.startDate.clone().add(0, "days").utc().valueOf();
         this.props.dispatch(fetchHashTracking(this.props.type, start, end));
+    }
+    fetchData(){
+        this._fetchData()
     }
     flatten(data){
         for(let l in data){

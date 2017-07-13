@@ -33,7 +33,7 @@ class RestConfig {
     }
 }
 let rest = {};
-if(__DEVELOPMENT__){
+if(global.__DEVELOPMENT__){
     rest = new RestConfig('http://localhost:3000/').dev();
 }else{
     rest = new RestConfig('/rest/').prod();

@@ -45,9 +45,9 @@ export default class LeftMenu extends React.Component {
                             <li>
                                 <Link to="/">Dashboard</Link>
                                 <ul className="content-viewer-aside-subsections">
-                                    { this.allowedFor(["ADMINISTRATOR", "ANALYST", "REPORTING"]) ? <li><Link to="/dash/1"><span className="overflow-ellipses">Cynic Efficacy Metrics</span></Link></li> : null }
-                                    { this.allowedFor(["ADMINISTRATOR", "ANALYST"]) ? <li><Link to="/dash/2"><span className="overflow-ellipses">FN sample hash tracking</span></Link></li> : null }
-                                    { this.allowedFor(["ADMINISTRATOR", "ANALYST"]) ? <li><Link to="/dash/3"><span className="overflow-ellipses">FP sample hash tracking</span></Link></li> : null }
+                                    { this.allowedFor(["ADMINISTRATOR", "ANALYST", "REPORTING"]) ? <li><Link to="/dash/1"><span className="overflow-ellipses">Efficacy Metrics</span></Link></li> : null }
+                                    { this.allowedFor(["ADMINISTRATOR", "ANALYST"]) ? <li><Link to="/dash/2"><span className="overflow-ellipses">False Negatives Sample Hash Tracking</span></Link></li> : null }
+                                    { this.allowedFor(["ADMINISTRATOR", "ANALYST"]) ? <li><Link to="/dash/3"><span className="overflow-ellipses">False Positives Sample Hash Tracking</span></Link></li> : null }
                                 </ul>
                             </li>
                         </ul>

@@ -7,7 +7,7 @@
   "repository": "https://github.com/aliaman/react-spring-rest.git",
   "license": "MIT",
   "jest": {
-    "moduleNameMapper":{
+    "moduleNameMapper": {
       "^.+\\.(css|less|scss)$": "./config/cssstub.js"
     },
     "verbose": true,
@@ -69,6 +69,7 @@
     "babel-preset-es2015": "^6.24.1",
     "babel-preset-react": "^6.24.1",
     "enzyme": "^2.9.1",
+    "enzyme-to-json": "^1.5.1",
     "extract-text-webpack-plugin": "^2.1.0",
     "jest": "^20.0.4",
     "jest-enzyme": "^3.5.3",
@@ -76,13 +77,15 @@
     "moment": "^2.18.1",
     "react-test-renderer": "15.5.4",
     "webpack": "^2.4.1",
+    "webpack-dashboard": "^0.4.0",
     "webpack-dev-server": "^2.4.2"
   },
   "scripts": {
     "test": "jest",
+    "dashboard": "webpack-dashboard webpack-dev-server --host 0.0.0.0 --port 8081 --config webpack/webpack.dev.config.js",
     "start": "webpack-dev-server --host 0.0.0.0 --port 8081 --config webpack/webpack.dev.config.js",
     "mock": "mock-json-server ../resources/mock/db.json --port=3000",
-    "watch": " webpack --watch -d",
+    "watch": "webpack --watch -d",
     "build": "webpack --config webpack/webpack.config.js"
   }
 }

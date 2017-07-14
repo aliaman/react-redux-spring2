@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react';
-import LoginForm from '../../scomponents/forms/LoginForm';
+import LoginForm from './LoginForm';
 import { Row, Col, FormGroup, Form, FormControl, ControlLabel, HelpBlock, Button } from 'react-bootstrap';
 
 export default class Login extends React.Component {

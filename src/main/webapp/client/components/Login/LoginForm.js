@@ -1,7 +1,7 @@
 import React from 'react';
 import { Row, Col, FormGroup, Form, FormControl, ControlLabel, HelpBlock, Button } from 'react-bootstrap';
 import { connect } from 'react-redux'
-import { doLogin } from './../../redux/actions/login'
+import { doLogin } from '../../redux/actions/login'
 import { hashHistory } from 'react-router'
 import PropTypes from 'prop-types'
 import ReactSpinner from 'reactjs-spinner'

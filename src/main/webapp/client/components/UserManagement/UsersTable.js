@@ -1,7 +1,6 @@
 import React from 'react'
 import {BootstrapTable, TableHeaderColumn} from 'react-bootstrap-table'
 import Constants from './../../../client/utils/Constants'
-import Suggestion from './../autosuggest/Suggestion'
 
 export default class UsersTable extends React.Component{
 

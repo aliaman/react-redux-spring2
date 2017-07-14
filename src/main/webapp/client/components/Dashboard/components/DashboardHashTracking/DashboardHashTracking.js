@@ -1,14 +1,14 @@
 import React from 'react'
-import Authorization from './../utils/Authorization'
+import Authorization from '../../../../utils/Authorization'
 import { connect } from 'react-redux'
-import { fetchHashTracking, fetchCommentsForEfficacyMetrics, saveCommentsForEfficacyMetrics, fetchUniqueComments } from './../redux/actions/hashTrackingES'
+import { fetchHashTracking, fetchCommentsForEfficacyMetrics, saveCommentsForEfficacyMetrics, fetchUniqueComments } from '../../../../redux/actions/hashTrackingES'
 import ReactSpinner from 'reactjs-spinner'
-import Suggestion from './autosuggest/Suggestion'
+import Suggestion from '../../../../scomponents/autosuggest/Suggestion'
 import * as RB from 'react-bootstrap'
 import ls from 'localstorage-ttl'
-import DateRangePicker from './component/DateRangePicker'
+import DateRangePicker from '../../../../scomponents/daterange/DateRangePicker'
 import moment from 'moment'
-import HashTracking from '../scomponents/tables/HashTracking'
+import HashTracking from './HashTracking'
 
 @connect((store) => {
     return {

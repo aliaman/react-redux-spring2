@@ -4,9 +4,9 @@ import ReactHighcharts from 'react-highcharts'
 import * as RB from 'react-bootstrap'
 import update from 'react-addons-update'
 
-import Authorization from './../utils/Authorization'
-import { fetchEfficacyMetrics } from './../redux/actions/cynicES'
-import DateRangePicker from './component/DateRangePicker'
+import Authorization from '../../../../utils/Authorization'
+import { fetchEfficacyMetrics } from '../../../../redux/actions/cynicES'
+import DateRangePicker from '../../../../scomponents/daterange/DateRangePicker'
 import moment from 'moment'
 import ReactSpinner from 'reactjs-spinner'
 

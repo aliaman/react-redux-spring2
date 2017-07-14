@@ -1,6 +1,6 @@
 import React from 'react'
 import {BootstrapTable, TableHeaderColumn} from 'react-bootstrap-table'
-import Constants from './../../../client/utils/Constants'
+import Constants from '../../../../utils/Constants'
 
 export default class HashTracking extends React.Component{
 

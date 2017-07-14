@@ -13,10 +13,10 @@ import LeftMenu from './components/LeftMenu/LeftMenu';
 import SplashScreen from './components/SplashScreen/SplashScreen';
 
 import Dashboard from './components/Dashboard/Dashboard';
-import Dashboard1 from './scomponents/Dashboard1';
-import DashboardFalseNegatives from './scomponents/DashboardFalseNegatives';
-import DashboardFalsePositives from './scomponents/DashboardFalsePositives';
-import UserManagement from './scomponents/UserManagement';
+import Dashboard1 from './components/Dashboard/components/Dashboard1/Dashboard1';
+import DashboardFalseNegatives from './components/Dashboard/components/DashboardHashTracking/DashboardFalseNegatives';
+import DashboardFalsePositives from './components/Dashboard/components/DashboardHashTracking/DashboardFalsePositives';
+import UserManagement from './components/UserManagement/UserManagement';
 
 import { Router, IndexRoute, Route, hashHistory } from 'react-router';
 

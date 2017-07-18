@@ -13,6 +13,7 @@ import HashTracking from './HashTracking'
 @connect((store) => {
     return {
         FN: {
+            fetching: store.fnHashTracking.fetching,
             fetchedData: store.fnHashTracking.fetchedData,
             fetchedComments: store.fnHashTracking.fetchedComments,
             fetchedUniqueComments: store.fnHashTracking.fetchedUniqueComments,
@@ -22,6 +23,7 @@ import HashTracking from './HashTracking'
             uniqueComments: store.fnHashTracking.uniqueComments,
         },
         FP: {
+            fetching: store.fnHashTracking.fetching,
             fetchedData: store.fpHashTracking.fetchedData,
             fetchedComments: store.fpHashTracking.fetchedComments,
             fetchedUniqueComments: store.fpHashTracking.fetchedUniqueComments,
@@ -38,8 +40,8 @@ class DashboardHashTracking extends React.Component {
         super(props);
         this.handleApply = this.handleApply.bind(this);
         this.state = {
-            heading: ((this.props.type == "FN") ? "False Negatives" : "False Positives"),
             selectedRows: [],
+            fetching: false,
             dp: {
                 width: 200,
                 maxDate: moment(),
@@ -54,10 +56,12 @@ class DashboardHashTracking extends React.Component {
 
     }
     componentWillMount(){
+        this.setState({
+           fetching: this.props[this.props.type].fetching
+        });
         if (this.props[this.props.type].fetchedComments && this.props[this.props.type].fetchedData) {
             this.setState({
                 showModal: false,
-                heading: ((this.props.type == "FN") ? "False Negatives" : "False Positives"),
                 dp: Object.assign({}, this.state.dp, {
                     startDate: moment().startOf('day').subtract(96, 'days'),
                     endDate: moment().endOf('day').subtract(90, 'days')
@@ -210,11 +214,6 @@ class DashboardHashTracking extends React.Component {
         if(this.props[this.props.type].fetchedComments && this.props[this.props.type].fetchedData){
             return (
                 <div>
-                    <RB.Row>
-                        <RB.Col md={4}>
-                            <h3>{this.state.heading}</h3>
-                        </RB.Col>
-                    </RB.Row>
                     <RB.Row style={rowmargin}>
                         <RB.Col md={4} mdOffset={0}>
                             <div className="dpdiv">
@@ -225,6 +224,7 @@ class DashboardHashTracking extends React.Component {
                             <RB.Button
                                 className="goBtn"
                                 bsStyle="primary"
+                                disabled={this.state.fetching}
                                 onClick={this.fetchData.bind(this)}>
                                 Go
                             </RB.Button>

@@ -4,8 +4,10 @@ import querystring from 'querystring';
 
 export function fetchUsers() {
     return function(dispatch) {
+        document.body.style.cursor = 'wait';
         axios.get(rest.GET_ALL_USERS)
             .then((response) => {
+                document.body.style.cursor = 'default';
                 if(response.data.success) {
                     dispatch({type: 'FETCH_USERS_FULFILLED', payload: response.data.payload})
                 }else{

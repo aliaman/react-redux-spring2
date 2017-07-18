@@ -5,6 +5,7 @@ let initialState = {
     comments: [],
     uniqueComments: [],
 
+    fetching: false,
     fetchedData: false,
     fetchedComments: false,
     fetchedUniqueComments: false,
@@ -13,12 +14,16 @@ let initialState = {
 const hashTrackingESReducer = (state=initialState, action) => {
     switch (action.type) {
         case "FP_HASHTRACKING_PENDING": {
-            return {...state, fetching: true}
+            return {...state,
+                fetching: true,
+                fetchedData: false,
+            }
         }
         case "FP_HASHTRACKING_REJECTED": {
             return {
                 ...state,
                 fetchedData: false,
+                fetching: false,
                 error: action.payload,
             }
         }
@@ -26,6 +31,7 @@ const hashTrackingESReducer = (state=initialState, action) => {
             return {
                 ...state,
                 fetchedData: true,
+                fetching: false,
                 error: null,
                 data: action.payload.data.hits.hits
             }

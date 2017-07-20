@@ -203,7 +203,7 @@ class Dashboard1 extends React.Component {
     }
     _renderChart(){
         const rowMargin = {
-            marginBottom: 3
+            marginBottom: ''
         };
         return (
             <div>

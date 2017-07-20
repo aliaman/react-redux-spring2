@@ -21,9 +21,11 @@ export function fetchHashTracking(type="FP", start, end) {
         }).then(function (body) {
             document.body.style.cursor = 'default';
             dispatch({type: type + '_HASHTRACKING_FULFILLED', payload: {success: true, data: body }});
+            client.close();
         }, function (error) {
             document.body.style.cursor = 'default';
             dispatch({type: type + '_HASHTRACKING_REJECTED',  payload: error.message})
+            client.close();
         });
     }
 }

@@ -1,3 +1,5 @@
+import actionTypes from './../constans/actionTypes'
+
 let initialState = {
     error: null,
 

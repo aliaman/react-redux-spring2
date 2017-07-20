@@ -1,3 +1,5 @@
+import actionTypes from './../constans/actionTypes'
+
 let initialState = {
     error: null,
 
@@ -13,13 +15,13 @@ let initialState = {
 
 const hashTrackingESReducer = (state=initialState, action) => {
     switch (action.type) {
-        case "FP_HASHTRACKING_PENDING": {
+        case actionTypes.FP_HASHTRACKING_PENDING: {
             return {...state,
                 fetching: true,
                 fetchedData: false,
             }
         }
-        case "FP_HASHTRACKING_REJECTED": {
+        case actionTypes.FP_HASHTRACKING_REJECTED: {
             return {
                 ...state,
                 fetchedData: false,
@@ -27,7 +29,7 @@ const hashTrackingESReducer = (state=initialState, action) => {
                 error: action.payload,
             }
         }
-        case "FP_HASHTRACKING_FULFILLED": {
+        case actionTypes.FP_HASHTRACKING_FULFILLED: {
             return {
                 ...state,
                 fetchedData: true,
@@ -37,17 +39,17 @@ const hashTrackingESReducer = (state=initialState, action) => {
             }
         }
         //get comments
-        case "FP_CYNIC_ES_COMMENTS_PENDING": {
+        case actionTypes.FP_CYNIC_ES_COMMENTS_PENDING: {
             return {...state, fetching: true}
         }
-        case "FP_CYNIC_ES_COMMENTS_REJECTED": {
+        case actionTypes.FP_CYNIC_ES_COMMENTS_REJECTED: {
             return {
                 ...state,
                 fetchedComments: false,
                 error: action.payload,
             }
         }
-        case "FP_CYNIC_ES_COMMENTS_FULFILLED": {
+        case actionTypes.FP_CYNIC_ES_COMMENTS_FULFILLED: {
             return {
                 ...state,
                 fetchedComments: true,
@@ -56,16 +58,16 @@ const hashTrackingESReducer = (state=initialState, action) => {
             }
         }
         //Save Comments
-        case "FP_SAVE_ES_COMMENTS_PENDING": {
+        case actionTypes.FP_SAVE_ES_COMMENTS_PENDING: {
             return {...state }
         }
-        case "FP_SAVE_ES_COMMENTS_REJECTED": {
+        case actionTypes.FP_SAVE_ES_COMMENTS_REJECTED: {
             return {
                 ...state,
                 error: action.payload,
             }
         }
-        case "FP_SAVE_ES_COMMENTS_FULFILLED": {
+        case actionTypes.FP_SAVE_ES_COMMENTS_FULFILLED: {
             return {
                 ...state,
                 error: null
@@ -73,16 +75,16 @@ const hashTrackingESReducer = (state=initialState, action) => {
         }
 
         //getUniqueComments
-        case "FP_ES_COMMENTS_UNIQUE_PENDING": {
+        case actionTypes.FP_ES_COMMENTS_UNIQUE_PENDING: {
             return {...state }
         }
-        case "FP_ES_COMMENTS_UNIQUE_REJECTED": {
+        case actionTypes.FP_ES_COMMENTS_UNIQUE_REJECTED: {
             return {
                 ...state,
                 error: action.payload,
             }
         }
-        case "FP_ES_COMMENTS_UNIQUE_FULFILLED": {
+        case actionTypes.FP_ES_COMMENTS_UNIQUE_FULFILLED: {
             return {
                 ...state,
                 uniqueComments: action.payload,

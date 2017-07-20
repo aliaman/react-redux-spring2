@@ -75,7 +75,7 @@ export default class HashTracking extends React.Component{
         };
         if(data!=undefined) {
             return (
-                <BootstrapTable ref='hashtrackTable' data={ data } pagination selectRow={ selectRowProp } striped={true}>
+                <BootstrapTable ref='hashtrackTable' data={ data } pagination selectRow={ selectRowProp } striped={ true } search={ true }>
                     <TableHeaderColumn dataField='_id' isKey dataSort={ true } hidden={true}>ID</TableHeaderColumn>
                     <TableHeaderColumn dataField='task_id' dataSort={ true }>Task ID</TableHeaderColumn>
                     <TableHeaderColumn dataField='timestamp' dataSort={ true }>Timestamp</TableHeaderColumn>

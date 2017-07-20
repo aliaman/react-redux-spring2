@@ -13,13 +13,13 @@ let initialState = {
 
 const hashTrackingESReducer = (state=initialState, action) => {
     switch (action.type) {
-        case "FN_HASHTRACKING_PENDING": {
+        case actionTypes.FN_HASHTRACKING_PENDING: {
             return {...state,
                 fetching: true,
                 fetchedData: false,
             }
         }
-        case "FN_HASHTRACKING_REJECTED": {
+        case actionTypes.FN_HASHTRACKING_REJECTED: {
             return {
                 ...state,
                 fetching: false,
@@ -27,7 +27,7 @@ const hashTrackingESReducer = (state=initialState, action) => {
                 error: action.payload,
             }
         }
-        case "FN_HASHTRACKING_FULFILLED": {
+        case actionTypes.FN_HASHTRACKING_FULFILLED: {
             return {
                 ...state,
                 fetching: false,
@@ -37,17 +37,17 @@ const hashTrackingESReducer = (state=initialState, action) => {
             }
         }
         //get comments
-        case "FN_CYNIC_ES_COMMENTS_PENDING": {
+        case actionTypes.FN_CYNIC_ES_COMMENTS_PENDING: {
             return {...state, fetching: true}
         }
-        case "FN_CYNIC_ES_COMMENTS_REJECTED": {
+        case actionTypes.FN_CYNIC_ES_COMMENTS_REJECTED: {
             return {
                 ...state,
                 fetchedComments: false,
                 error: action.payload,
             }
         }
-        case "FN_CYNIC_ES_COMMENTS_FULFILLED": {
+        case actionTypes.FN_CYNIC_ES_COMMENTS_FULFILLED: {
             return {
                 ...state,
                 fetchedComments: true,
@@ -56,16 +56,16 @@ const hashTrackingESReducer = (state=initialState, action) => {
             }
         }
         //Save Comments
-        case "FN_SAVE_ES_COMMENTS_PENDING": {
+        case actionTypes.FN_SAVE_ES_COMMENTS_PENDING: {
             return {...state }
         }
-        case "FN_SAVE_ES_COMMENTS_REJECTED": {
+        case actionTypes.FN_SAVE_ES_COMMENTS_REJECTED: {
             return {
                 ...state,
                 error: action.payload,
             }
         }
-        case "FN_SAVE_ES_COMMENTS_FULFILLED": {
+        case actionTypes.FN_SAVE_ES_COMMENTS_FULFILLED: {
             return {
                 ...state,
                 error: null
@@ -73,16 +73,16 @@ const hashTrackingESReducer = (state=initialState, action) => {
         }
 
         //getUniqueComments
-        case "FN_ES_COMMENTS_UNIQUE_PENDING": {
+        case actionTypes.FN_ES_COMMENTS_UNIQUE_PENDING: {
             return {...state }
         }
-        case "FN_ES_COMMENTS_UNIQUE_REJECTED": {
+        case actionTypes.FN_ES_COMMENTS_UNIQUE_REJECTED: {
             return {
                 ...state,
                 error: action.payload,
             }
         }
-        case "FN_ES_COMMENTS_UNIQUE_FULFILLED": {
+        case actionTypes.FN_ES_COMMENTS_UNIQUE_FULFILLED: {
             return {
                 ...state,
                 uniqueComments: action.payload,

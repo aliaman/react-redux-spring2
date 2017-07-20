@@ -34,7 +34,7 @@ export default class LeftMenu extends React.Component {
                             <li>
                                 <Link to="/">Administration</Link>
                                 <ul className="content-viewer-aside-subsections">
-                                    { this.allowedFor(["ADMINISTRATOR"]) ? <li><Link to="/um"><span className="overflow-ellipses">User Management</span></Link></li> : null }
+                                    { this.allowedFor(["ADMINISTRATOR"]) ? <li><Link to="/um"><span className={(window.location.hash === "#/um") ? "active overflow-ellipses" : "overflow-ellipses"}>User Management</span></Link></li> : null }
                                 </ul>
                             </li>
                         </ul>
@@ -45,9 +45,9 @@ export default class LeftMenu extends React.Component {
                             <li>
                                 <Link to="/">Dashboard</Link>
                                 <ul className="content-viewer-aside-subsections">
-                                    { this.allowedFor(["ADMINISTRATOR", "ANALYST", "REPORTING"]) ? <li><Link to="/dash/1"><span className="overflow-ellipses">Efficacy Metrics</span></Link></li> : null }
-                                    { this.allowedFor(["ADMINISTRATOR", "ANALYST"]) ? <li><Link to="/dash/2"><span className="overflow-ellipses">False Negatives Sample Hash Tracking</span></Link></li> : null }
-                                    { this.allowedFor(["ADMINISTRATOR", "ANALYST"]) ? <li><Link to="/dash/3"><span className="overflow-ellipses">False Positives Sample Hash Tracking</span></Link></li> : null }
+                                    { this.allowedFor(["ADMINISTRATOR", "ANALYST", "REPORTING"]) ? <li><Link to="/dash/1"><span className={(window.location.hash === "#/dash/1") ? "active overflow-ellipses" : "overflow-ellipses"}>Efficacy Metrics</span></Link></li> : null }
+                                    { this.allowedFor(["ADMINISTRATOR", "ANALYST"]) ? <li><Link to="/dash/2"><span className={(window.location.hash === "#/dash/2") ? "active overflow-ellipses" : "overflow-ellipses"}>False Negatives Sample Hash Tracking</span></Link></li> : null }
+                                    { this.allowedFor(["ADMINISTRATOR", "ANALYST"]) ? <li><Link to="/dash/3"><span className={(window.location.hash === "#/dash/3") ? "active overflow-ellipses" : "overflow-ellipses"}>False Positives Sample Hash Tracking</span></Link></li> : null }
                                 </ul>
                             </li>
                         </ul>

@@ -1,6 +1,6 @@
-import axios from 'axios';
-import rest from './../../utils/restconfig';
-import querystring from 'querystring';
+import axios from 'axios'
+import rest from '../../../utils/restconfig'
+import actionTypes from './../../constans/actionTypes'
 
 
 export function fetchEfficacyMetrics(start, end) {
@@ -14,11 +14,11 @@ export function fetchEfficacyMetrics(start, end) {
             request
         ).then((response) => {
                 document.body.style.cursor = 'default';
-                dispatch({type: 'CYNIC_ES_ACCURACY_FULFILLED', payload: response.data})
+                dispatch({type: actionTypes.CYNIC_ES_ACCURACY_FULFILLED, payload: response.data})
             }).catch((err) => {
                 console.log(err);
                 document.body.style.cursor = 'default';
-                dispatch({type: 'CYNIC_ES_ACCURACY_REJECTED',  payload: err})
+                dispatch({type: actionTypes.CYNIC_ES_ACCURACY_REJECTED,  payload: err})
         });
     }
 }

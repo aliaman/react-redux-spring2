@@ -21,7 +21,6 @@
   },
   "dependencies": {
     "axios": "^0.16.1",
-    "create-react-class": "^15.5.2",
     "cross-env": "^4.0.0",
     "css-loader": "^0.28.0",
     "elasticsearch": "^13.0.1",
@@ -73,15 +72,19 @@
     "extract-text-webpack-plugin": "^2.1.0",
     "jest": "^20.0.4",
     "jest-enzyme": "^3.5.3",
+    "mock": "^0.1.1",
     "mock-json-server": "0.0.4",
     "moment": "^2.18.1",
+    "nock": "^9.0.14",
     "react-test-renderer": "15.5.4",
+    "redux-mock-store": "^1.2.3",
     "webpack": "^2.4.1",
     "webpack-dashboard": "^0.4.0",
     "webpack-dev-server": "^2.4.2"
   },
   "scripts": {
-    "test": "jest",
+    "test": "jest --coverage",
+    "test:watch": "npm run test -- --watch",
     "dashboard": "webpack-dashboard webpack-dev-server --host 0.0.0.0 --port 8081 --config webpack/webpack.dev.config.js",
     "start": "webpack-dev-server --host 0.0.0.0 --port 8081 --config webpack/webpack.dev.config.js",
     "mock": "mock-json-server ../resources/mock/db.json --port=3000",

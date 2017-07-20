@@ -5,7 +5,7 @@ import * as RB from 'react-bootstrap'
 import update from 'react-addons-update'
 
 import Authorization from '../../../../utils/Authorization'
-import { fetchEfficacyMetrics } from '../../../../redux/actions/cynicES'
+import { fetchEfficacyMetrics } from '../../../../redux/actions/cynicES/cynicES'
 import DateRangePicker from '../../../../scomponents/daterange/DateRangePicker'
 import moment from 'moment'
 import ReactSpinner from 'reactjs-spinner'
@@ -202,10 +202,13 @@ class Dashboard1 extends React.Component {
         });
     }
     _renderChart(){
+        const rowMargin = {
+            marginBottom: 3
+        };
         return (
             <div>
                 <h3>Efficacy Metrics</h3>
-                <RB.Row>
+                <RB.Row className={rowMargin}>
                     <RB.Col md={4} mdOffset={0}>
                         <div className="dpdiv">
                             <DateRangePicker {...this.state.dp} clickHandler={this.handleApply} />

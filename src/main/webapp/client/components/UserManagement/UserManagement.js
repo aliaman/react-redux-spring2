@@ -2,7 +2,7 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import Authorization from '../../utils/Authorization'
 import { connect } from 'react-redux'
-import { fetchUsers, saveUserField, saveUser, deleteUser } from '../../redux/actions/userActions'
+import { fetchUsers, saveUserField, saveUser, deleteUser } from '../../redux/actions/userActions/userActions'
 import * as RB from 'react-bootstrap'
 import UsersTable, {Selected} from './UsersTable'
 import Constants from '../../utils/Constants'
@@ -203,7 +203,7 @@ class UserManagement extends React.Component {
             };
         };
         const rowmargin = {
-            paddingBottom: 10
+            paddingBottom: 4
         };
         const applyMargin = {
             marginRight: 5

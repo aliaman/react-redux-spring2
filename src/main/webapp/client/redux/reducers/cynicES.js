@@ -1,3 +1,5 @@
+import actionTypes from './../constans/actionTypes'
+
 let initialState = {
     fetching: false,
     fetched: false,
@@ -6,17 +8,17 @@ let initialState = {
 };
 const cynicESReducer = (state=initialState, action) => {
     switch (action.type) {
-        case "CYNIC_ES_ACCURACY_PENDING": {
+        case actionTypes.CYNIC_ES_ACCURACY_PENDING: {
             return {...state, fetching: true}
         }
-        case "CYNIC_ES_ACCURACY_REJECTED": {
+        case actionTypes.CYNIC_ES_ACCURACY_REJECTED: {
             return {
                 ...state,
                 fetching: false,
                 error: action.payload,
             }
         }
-        case "CYNIC_ES_ACCURACY_FULFILLED": {
+        case actionTypes.CYNIC_ES_ACCURACY_FULFILLED: {
             return {
                 ...state,
                 fetching: false,
@@ -25,7 +27,9 @@ const cynicESReducer = (state=initialState, action) => {
                 data: action.payload
             }
         }
+        default: {
+            return state;
+        }
     }
-    return state
 };
 export default cynicESReducer;

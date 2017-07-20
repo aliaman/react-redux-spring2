@@ -1,7 +1,7 @@
 import React from 'react'
 import Authorization from '../../../../utils/Authorization'
 import { connect } from 'react-redux'
-import { fetchHashTracking, fetchCommentsForEfficacyMetrics, saveCommentsForEfficacyMetrics, fetchUniqueComments } from '../../../../redux/actions/hashTrackingES'
+import { fetchHashTracking, fetchCommentsForEfficacyMetrics, saveCommentsForEfficacyMetrics, fetchUniqueComments } from '../../../../redux/actions/hashTrackingES/hashTrackingES'
 import ReactSpinner from 'reactjs-spinner'
 import Suggestion from '../../../../scomponents/autosuggest/Suggestion'
 import * as RB from 'react-bootstrap'
@@ -209,7 +209,7 @@ class DashboardHashTracking extends React.Component {
             marginTop: '140px',
         };
         const rowmargin = {
-            paddingBottom: 10
+            paddingBottom: 4
         };
         if(this.props[this.props.type].fetchedComments && this.props[this.props.type].fetchedData){
             return (
@@ -231,7 +231,7 @@ class DashboardHashTracking extends React.Component {
                         </RB.Col>
                         <RB.Col md={2} mdOffset={6}>
                             <RB.Button
-                                className="actionBtn"
+                                className="actionBtn right"
                                 bsStyle="primary"
                                 disabled = {this.state.selectedHash.length == 0}
                                 onClick={this.edit.bind(this)}>

@@ -1313,7 +1313,7 @@ exports[`UsersTable component to match snapshot 1`] = `
     pagination={true}
     printable={false}
     replace={false}
-    search={false}
+    search={true}
     selectRow={
       Object {
         "bgColor": "#fff2fc",
@@ -1336,6 +1336,162 @@ exports[`UsersTable component to match snapshot 1`] = `
     <div
       className="react-bs-table-container"
     >
+      <div
+        className="react-bs-table-tool-bar "
+      >
+        <ToolBar
+          clearSearch={false}
+          closeText="Close"
+          columns={
+            Array [
+              Object {
+                "autoValue": false,
+                "customInsertEditor": undefined,
+                "editable": true,
+                "field": "id",
+                "format": false,
+                "hiddenOnInsert": false,
+                "isKey": true,
+                "keyValidator": false,
+                "name": "ID",
+              },
+              Object {
+                "autoValue": false,
+                "customInsertEditor": undefined,
+                "editable": true,
+                "field": "name",
+                "format": false,
+                "hiddenOnInsert": false,
+                "isKey": false,
+                "keyValidator": false,
+                "name": "Name",
+              },
+              Object {
+                "autoValue": false,
+                "customInsertEditor": undefined,
+                "editable": true,
+                "field": "email",
+                "format": [Function],
+                "hiddenOnInsert": false,
+                "isKey": false,
+                "keyValidator": false,
+                "name": "Email",
+              },
+              Object {
+                "autoValue": false,
+                "customInsertEditor": undefined,
+                "editable": Object {
+                  "options": Object {
+                    "values": Array [
+                      "Administrator",
+                      "Super User",
+                      "Analyst",
+                      "Reporting",
+                    ],
+                  },
+                  "type": "select",
+                },
+                "field": "roledisplay",
+                "format": false,
+                "hiddenOnInsert": false,
+                "isKey": false,
+                "keyValidator": false,
+                "name": "Role",
+              },
+            ]
+          }
+          defaultSearch=""
+          deleteText="Delete"
+          enableDelete={false}
+          enableExportCSV={false}
+          enableInsert={false}
+          enableSearch={true}
+          enableShowOnlySelected={false}
+          exportCSVText="Export to CSV"
+          ignoreEditable={false}
+          insertText="New"
+          isValidKey={[Function]}
+          onAddRow={[Function]}
+          onDropRow={[Function]}
+          onExportCSV={[Function]}
+          onSearch={[Function]}
+          onShowOnlySelected={[Function]}
+          reset={false}
+          saveText="Save"
+          searchPosition="right"
+        >
+          <div
+            className="row"
+          >
+            <div>
+              <div
+                className="col-xs-6 col-sm-6 col-md-6 col-lg-8"
+              >
+                <div
+                  className="btn-group btn-group-sm"
+                  role="group"
+                />
+              </div>
+              <div
+                className="col-xs-6 col-sm-6 col-md-6 col-lg-4"
+              >
+                <div
+                  className="form-group form-group-sm react-bs-table-search-form"
+                >
+                  <SearchField
+                    className=""
+                    defaultValue=""
+                    onKeyUp={[Function]}
+                    placeholder="Search"
+                  >
+                    <input
+                      className="form-control "
+                      defaultValue=""
+                      onKeyUp={[Function]}
+                      placeholder="Search"
+                      style={
+                        Object {
+                          "zIndex": 0,
+                        }
+                      }
+                      type="text"
+                    />
+                  </SearchField>
+                  <span
+                    className="input-group-btn"
+                  />
+                </div>
+              </div>
+            </div>
+            <Notification>
+              <ToastContainer
+                className="toast-top-right"
+                id="toast-container"
+                newestOnTop={true}
+                onClick={[Function]}
+                preventDuplicates={true}
+                toastMessageFactory={[Function]}
+                toastType={
+                  Object {
+                    "error": "error",
+                    "info": "info",
+                    "success": "success",
+                    "warning": "warning",
+                  }
+                }
+              >
+                <div
+                  aria-live="polite"
+                  className="toast-top-right"
+                  id="toast-container"
+                  onClick={[Function]}
+                  role="alert"
+                />
+              </ToastContainer>
+            </Notification>
+          </div>
+        </ToolBar>
+      </div>
       <div
         className="react-bs-table react-bs-table-bordered"
         onMouseEnter={[Function]}

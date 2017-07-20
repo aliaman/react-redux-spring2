@@ -1,8 +1,8 @@
 import axios from 'axios'
-import rest from './../../utils/restconfig'
+import rest from '../../../utils/restconfig'
 import querystring from 'querystring'
 import ls from 'localstorage-ttl'
-import Constants from './../../utils/Constants'
+import Constants from '../../../utils/Constants'
 
 
 export function doLogin(email, password) {

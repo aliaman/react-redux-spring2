@@ -99,7 +99,7 @@ export default class UsersTable extends React.Component{
         };
         if(users!=undefined) {
             return (
-                <BootstrapTable ref='userstable' data={ users } pagination cellEdit={ cellEditProp } selectRow={ selectRowProp } striped={true}>
+                <BootstrapTable ref='userstable' data={ users } pagination cellEdit={ cellEditProp } selectRow={ selectRowProp } striped={ true } search={ true }>
                     <TableHeaderColumn dataField='id' isKey hidden dataSort={ true }>ID</TableHeaderColumn>
                     <TableHeaderColumn dataField='name' dataSort={ true }>Name</TableHeaderColumn>
                     <TableHeaderColumn dataField='email' dataSort={ true } dataFormat={this.emailFormatter.bind(this)}>Email</TableHeaderColumn>

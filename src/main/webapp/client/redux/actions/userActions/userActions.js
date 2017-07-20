@@ -1,5 +1,5 @@
 import axios from 'axios';
-import rest from './../../utils/restconfig';
+import rest from '../../../utils/restconfig';
 import querystring from 'querystring';
 
 export function fetchUsers() {

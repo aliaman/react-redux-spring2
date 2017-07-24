@@ -1,0 +1,476 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Code coverage report for components/UserManagement/UsersTable.js</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="../../prettify.css" />
+    <link rel="stylesheet" href="../../base.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style type='text/css'>
+        .coverage-summary .sorter {
+            background-image: url(../../sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+<body>
+<div class='wrapper'>
+  <div class='pad1'>
+    <h1>
+      <a href="../../index.html">All files</a> / <a href="index.html">components/UserManagement</a> UsersTable.js
+    </h1>
+    <div class='clearfix'>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">42.86% </span>
+        <span class="quiet">Statements</span>
+        <span class='fraction'>15/35</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">50% </span>
+        <span class="quiet">Branches</span>
+        <span class='fraction'>2/4</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">30.77% </span>
+        <span class="quiet">Functions</span>
+        <span class='fraction'>4/13</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">42.86% </span>
+        <span class="quiet">Lines</span>
+        <span class='fraction'>15/35</span>
+      </div>
+    </div>
+  </div>
+  <div class='status-line low'></div>
+<pre><table class="coverage">
+<tr><td class="line-count quiet">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121
+122
+123
+124
+125
+126
+127
+128
+129
+130
+131
+132
+133
+134
+135
+136
+137
+138</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">84x</span>
+<span class="cline-any cline-yes">84x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">20x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">8x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React from 'react'
+import {BootstrapTable, TableHeaderColumn} from 'react-bootstrap-table'
+import Constants from './../../../client/utils/Constants'
+&nbsp;
+export default class UsersTable extends React.Component{
+&nbsp;
+    constructor(props){
+        super(props)
+    }
+&nbsp;
+<span class="fstat-no" title="function not covered" >    re</span>nderShowsTotal(start, to, total) {
+<span class="cstat-no" title="statement not covered" >        return (</span>
+            &lt;p style={ { color: 'blue' } }&gt;
+                From { start } to { to }, totals is { total }&amp;nbsp;&amp;nbsp;(its a customize text)
+            &lt;/p&gt;
+        );
+    }
+&nbsp;
+    format(users){
+        for(let k in users){
+            <span class="missing-if-branch" title="else path not taken" >E</span>if(users[k].role !=undefined) {
+                users[k]['roledisplay'] = users[k].role.display;
+            }
+        }
+        return users;
+    }
+<span class="fstat-no" title="function not covered" >    on</span>AfterSaveCell(row, cellName, cellValue) {
+        //alert(`Save cell ${cellName} with value ${cellValue}`);
+&nbsp;
+        let rowStr = <span class="cstat-no" title="statement not covered" >'';</span>
+<span class="cstat-no" title="statement not covered" >        for (const prop in row) {</span>
+<span class="cstat-no" title="statement not covered" >            rowStr += prop + ': ' + row[prop] + '\n';</span>
+        }
+<span class="cstat-no" title="statement not covered" >        this.props.editUser(row.id, cellName, cellValue);</span>
+        //alert('Thw whole row :\n' + rowStr);
+    }
+<span class="fstat-no" title="function not covered" >    on</span>RowSelect(row, isSelected, e) {
+        let selected = <span class="cstat-no" title="statement not covered" >new Selected();</span>
+<span class="cstat-no" title="statement not covered" >        selected.rows = [row];</span>
+<span class="cstat-no" title="statement not covered" >        selected.selected = isSelected;</span>
+<span class="cstat-no" title="statement not covered" >        this.props.onRowSelect(selected);</span>
+    }
+<span class="fstat-no" title="function not covered" >    on</span>SelectAll(isSelected, rows) {
+        let selected = <span class="cstat-no" title="statement not covered" >new Selected();</span>
+<span class="cstat-no" title="statement not covered" >        selected.rows = rows;</span>
+<span class="cstat-no" title="statement not covered" >        selected.selected = isSelected;</span>
+<span class="cstat-no" title="statement not covered" >        this.props.onRowSelect(selected);</span>
+    }
+    emailFormatter(cell, row){
+        return cell;
+        // return (&lt;div&gt;
+        //     &lt;Suggestion
+        //         id={Math.random()}
+        //         type="mitigation"
+        //         value="abc"
+        //         suggestions={[{name: "a", value: "a"},{name: "aa", value: "aa"},{name: "aaa", value: "aaa"},{name: "aaaa", value: "aaaa"},{name: "aaaaa", value: "aaaaa"}]} /&gt;
+        // &lt;/div&gt;)
+    }
+    render() {
+        let users = this.format(this.props.data);
+        let roleTypes = [];
+        for(let role of Constants.ROLES){
+            roleTypes.push(role.display)
+        }
+        const options = {
+            page: 2,  // which page you want to show as default
+            sizePerPageList: [ {
+                text: '5', value: 5
+            }, {
+                text: '10', value: 10
+            }, {
+                text: 'All', value: users.length
+            } ], // you can change the dropdown list for size per page
+            sizePerPage: 5,  // which size per page you want to locate as default
+            pageStartIndex: 0, // where to start counting the pages
+            paginationSize: 3,  // the pagination bar size.
+            prePage: 'Prev', // Previous page button text
+            nextPage: 'Next', // Next page button text
+            firstPage: 'First', // First page button text
+            lastPage: 'Last', // Last page button text
+            paginationShowsTotal: this.renderShowsTotal,  // Accept bool or function
+            paginationPosition: 'top'  // default is bottom, top and both is all available
+            // hideSizePerPage: true &gt; You can hide the dropdown for sizePerPage
+            // alwaysShowAllBtns: true // Always show next and previous button
+            // withFirstAndLast: false &gt; Hide the going to First and Last page button
+        };
+        const selectRowProp = {
+            mode: 'checkbox',
+            clickToSelect: true,
+            unselectable: [ 1 ],
+            bgColor: '#fff2fc',
+            onSelect: this.onRowSelect.bind(this),
+            onSelectAll: this.onSelectAll.bind(this)
+        };
+        const cellEditProp = {
+            mode: 'click',
+            blurToSave: true,
+            afterSaveCell: this.onAfterSaveCell.bind(this)
+        };
+        <span class="missing-if-branch" title="else path not taken" >E</span>if(users!=undefined) {
+            return (
+                &lt;BootstrapTable ref='userstable' data={ users } pagination cellEdit={ cellEditProp } selectRow={ selectRowProp } striped={ true } search={ true }&gt;
+                    &lt;TableHeaderColumn dataField='id' isKey hidden dataSort={ true }&gt;ID&lt;/TableHeaderColumn&gt;
+                    &lt;TableHeaderColumn dataField='name' dataSort={ true }&gt;Name&lt;/TableHeaderColumn&gt;
+                    &lt;TableHeaderColumn dataField='email' dataSort={ true } dataFormat={this.emailFormatter.bind(this)}&gt;Email&lt;/TableHeaderColumn&gt;
+                    &lt;TableHeaderColumn dataField='roledisplay' dataSort={ true } editable={ { type: 'select', options: { values: roleTypes } } }&gt;Role&lt;/TableHeaderColumn&gt;
+                &lt;/BootstrapTable&gt;
+            );
+        }else{
+<span class="cstat-no" title="statement not covered" >            return (</span>
+                &lt;div&gt;Empty.&lt;/div&gt;
+            )
+        }
+    }
+}
+&nbsp;
+export class Selected{
+<span class="fstat-no" title="function not covered" >    ge</span>t rows() {
+<span class="cstat-no" title="statement not covered" >        return this._rows;</span>
+    }
+&nbsp;
+<span class="fstat-no" title="function not covered" >    se</span>t rows(value) {
+<span class="cstat-no" title="statement not covered" >        this._rows = value;</span>
+    }
+&nbsp;
+<span class="fstat-no" title="function not covered" >    ge</span>t selected() {
+<span class="cstat-no" title="statement not covered" >        return this._selected;</span>
+    }
+&nbsp;
+<span class="fstat-no" title="function not covered" >    se</span>t selected(value) {
+<span class="cstat-no" title="statement not covered" >        this._selected = value;</span>
+    }
+<span class="fstat-no" title="function not covered" >    co</span>nstructor(){
+<span class="cstat-no" title="statement not covered" >        this._rows = new Array();</span>
+<span class="cstat-no" title="statement not covered" >        this._selected = new Boolean();</span>
+    }
+&nbsp;
+}</pre></td></tr>
+</table></pre>
+<div class='push'></div><!-- for sticky footer -->
+</div><!-- /wrapper -->
+<div class='footer quiet pad2 space-top1 center small'>
+  Code coverage
+  generated by <a href="https://istanbul.js.org/" target="_blank">istanbul</a> at Thu Jul 20 2017 13:06:18 GMT-0700 (PDT)
+</div>
+</div>
+<script src="../../prettify.js"></script>
+<script>
+window.onload = function () {
+        if (typeof prettyPrint === 'function') {
+            prettyPrint();
+        }
+};
+</script>
+<script src="../../sorter.js"></script>
+</body>
+</html>

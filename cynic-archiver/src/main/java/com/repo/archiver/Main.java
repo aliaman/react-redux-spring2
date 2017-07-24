@@ -38,6 +38,7 @@ public class Main {
                 break;
             case "fn":
                 processType = AcceptableProcesses.FALSENEGATIVES;
+                break;
             case "fp":
                 processType = AcceptableProcesses.FALSEPOSITIVES;
                 break;

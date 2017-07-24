@@ -1,0 +1,14 @@
+.idea/.name
+.idea/**
+spring-rest.iml
+src/main/webapp/client-web/node_modules/
+src/test/
+target/
+yarn.lock
+/src/main/webapp/index_bundle*.js
+/src/main/webapp/index_bundle*.js.map
+*.iml
+src/main/webapp/index.html
+/src/main/webapp/node_modules/
+#**/__snapshots__/*
+

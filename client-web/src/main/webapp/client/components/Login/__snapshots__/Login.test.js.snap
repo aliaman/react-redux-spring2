@@ -1,0 +1,35 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Login component should render as expected 1`] = `
+<div
+  className="container"
+>
+  <Row
+    bsClass="row"
+    componentClass="div"
+    style={
+      Object {
+        "paddingTop": "100px",
+      }
+    }
+  >
+    <Col
+      bsClass="col"
+      componentClass="div"
+      lg={6}
+      lgOffset={3}
+    >
+      <h1
+        className="symheading"
+      >
+        Login
+      </h1>
+      <Connect(LoginForm)
+        authenticated={false}
+        error={null}
+        userObj={null}
+      />
+    </Col>
+  </Row>
+</div>
+`;

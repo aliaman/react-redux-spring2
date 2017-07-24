@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-configuration PUBLIC "-//Hibernate/Hibernate Configuration DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+    <session-factory>
+        <property name="hibernate.connection.driver_class">com.mysql.cj.jdbc.Driver</property>
+        <property name="hibernate.connection.url">jdbc:mysql://ci-poc-db.cdrn06pzpw23.us-east-1.rds.amazonaws.com:3306/ci_cynic?autoReconnect=true&amp;useSSL=false</property>
+        <property name="hibernate.connection.username">cy_user</property>
+        <property name="hibernate.connection.password">w84Yv!Gt4s6</property>
+        <property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
+
+        <!-- mappings for annotated classes -->
+        <mapping class="com.repo.dao.pojo.User"/>
+        <mapping class="com.repo.dao.pojo.Role"/>
+        <mapping class="com.repo.dao.pojo.Comment"/>
+        <mapping class="com.repo.dao.pojo.Audit"/>
+    </session-factory>
+</hibernate-configuration>

@@ -1,0 +1,22 @@
+{
+  "/users": {
+    "get": [
+      {
+        "id": 1,
+        "name": "Ali",
+        "salary": "10001"
+      },
+      {
+        "name": "Usman",
+        "salary": "5001",
+        "id": 2
+      }
+    ]
+  },
+  "/login": {
+    "post": {
+      "payload": "Could not validate your credentials.",
+      "success": false
+    }
+  }
+}

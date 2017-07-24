@@ -1,0 +1,185 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Code coverage report for utils/restconfig.js</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="../prettify.css" />
+    <link rel="stylesheet" href="../base.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style type='text/css'>
+        .coverage-summary .sorter {
+            background-image: url(../sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+<body>
+<div class='wrapper'>
+  <div class='pad1'>
+    <h1>
+      <a href="../index.html">All files</a> / <a href="index.html">utils</a> restconfig.js
+    </h1>
+    <div class='clearfix'>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">71.43% </span>
+        <span class="quiet">Statements</span>
+        <span class='fraction'>5/7</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">50% </span>
+        <span class="quiet">Branches</span>
+        <span class='fraction'>1/2</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">66.67% </span>
+        <span class="quiet">Functions</span>
+        <span class='fraction'>2/3</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">71.43% </span>
+        <span class="quiet">Lines</span>
+        <span class='fraction'>5/7</span>
+      </div>
+    </div>
+  </div>
+  <div class='status-line medium'></div>
+<pre><table class="coverage">
+<tr><td class="line-count quiet">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">&nbsp;
+class RestConfig {
+    constructor(base){
+        this.base = base;
+    }
+<span class="fstat-no" title="function not covered" >    de</span>v() {
+<span class="cstat-no" title="statement not covered" >        return {</span>
+            'GET_ALL_USERS': this.base + 'users',
+            'LOGIN': this.base + 'login',
+            'GET_EFFICACY_METRICS': 'https://search-cynic-analytics-v2-nato57mz432a4jklgi6bp7fgwm.us-east-1.es.amazonaws.com/task-*/task/_search',
+            'ES_BASE': 'https://search-cynic-analytics-v2-nato57mz432a4jklgi6bp7fgwm.us-east-1.es.amazonaws.com',
+            'GET_COMMENTS_FOR_EFFICACY_METRICS': this.base + 'comments',
+            'GET_UNIQUE_COMMENTS_FOR_EFFICACY_METRICS': this.base + 'getUniqueComments',
+            'SAVE_COMMENTS_FOR_EFFICACY_METRICS': this.base + 'comments',
+            'POST_USER_FIELD': this.base + 'savefield',
+            'POST_NEW_USER': this.base + 'newUser',
+            'DELETE_USER': this.base + 'deleteUser',
+        }
+    }
+    prod() {
+        return {
+            'GET_ALL_USERS': this.base + 'users/getAllUsers',
+            'LOGIN': this.base + 'auth/login',
+            'GET_EFFICACY_METRICS': 'https://search-cynic-analytics-v2-nato57mz432a4jklgi6bp7fgwm.us-east-1.es.amazonaws.com/task-*/task/_search',
+            'ES_BASE': 'https://search-cynic-analytics-v2-nato57mz432a4jklgi6bp7fgwm.us-east-1.es.amazonaws.com',
+            'GET_COMMENTS_FOR_EFFICACY_METRICS': this.base + 'esdata/comments',
+            'GET_UNIQUE_COMMENTS_FOR_EFFICACY_METRICS': this.base + 'esdata/getUniqueComments',
+            'SAVE_COMMENTS_FOR_EFFICACY_METRICS': this.base + 'esdata/comment',
+            'POST_USER_FIELD': this.base + 'users/savefield',
+            'POST_NEW_USER': this.base + 'users/newUser',
+            'DELETE_USER': this.base + 'users/deleteUser',
+        }
+    }
+}
+let rest = {};
+<span class="missing-if-branch" title="if path not taken" >I</span>if(global.__DEVELOPMENT__){
+<span class="cstat-no" title="statement not covered" >    rest = new RestConfig('http://localhost:3000/').dev();</span>
+}else{
+    rest = new RestConfig('/rest/').prod();
+}
+export default rest;</pre></td></tr>
+</table></pre>
+<div class='push'></div><!-- for sticky footer -->
+</div><!-- /wrapper -->
+<div class='footer quiet pad2 space-top1 center small'>
+  Code coverage
+  generated by <a href="https://istanbul.js.org/" target="_blank">istanbul</a> at Thu Jul 20 2017 13:06:18 GMT-0700 (PDT)
+</div>
+</div>
+<script src="../prettify.js"></script>
+<script>
+window.onload = function () {
+        if (typeof prettyPrint === 'function') {
+            prettyPrint();
+        }
+};
+</script>
+<script src="../sorter.js"></script>
+</body>
+</html>

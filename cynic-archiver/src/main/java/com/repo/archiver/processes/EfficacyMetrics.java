@@ -16,6 +16,7 @@ import java.util.Map;
  */
 public class EfficacyMetrics extends AbstractProcess {
 
+
     public void run(){
         try {
             System.out.println("Running Efficacy Metrics");

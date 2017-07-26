@@ -7,7 +7,6 @@ yarn.lock
 /client-web/src/main/webapp/index_bundle*.js
 /client-web/src/main/webapp/index_bundle*.js.map
 *.iml
-/client-web/src/main/webapp/index.html
 #**/__snapshots__/*
 /client-web/src/main/webapp/coverage/
 /client-web/src/main/webapp/node_modules/

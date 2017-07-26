@@ -1,0 +1,27 @@
+.errorz-enter {
+  opacity: 0.01;
+  transition: opacity .5s ease-in;
+}
+
+.errorz-enter.errorz-enter-active {
+  opacity: 1;
+}
+
+.errorz-leave {
+  opacity: 1;
+  transition: opacity 1s ease-in;
+}
+
+.errorz-leave.errorz-leave-active {
+  opacity: 0.01;
+  transition: opacity 300ms ease-in;
+}
+
+.errorz-appear {
+  opacity: 0.01;
+  transition: opacity 1s ease-in;
+}
+
+.errorz-appear.errorz-appear-active {
+  opacity: 1;
+}

@@ -9,6 +9,8 @@ import ls from 'localstorage-ttl'
 import DateRangePicker from '../../../../scomponents/daterange/DateRangePicker'
 import moment from 'moment'
 import HashTracking from './HashTracking'
+import Error from '../../../../scomponents/notifications/Error'
+
 
 @connect((store) => {
     return {
@@ -18,6 +20,7 @@ import HashTracking from './HashTracking'
             fetchedComments: store.fnHashTracking.fetchedComments,
             fetchedUniqueComments: store.fnHashTracking.fetchedUniqueComments,
 
+            error: store.fnHashTracking.error,
             data: store.fnHashTracking.data,
             comments: store.fnHashTracking.comments,
             uniqueComments: store.fnHashTracking.uniqueComments,
@@ -28,6 +31,7 @@ import HashTracking from './HashTracking'
             fetchedComments: store.fpHashTracking.fetchedComments,
             fetchedUniqueComments: store.fpHashTracking.fetchedUniqueComments,
 
+            error: store.fpHashTracking.error,
             data: store.fpHashTracking.data,
             comments: store.fpHashTracking.comments,
             uniqueComments: store.fpHashTracking.uniqueComments,
@@ -68,13 +72,13 @@ class DashboardHashTracking extends React.Component {
                 })
             });
         }
-        if(this.props[this.props.type].fetchedData==false) {
+        //if(this.props[this.props.type].fetchedData==false) {
             this._fetchData();
             this.props.dispatch(fetchCommentsForEfficacyMetrics(this.props.type));
             this.props.dispatch(fetchUniqueComments(this.props.type));
-        }else{
-            this.setDataState(this.props);
-        }
+        // }else{
+        //     this.setDataState(this.props);
+        // }
     }
     handleApply(event, picker) {
         this.setState({
@@ -110,6 +114,7 @@ class DashboardHashTracking extends React.Component {
             let formatteddata = this.flatten(props[this.props.type].data);
             formatteddata = this.addSupplementInfo(formatteddata, props[this.props.type].comments);
             this.setState({
+                error: props[this.props.type].error,
                 formatteddata: formatteddata,
                 autosuggest: props[this.props.type].uniqueComments
             });
@@ -214,6 +219,7 @@ class DashboardHashTracking extends React.Component {
         if(this.props[this.props.type].fetchedComments && this.props[this.props.type].fetchedData){
             return (
                 <div>
+                    <Error error={this.state.error} showError={ true } />
                     <RB.Row style={rowmargin}>
                         <RB.Col md={4} mdOffset={0}>
                             <div className="dpdiv">
@@ -293,7 +299,6 @@ class DashboardHashTracking extends React.Component {
                         <RB.Row>
                             <RB.Col lg={12} lgOffset={0}>
                                 <h3 className="symheading">Edit Remarks</h3>
-                                <div className="error">{this.state.error}</div>
                                 <RB.Form horizontal onSubmit={this.submitedit.bind(this)}>
                                     <RB.FormGroup>
                                         <RB.Col sm={2}>

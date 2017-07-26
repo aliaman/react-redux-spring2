@@ -32,7 +32,7 @@ export default class LeftMenu extends React.Component {
                     { this.allowedFor(["ADMINISTRATOR"]) ?
                         <ul className="content-viewer-aside-sections">
                             <li>
-                                <Link to="/">Administration</Link>
+                                <Link to="/" className="no-wrap">Administration</Link>
                                 <ul className="content-viewer-aside-subsections">
                                     { this.allowedFor(["ADMINISTRATOR"]) ? <li><Link to="/um"><span className={(window.location.hash === "#/um") ? "active overflow-ellipses" : "overflow-ellipses"}>User Management</span></Link></li> : null }
                                 </ul>
@@ -43,7 +43,7 @@ export default class LeftMenu extends React.Component {
                     { this.allowedFor(["ADMINISTRATOR", "ANALYST", "REPORTING"]) ?
                         <ul className="content-viewer-aside-sections">
                             <li>
-                                <Link to="/">Dashboard</Link>
+                                <Link to="/" className="no-wrap">Dashboard</Link>
                                 <ul className="content-viewer-aside-subsections">
                                     { this.allowedFor(["ADMINISTRATOR", "ANALYST", "REPORTING"]) ? <li><Link to="/dash/1"><span className={(window.location.hash === "#/dash/1") ? "active overflow-ellipses" : "overflow-ellipses"}>Efficacy Metrics</span></Link></li> : null }
                                     { this.allowedFor(["ADMINISTRATOR", "ANALYST"]) ? <li><Link to="/dash/2"><span className={(window.location.hash === "#/dash/2") ? "active overflow-ellipses" : "overflow-ellipses"}>False Negatives Sample Hash Tracking</span></Link></li> : null }
@@ -55,7 +55,7 @@ export default class LeftMenu extends React.Component {
 
                     <ul className="content-viewer-aside-sections">
                         <li>
-                            <Link to="/logout">Log Out</Link>
+                            <Link to="/logout" className="no-wrap">Log Out</Link>
                         </li>
                     </ul>
                 </nav>

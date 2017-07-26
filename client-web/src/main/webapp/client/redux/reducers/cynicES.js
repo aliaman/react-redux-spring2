@@ -9,13 +9,18 @@ let initialState = {
 const cynicESReducer = (state=initialState, action) => {
     switch (action.type) {
         case actionTypes.CYNIC_ES_ACCURACY_PENDING: {
-            return {...state, fetching: true}
+            return {
+                ...state,
+                fetching: true,
+                fetched: false,
+            }
         }
         case actionTypes.CYNIC_ES_ACCURACY_REJECTED: {
             return {
                 ...state,
                 fetching: false,
-                error: action.payload,
+                fetched: true,
+                error: action.payload.message,
             }
         }
         case actionTypes.CYNIC_ES_ACCURACY_FULFILLED: {
@@ -23,7 +28,6 @@ const cynicESReducer = (state=initialState, action) => {
                 ...state,
                 fetching: false,
                 fetched: true,
-                error: null,
                 data: action.payload
             }
         }

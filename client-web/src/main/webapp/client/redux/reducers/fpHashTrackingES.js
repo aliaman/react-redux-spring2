@@ -2,6 +2,9 @@ import actionTypes from './../constans/actionTypes'
 
 let initialState = {
     error: null,
+    error2: null,
+    error3: null,
+    error4: null,
 
     data: [],
     comments: [],
@@ -19,13 +22,14 @@ const hashTrackingESReducer = (state=initialState, action) => {
             return {...state,
                 fetching: true,
                 fetchedData: false,
+                error: null,
             }
         }
         case actionTypes.FP_HASHTRACKING_REJECTED: {
             return {
                 ...state,
-                fetchedData: false,
                 fetching: false,
+                fetchedData: true,
                 error: action.payload,
             }
         }
@@ -40,20 +44,23 @@ const hashTrackingESReducer = (state=initialState, action) => {
         }
         //get comments
         case actionTypes.FP_CYNIC_ES_COMMENTS_PENDING: {
-            return {...state, fetching: true}
+            return {
+                ...state,
+                fetching: true
+            }
         }
         case actionTypes.FP_CYNIC_ES_COMMENTS_REJECTED: {
             return {
                 ...state,
                 fetchedComments: false,
-                error: action.payload,
+                error2: action.payload,
             }
         }
         case actionTypes.FP_CYNIC_ES_COMMENTS_FULFILLED: {
             return {
                 ...state,
                 fetchedComments: true,
-                error: null,
+                error2: null,
                 comments: action.payload
             }
         }
@@ -64,13 +71,13 @@ const hashTrackingESReducer = (state=initialState, action) => {
         case actionTypes.FP_SAVE_ES_COMMENTS_REJECTED: {
             return {
                 ...state,
-                error: action.payload,
+                error3: action.payload,
             }
         }
         case actionTypes.FP_SAVE_ES_COMMENTS_FULFILLED: {
             return {
                 ...state,
-                error: null
+                error3: null
             }
         }
 
@@ -81,7 +88,7 @@ const hashTrackingESReducer = (state=initialState, action) => {
         case actionTypes.FP_ES_COMMENTS_UNIQUE_REJECTED: {
             return {
                 ...state,
-                error: action.payload,
+                error4: action.payload,
             }
         }
         case actionTypes.FP_ES_COMMENTS_UNIQUE_FULFILLED: {
@@ -89,7 +96,7 @@ const hashTrackingESReducer = (state=initialState, action) => {
                 ...state,
                 uniqueComments: action.payload,
                 fetchedUniqueComments: true,
-                error: null
+                error4: null
             }
         }
     }

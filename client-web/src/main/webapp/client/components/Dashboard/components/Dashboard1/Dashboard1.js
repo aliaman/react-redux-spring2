@@ -9,11 +9,16 @@ import { fetchEfficacyMetrics } from '../../../../redux/actions/cynicES/cynicES'
 import DateRangePicker from '../../../../scomponents/daterange/DateRangePicker'
 import moment from 'moment'
 import ReactSpinner from 'reactjs-spinner'
+import Error from '../../../../scomponents/notifications/Error'
+
 
 
 @connect((store) => {
     return {
-        data: store.cynic.data
+        data: store.cynic.data,
+        error: store.cynic.error,
+        fetching: store.cynic.fetching,
+        fetched: store.cynic.fetched
     }
 })
 class Dashboard1 extends React.Component {
@@ -21,6 +26,7 @@ class Dashboard1 extends React.Component {
         super(props);
         this.handleApply = this.handleApply.bind(this);
         this.state = {
+            error: this.props.error,
             refresh: true,
             dp: {
                 maxDate: moment(),
@@ -208,6 +214,7 @@ class Dashboard1 extends React.Component {
         return (
             <div>
                 <h3>Efficacy Metrics</h3>
+                <Error error={this.state.error} showError={ true } />
                 <RB.Row className={rowMargin}>
                     <RB.Col md={4} mdOffset={0}>
                         <div className="dpdiv">
@@ -234,7 +241,7 @@ class Dashboard1 extends React.Component {
         const style = {
             marginTop: '140px',
         };
-        if(this.props.data!=null){
+        if(!this.props.fetching){
             return this._renderChart();
         }else{
             return (<div style={style}>
